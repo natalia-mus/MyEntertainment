@@ -1,18 +1,19 @@
-package com.example.myentertainment
+package com.example.myentertainment.view.authentication
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.myentertainment.R
 
-class MusicFragment : Fragment() {
+class SignUpFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_music, container, false)
+        return inflater.inflate(R.layout.fragment_sign_up, container, false)
     }
 }

@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">MyEntertainment</string>
+    <string name="email_address">e-mail address</string>
+    <string name="password">password</string>
+    <string name="sign_in">sign in</string>
+    <string name="sign_in_message">Don\'t have an account? </string>
+    <string name="create_one"> <u>Create one</u> </string>
+    <string name="dot">.</string>
+    <string name="sign_up">sign up</string>
+    <string name="sign_up_message">Create your account</string>
     <string name="bottomNavigation_movies">Movies</string>
     <string name="bottomNavigation_books">Books</string>
     <string name="bottomNavigation_games">Games</string>

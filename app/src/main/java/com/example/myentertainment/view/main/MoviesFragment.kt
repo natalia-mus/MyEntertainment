@@ -1,10 +1,11 @@
-package com.example.myentertainment
+package com.example.myentertainment.view.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.myentertainment.R
 
 class MoviesFragment : Fragment() {
 
