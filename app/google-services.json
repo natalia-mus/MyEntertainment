@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "829385879561",
+    "project_id": "myentertainment-2a1da",
+    "storage_bucket": "myentertainment-2a1da.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:829385879561:android:fce841da89306241fa48d8",
+        "android_client_info": {
+          "package_name": "com.example.myentertainment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "829385879561-4666ftjscf3s3t76qqqg8tgb2sl2fpde.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnFgJLSY44yWd71GW6eBgTkv_abQcID7k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "829385879561-4666ftjscf3s3t76qqqg8tgb2sl2fpde.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
