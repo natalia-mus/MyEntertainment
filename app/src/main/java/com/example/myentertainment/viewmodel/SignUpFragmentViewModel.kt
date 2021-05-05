@@ -1,9 +1,8 @@
 package com.example.myentertainment.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
 class SignUpFragmentViewModel : ViewModel() {
@@ -13,9 +12,9 @@ class SignUpFragmentViewModel : ViewModel() {
     }
 
     @Inject
-    lateinit var database: DatabaseReference
+    lateinit var databaseAuth: FirebaseAuth
 
     fun signUp(email: String, password: String) {
-        Log.e("viewModel database", database.toString())
+        databaseAuth.createUserWithEmailAndPassword(email, password)
     }
 }

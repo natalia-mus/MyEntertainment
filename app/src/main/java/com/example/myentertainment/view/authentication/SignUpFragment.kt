@@ -16,9 +16,12 @@ class SignUpFragment : Fragment() {
     private lateinit var fragmentView: View
     private lateinit var viewModel: SignUpFragmentViewModel
 
+    private lateinit var emailEditText: EditText
+    private lateinit var passwordEditText: EditText
+    private lateinit var signUpButton: Button
+
     private lateinit var email: String
     private lateinit var password: String
-    private lateinit var signUpButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,17 +30,19 @@ class SignUpFragment : Fragment() {
     ): View {
         fragmentView = inflater.inflate(R.layout.fragment_sign_up, container, false)
         viewModel = ViewModelProvider(this).get(SignUpFragmentViewModel::class.java)
+        initView()
+        return fragmentView
+    }
 
-        val emailLabel = fragmentView.findViewById<EditText>(R.id.signUp_email)
-        val passwordLabel = fragmentView.findViewById<EditText>(R.id.signUp_password)
+    private fun initView() {
+        emailEditText = fragmentView.findViewById(R.id.signUp_email)
+        passwordEditText = fragmentView.findViewById(R.id.signUp_password)
         signUpButton = fragmentView.findViewById(R.id.signUp_buttonOk)
 
         signUpButton.setOnClickListener() {
-            email = emailLabel.text.toString()
-            password = passwordLabel.text.toString()
+            email = emailEditText.text.toString()
+            password = passwordEditText.text.toString()
             viewModel.signUp(email, password)
         }
-
-        return fragmentView
     }
 }
