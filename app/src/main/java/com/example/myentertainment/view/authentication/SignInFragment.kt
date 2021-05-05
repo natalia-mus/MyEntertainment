@@ -21,6 +21,7 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
         savedInstanceState: Bundle?
     ): View {
         fragmentView = inflater.inflate(R.layout.fragment_sign_in, container, false)
+
         signInButton = fragmentView.findViewById(R.id.signIn_buttonOk)
         signUp = fragmentView.findViewById(R.id.signIn_signUp)
 
