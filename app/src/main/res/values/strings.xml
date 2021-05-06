@@ -12,4 +12,5 @@
     <string name="bottomNavigation_books">Books</string>
     <string name="bottomNavigation_games">Games</string>
     <string name="bottomNavigation_music">Music</string>
+    <string name="sign_out">sign out</string>
 </resources>

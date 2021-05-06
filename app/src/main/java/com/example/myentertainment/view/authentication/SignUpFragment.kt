@@ -88,6 +88,8 @@ class SignUpFragment : Fragment() {
     private fun signingUpResult(signingUpStatus: Boolean) {
         if (signingUpStatus) {
             val intent = Intent(activity, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         } else {
             message = "Unfortunately, user can not be created"

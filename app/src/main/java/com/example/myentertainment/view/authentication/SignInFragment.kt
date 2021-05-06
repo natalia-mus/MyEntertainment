@@ -39,20 +39,9 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
         fragmentView = inflater.inflate(R.layout.fragment_sign_in, container, false)
         initView()
         viewModel = ViewModelProvider(this).get(SignInFragmentViewModel::class.java)
-        checkCurrentUser(viewModel.checkUserId())
+        setObservers()
+        viewModel.checkUserId()
         return fragmentView
-    }
-
-    private fun checkCurrentUser(userId: String) {
-        if (userId.isNotEmpty()) {
-            val intent = Intent(activity, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        } else {
-            loadingSection.visibility = View.INVISIBLE
-            signInSection.visibility = View.VISIBLE
-        }
     }
 
     private fun initView() {
@@ -65,6 +54,22 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
 
         signUp.setOnClickListener() {
             onSignUpClickAction.signUpClicked()
+        }
+    }
+
+    private fun setObservers() {
+        viewModel.userId.observe(this, { updateView(it) })
+    }
+
+    private fun updateView(userId: String?) {
+        if (userId != "null") {
+            val intent = Intent(activity, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        } else {
+            loadingSection.visibility = View.INVISIBLE
+            signInSection.visibility = View.VISIBLE
         }
     }
 }

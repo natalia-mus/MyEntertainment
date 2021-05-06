@@ -1,12 +1,11 @@
 package com.example.myentertainment.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
-class SignInFragmentViewModel : ViewModel() {
+class MainActivityViewModel : ViewModel() {
 
     init {
         BaseApplication.baseApplicationComponent.inject(this)
@@ -15,9 +14,7 @@ class SignInFragmentViewModel : ViewModel() {
     @Inject
     lateinit var databaseAuth: FirebaseAuth
 
-    val userId = MutableLiveData<String>()
-
-    fun checkUserId() {
-        userId.value = databaseAuth.uid.toString()
+    fun signOut() {
+        databaseAuth.signOut()
     }
 }
