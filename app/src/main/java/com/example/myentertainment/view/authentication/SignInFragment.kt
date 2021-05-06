@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
+import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.view.main.MainActivity
 import com.example.myentertainment.viewmodel.SignInFragmentViewModel
 
@@ -52,25 +54,66 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
         signInButton = fragmentView.findViewById(R.id.signIn_buttonOk)
         signUp = fragmentView.findViewById(R.id.signIn_signUp)
 
+        signInButton.setOnClickListener() {
+            email = emailEditText.text.toString()
+            password = passwordEditText.text.toString()
+            viewModel.signIn(email, password)
+        }
+
         signUp.setOnClickListener() {
             onSignUpClickAction.signUpClicked()
         }
     }
 
     private fun setObservers() {
-        viewModel.userId.observe(this, { updateView(it) })
+        viewModel.userId.observe(this, { updateActivity(it) })
+        viewModel.loading.observe(this, { updateView(it) })
+        viewModel.validationResult.observe(this, { validationResult(it) })
+        viewModel.signingInStatus.observe(this, { signingInResult(it) })
     }
 
-    private fun updateView(userId: String?) {
+    private fun updateActivity(userId: String?) {
         if (userId != "null") {
-            val intent = Intent(activity, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+            goToMainActivity()
         } else {
             loadingSection.visibility = View.INVISIBLE
             signInSection.visibility = View.VISIBLE
         }
+    }
+
+    private fun updateView(loading: Boolean) {
+        if (loading) {
+            loadingSection.visibility = View.VISIBLE
+        } else {
+            loadingSection.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun validationResult(validationResult: Int) {
+        when (validationResult) {
+            ValidationObject.EMPTY_VALUES -> message = "Enter both e-mail and password"
+            ValidationObject.INVALID_EMAIL -> message = "Your e-mail address is invalid"
+        }
+        toast(message)
+    }
+
+    private fun signingInResult(signingUpResult: Boolean) {
+        if (signingUpResult) goToMainActivity()
+        else {
+            val message = "Failed to sign in"
+            toast(message)
+        }
+    }
+
+    private fun goToMainActivity() {
+        val intent = Intent(activity, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+    }
+
+    private fun toast(message: String) {
+        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 }
 
