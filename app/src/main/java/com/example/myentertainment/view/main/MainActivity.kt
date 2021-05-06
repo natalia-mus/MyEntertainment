@@ -17,10 +17,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        bottomNavigation = findViewById(R.id.bottomNavigation_bar)
-
+        initView()
         changeCurrentFragment(moviesFragment)
+    }
+
+    private fun initView() {
+        bottomNavigation = findViewById(R.id.bottomNavigation_bar)
 
         bottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
