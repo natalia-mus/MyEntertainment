@@ -29,9 +29,9 @@
     <RatingBar
         android:id="@+id/movie_rate"
         style="?android:attr/ratingBarStyleSmall"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:isIndicator="false"
+        android:isIndicator="true"
         android:numStars="5"
         android:paddingVertical="8dp"
         android:stepSize="0.5"
