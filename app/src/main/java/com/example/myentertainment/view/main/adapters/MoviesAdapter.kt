@@ -22,8 +22,18 @@ class MoviesAdapter(private val context: Context, private val movies: List<Movie
         holder.title.text = movies[position].title
         holder.releaseYear.text = movies[position].releaseYear
         holder.rate.rating = movies[position].rating!!
-        holder.genre.text = movies[position].genre
-        holder.director.text = movies[position].director
+
+        if (movies[position].genre.isNullOrEmpty()) {
+            holder.genre.text = "-"
+        } else {
+            holder.genre.text = movies[position].genre
+        }
+
+        if (movies[position].director.isNullOrEmpty()) {
+            holder.director.text = "-"
+        } else {
+            holder.director.text = movies[position].director
+        }
     }
 
     override fun getItemCount() = movies.size
