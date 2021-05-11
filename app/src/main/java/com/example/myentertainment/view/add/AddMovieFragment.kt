@@ -1,5 +1,6 @@
 package com.example.myentertainment.view.add
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,10 +8,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RatingBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Movie
+import com.example.myentertainment.view.main.MainActivity
 import com.example.myentertainment.viewmodel.AddMovieFragmentViewModel
 
 class AddMovieFragment : Fragment() {
@@ -33,6 +36,7 @@ class AddMovieFragment : Fragment() {
         fragmentView = inflater.inflate(R.layout.fragment_add_movie, container, false)
         initView()
         viewModel = ViewModelProvider(this).get(AddMovieFragmentViewModel::class.java)
+        setObservers()
         return fragmentView
     }
 
@@ -53,6 +57,22 @@ class AddMovieFragment : Fragment() {
 
             val movie = Movie(title, releaseYear, genre, director, rating)
             viewModel.addToDatabase(movie)
+        }
+    }
+
+    private fun setObservers() {
+        //viewModel.addingToDatabaseStatus.observe(this, { addingToDatabaseResult(it) })
+        viewModel.addingToDatabaseResult.observe(this, { addingToDatabaseResult(it) })
+    }
+
+    private fun addingToDatabaseResult(addingToDatabaseResult: Boolean) {
+        if (addingToDatabaseResult) {
+            Toast.makeText(activity!!.applicationContext, "Movie added.", Toast.LENGTH_LONG)
+                .show()
+            val intent = Intent(activity, MainActivity::class.java)
+            startActivity(intent)
+        } else {
+            Toast.makeText(activity, "An error occured.", Toast.LENGTH_LONG).show()
         }
     }
 }
