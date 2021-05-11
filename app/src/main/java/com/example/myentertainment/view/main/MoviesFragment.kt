@@ -4,16 +4,57 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
+import com.example.myentertainment.data.Movie
+import com.example.myentertainment.view.main.adapters.MoviesAdapter
+import com.example.myentertainment.viewmodel.MoviesFragmentViewModel
 
 class MoviesFragment : Fragment() {
+
+    private lateinit var viewModel: MoviesFragmentViewModel
+    private lateinit var fragmentView: View
+
+    private lateinit var moviesList: RecyclerView
+    private lateinit var loadingSection: ConstraintLayout
+    private lateinit var noMoviesLabel: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_movies, container, false)
+    ): View {
+        fragmentView = inflater.inflate(R.layout.fragment_movies, container, false)
+        viewModel = ViewModelProvider(this).get(MoviesFragmentViewModel::class.java)
+        setView()
+        setObservers()
+        viewModel.fetchMovies()
+        return fragmentView
+    }
+
+    private fun setView() {
+        moviesList = fragmentView.findViewById(R.id.movies_list)
+        loadingSection = fragmentView.findViewById(R.id.movies_loadingSection)
+        noMoviesLabel = fragmentView.findViewById(R.id.movies_noMoviesLabel)
+    }
+
+    private fun setObservers() {
+        viewModel.movies.observe(this, { updateView(it) })
+    }
+
+    private fun updateView(movies: List<Movie>) {
+        if (movies.isEmpty()) {
+            noMoviesLabel.visibility = View.VISIBLE
+        } else {
+            loadingSection.visibility = View.INVISIBLE
+            moviesList.layoutManager =
+                LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+            moviesList.adapter = MoviesAdapter(requireContext(), movies)
+        }
     }
 }

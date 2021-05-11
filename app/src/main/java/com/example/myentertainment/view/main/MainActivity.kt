@@ -8,18 +8,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
+import com.example.myentertainment.`object`.CategoryObject
+import com.example.myentertainment.view.add.AddActivity
 import com.example.myentertainment.view.authentication.AuthenticationActivity
 import com.example.myentertainment.viewmodel.MainActivityViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var bottomNavigation: BottomNavigationView
     private lateinit var viewModel: MainActivityViewModel
     private val moviesFragment = MoviesFragment()
     private val booksFragment = BooksFragment()
     private val gamesFragment = GamesFragment()
     private val musicFragment = MusicFragment()
+    private var currentFragment = CategoryObject.MOVIES
+
+    private lateinit var bottomNavigation: BottomNavigationView
+    private lateinit var addButton: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +57,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initView() {
         bottomNavigation = findViewById(R.id.bottomNavigation_bar)
+        addButton = findViewById(R.id.mainActivity_add)
 
         bottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
@@ -61,12 +68,25 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
+        addButton.setOnClickListener() {
+            val intent = Intent(this, AddActivity::class.java)
+            intent.putExtra("category", currentFragment)
+            startActivity(intent)
+        }
     }
 
     private fun changeCurrentFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.mainActivity_fragment, fragment)
             commit()
+        }
+
+        when (fragment) {
+            is MoviesFragment -> currentFragment = CategoryObject.MOVIES
+            is BooksFragment -> currentFragment = CategoryObject.BOOKS
+            is GamesFragment -> currentFragment = CategoryObject.GAMES
+            is MusicFragment -> currentFragment = CategoryObject.MUSIC
         }
     }
 

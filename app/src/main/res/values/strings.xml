@@ -13,4 +13,13 @@
     <string name="bottomNavigation_games">Games</string>
     <string name="bottomNavigation_music">Music</string>
     <string name="sign_out">sign out</string>
+    <string name="movie_title">movie title</string>
+    <string name="movie_release_year">release year</string>
+    <string name="movie_director">director</string>
+    <string name="movie_genre">genre</string>
+    <string name="movie_rating">your rate:</string>
+    <string name="movie_add">add movie</string>
+    <string name="genre">genre:</string>
+    <string name="director">director:</string>
+    <string name="no_movies">you have no movies</string>
 </resources>
