@@ -3,6 +3,7 @@ package com.example.myentertainment.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
+import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.data.Movie
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -29,21 +30,25 @@ class AddMovieFragmentViewModel : ViewModel() {
     lateinit var databaseReference: DatabaseReference
 
     val loading = MutableLiveData<Boolean>()
+    val validationResult = MutableLiveData<Int>()
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
     fun addToDatabase(movie: Movie) {
-        databaseReference.child(user).child("movies").child(itemId).setValue(movie)
-            .addOnCompleteListener() { task ->
-                if (task.isComplete) {
-                    if (task.isSuccessful) {
-                        loading.value = false
-                        addingToDatabaseResult.value = true
-                    } else {
-                        loading.value = false
-                        addingToDatabaseResult.value = false
+        loading.value = true
+        if (validation(movie)) {
+            databaseReference.child(user).child("movies").child(itemId).setValue(movie)
+                .addOnCompleteListener() { task ->
+                    if (task.isComplete) {
+                        if (task.isSuccessful) {
+                            loading.value = false
+                            addingToDatabaseResult.value = true
+                        } else {
+                            loading.value = false
+                            addingToDatabaseResult.value = false
+                        }
                     }
                 }
-            }
+        }
     }
 
     private fun setItemId() {
@@ -63,6 +68,14 @@ class AddMovieFragmentViewModel : ViewModel() {
                     }
                 }
             })
+    }
+
+    private fun validation(movie: Movie): Boolean {
+        return if (movie.title.isNullOrEmpty()) {
+            loading.value = false
+            validationResult.value = ValidationObject.EMPTY_VALUES
+            false
+        } else true
     }
 
 }
