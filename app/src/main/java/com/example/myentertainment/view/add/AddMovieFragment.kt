@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
+import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.data.Movie
 import com.example.myentertainment.view.main.MainActivity
 import com.example.myentertainment.viewmodel.AddMovieFragmentViewModel
@@ -65,6 +66,7 @@ class AddMovieFragment : Fragment() {
 
     private fun setObservers() {
         viewModel.loading.observe(this, { updateView(it) })
+        viewModel.validationResult.observe(this, { validationResult(it) })
         viewModel.addingToDatabaseResult.observe(this, { addingToDatabaseResult(it) })
     }
 
@@ -73,6 +75,16 @@ class AddMovieFragment : Fragment() {
             loadingSection.visibility = View.VISIBLE
         } else {
             loadingSection.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun validationResult(validationResult: Int) {
+        when (validationResult) {
+            ValidationObject.EMPTY_VALUES -> Toast.makeText(
+                activity,
+                "Please, enter movie title",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
