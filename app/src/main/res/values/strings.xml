@@ -19,4 +19,7 @@
     <string name="movie_genre">genre</string>
     <string name="movie_rating">your rate:</string>
     <string name="movie_add">add movie</string>
+    <string name="genre">genre:</string>
+    <string name="director">director:</string>
+    <string name="no_movies">you have no movies</string>
 </resources>
