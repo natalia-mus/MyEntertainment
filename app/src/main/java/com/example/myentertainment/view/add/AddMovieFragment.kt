@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RatingBar
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
@@ -27,6 +28,7 @@ class AddMovieFragment : Fragment() {
     private lateinit var directorEditText: EditText
     private lateinit var ratingBar: RatingBar
     private lateinit var addButton: Button
+    private lateinit var loadingSection: ConstraintLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +49,7 @@ class AddMovieFragment : Fragment() {
         directorEditText = fragmentView.findViewById(R.id.addMovie_director)
         ratingBar = fragmentView.findViewById(R.id.addMovie_rating)
         addButton = fragmentView.findViewById(R.id.addMovie_addButton)
+        loadingSection = fragmentView.findViewById(R.id.addMovie_loadingSection)
 
         addButton.setOnClickListener() {
             val title = titleEditText.text.toString()
@@ -61,8 +64,16 @@ class AddMovieFragment : Fragment() {
     }
 
     private fun setObservers() {
-        //viewModel.addingToDatabaseStatus.observe(this, { addingToDatabaseResult(it) })
+        viewModel.loading.observe(this, { updateView(it) })
         viewModel.addingToDatabaseResult.observe(this, { addingToDatabaseResult(it) })
+    }
+
+    private fun updateView(addingToDatabaseStatus: Boolean) {
+        if (addingToDatabaseStatus) {
+            loadingSection.visibility = View.VISIBLE
+        } else {
+            loadingSection.visibility = View.INVISIBLE
+        }
     }
 
     private fun addingToDatabaseResult(addingToDatabaseResult: Boolean) {

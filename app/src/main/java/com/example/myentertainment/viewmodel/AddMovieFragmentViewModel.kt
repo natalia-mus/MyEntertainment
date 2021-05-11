@@ -28,7 +28,7 @@ class AddMovieFragmentViewModel : ViewModel() {
     @Inject
     lateinit var databaseReference: DatabaseReference
 
-    //val addingToDatabaseStatus = MutableLiveData<Boolean>()
+    val loading = MutableLiveData<Boolean>()
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
     fun addToDatabase(movie: Movie) {
@@ -36,10 +36,10 @@ class AddMovieFragmentViewModel : ViewModel() {
             .addOnCompleteListener() { task ->
                 if (task.isComplete) {
                     if (task.isSuccessful) {
-                        //addingToDatabaseStatus.value = false
+                        loading.value = false
                         addingToDatabaseResult.value = true
                     } else {
-                        //addingToDatabaseStatus.value = false
+                        loading.value = false
                         addingToDatabaseResult.value = false
                     }
                 }
