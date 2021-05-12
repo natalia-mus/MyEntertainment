@@ -30,4 +30,7 @@
     <string name="no_games">you have no games</string>
     <string name="game_add">add game</string>
     <string name="game_title">game title</string>
+    <string name="song_title">song title</string>
+    <string name="artist">artist</string>
+    <string name="music_add">add song</string>
 </resources>

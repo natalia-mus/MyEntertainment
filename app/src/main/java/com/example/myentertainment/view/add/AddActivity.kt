@@ -24,6 +24,7 @@ class AddActivity : AppCompatActivity() {
             CategoryObject.MOVIES -> fragment = AddMovieFragment()
             CategoryObject.BOOKS -> fragment = AddBookFragment()
             CategoryObject.GAMES -> fragment = AddGameFragment()
+            CategoryObject.MUSIC -> fragment = AddMusicFragment()
         }
     }
 
