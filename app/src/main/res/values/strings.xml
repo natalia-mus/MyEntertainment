@@ -15,7 +15,8 @@
     <string name="sign_out">sign out</string>
     <string name="movie_title">movie title</string>
     <string name="release_year">release year</string>
-    <string name="director">director</string>
+    <string name="release_year_label">release year:</string>
+    <string name="director">director: </string>
     <string name="genre">genre</string>
     <string name="rating">your rate:</string>
     <string name="movie_add">add movie</string>
@@ -27,4 +28,6 @@
     <string name="book_add">add book</string>
     <string name="no_books">you have no books</string>
     <string name="no_games">you have no games</string>
+    <string name="game_add">add game</string>
+    <string name="game_title">game title</string>
 </resources>

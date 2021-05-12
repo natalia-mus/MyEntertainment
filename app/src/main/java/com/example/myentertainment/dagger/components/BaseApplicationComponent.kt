@@ -18,6 +18,6 @@ interface BaseApplicationComponent {
     fun inject(viewModel: MoviesFragmentViewModel)
     fun inject(viewModel: AddBookFragmentViewModel)
     fun inject(viewModel: BooksFragmentViewModel)
-
+    fun inject(viewModel: AddGameFragmentViewModel)
     fun inject(viewModel: GamesFragmentViewModel)
 }
