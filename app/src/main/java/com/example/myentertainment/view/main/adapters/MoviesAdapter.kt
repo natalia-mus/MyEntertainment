@@ -20,8 +20,13 @@ class MoviesAdapter(private val context: Context, private val movies: List<Movie
 
     override fun onBindViewHolder(holder: MoviesRecyclerViewHolder, position: Int) {
         holder.title.text = movies[position].title
-        holder.releaseYear.text = movies[position].releaseYear
         holder.rate.rating = movies[position].rating!!
+
+        if (movies[position].releaseYear.isNullOrEmpty()) {
+            holder.releaseYear.visibility = View.GONE
+        } else {
+            holder.releaseYear.text = movies[position].releaseYear
+        }
 
         if (movies[position].genre.isNullOrEmpty()) {
             holder.genre.text = "-"

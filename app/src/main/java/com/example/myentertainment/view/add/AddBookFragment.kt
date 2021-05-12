@@ -14,19 +14,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationObject
-import com.example.myentertainment.data.Movie
+import com.example.myentertainment.data.Book
 import com.example.myentertainment.view.main.MainActivity
-import com.example.myentertainment.viewmodel.AddMovieFragmentViewModel
+import com.example.myentertainment.viewmodel.AddBookFragmentViewModel
 
-class AddMovieFragment : Fragment() {
+class AddBookFragment : Fragment() {
 
     private lateinit var fragmentView: View
-    private lateinit var viewModel: AddMovieFragmentViewModel
+    private lateinit var viewModel: AddBookFragmentViewModel
 
     private lateinit var titleEditText: EditText
+    private lateinit var authorEditText: EditText
     private lateinit var releaseYearEditText: EditText
     private lateinit var genreEditText: EditText
-    private lateinit var directorEditText: EditText
     private lateinit var ratingBar: RatingBar
     private lateinit var addButton: Button
     private lateinit var loadingSection: ConstraintLayout
@@ -36,31 +36,31 @@ class AddMovieFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        fragmentView = inflater.inflate(R.layout.fragment_add_movie, container, false)
+        fragmentView = inflater.inflate(R.layout.fragment_add_book, container, false)
         initView()
-        viewModel = ViewModelProvider(this).get(AddMovieFragmentViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(AddBookFragmentViewModel::class.java)
         setObservers()
         return fragmentView
     }
 
     private fun initView() {
-        titleEditText = fragmentView.findViewById(R.id.addMovie_title)
-        releaseYearEditText = fragmentView.findViewById(R.id.addMovie_releaseYear)
-        genreEditText = fragmentView.findViewById(R.id.addMovie_genre)
-        directorEditText = fragmentView.findViewById(R.id.addMovie_director)
-        ratingBar = fragmentView.findViewById(R.id.addMovie_rating)
-        addButton = fragmentView.findViewById(R.id.addMovie_addButton)
-        loadingSection = fragmentView.findViewById(R.id.addMovie_loadingSection)
+        titleEditText = fragmentView.findViewById(R.id.addBook_title)
+        authorEditText = fragmentView.findViewById(R.id.addBook_author)
+        releaseYearEditText = fragmentView.findViewById(R.id.addBook_releaseYear)
+        genreEditText = fragmentView.findViewById(R.id.addBook_genre)
+        ratingBar = fragmentView.findViewById(R.id.addBook_rating)
+        addButton = fragmentView.findViewById(R.id.addBook_addButton)
+        loadingSection = fragmentView.findViewById(R.id.addBook_loadingSection)
 
         addButton.setOnClickListener() {
             val title = titleEditText.text.toString()
+            val author = authorEditText.text.toString()
             val releaseYear = releaseYearEditText.text.toString()
             val genre = genreEditText.text.toString()
-            val director = directorEditText.text.toString()
             val rating = ratingBar.rating
 
-            val movie = Movie(title, releaseYear, genre, director, rating)
-            viewModel.addToDatabase(movie)
+            val book = Book(title, author, releaseYear, genre, rating)
+            viewModel.addToDatabase(book)
         }
     }
 
@@ -82,7 +82,7 @@ class AddMovieFragment : Fragment() {
         when (validationResult) {
             ValidationObject.EMPTY_VALUES -> Toast.makeText(
                 activity,
-                "Please, enter movie title",
+                "Please, enter book title",
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -90,7 +90,7 @@ class AddMovieFragment : Fragment() {
 
     private fun addingToDatabaseResult(addingToDatabaseResult: Boolean) {
         if (addingToDatabaseResult) {
-            Toast.makeText(activity!!.applicationContext, "Movie added.", Toast.LENGTH_LONG)
+            Toast.makeText(activity!!.applicationContext, "Book added.", Toast.LENGTH_LONG)
                 .show()
             val intent = Intent(activity, MainActivity::class.java)
             startActivity(intent)
