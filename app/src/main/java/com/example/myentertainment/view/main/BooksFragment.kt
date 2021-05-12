@@ -31,13 +31,13 @@ class BooksFragment : Fragment() {
     ): View {
         fragmentView = inflater.inflate(R.layout.fragment_books, container, false)
         viewModel = ViewModelProvider(this).get(BooksFragmentViewModel::class.java)
-        setView()
+        initView()
         setObservers()
         viewModel.fetchBooks()
         return fragmentView
     }
 
-    private fun setView() {
+    private fun initView() {
         booksList = fragmentView.findViewById(R.id.books_list)
         loadingSection = fragmentView.findViewById(R.id.books_loadingSection)
         noBooksLabel = fragmentView.findViewById(R.id.books_noBooksLabel)
@@ -49,6 +49,7 @@ class BooksFragment : Fragment() {
 
     private fun updateView(books: List<Book>) {
         if (books.isEmpty()) {
+            loadingSection.visibility = View.INVISIBLE
             noBooksLabel.visibility = View.VISIBLE
         } else {
             loadingSection.visibility = View.INVISIBLE
@@ -57,5 +58,4 @@ class BooksFragment : Fragment() {
             booksList.adapter = BooksAdapter(requireContext(), books)
         }
     }
-
 }

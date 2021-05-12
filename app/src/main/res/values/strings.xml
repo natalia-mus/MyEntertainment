@@ -26,4 +26,5 @@
     <string name="author">author</string>
     <string name="book_add">add book</string>
     <string name="no_books">you have no books</string>
+    <string name="no_games">you have no games</string>
 </resources>

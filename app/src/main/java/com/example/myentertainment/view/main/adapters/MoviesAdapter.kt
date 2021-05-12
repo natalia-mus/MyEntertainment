@@ -11,14 +11,14 @@ import com.example.myentertainment.R
 import com.example.myentertainment.data.Movie
 
 class MoviesAdapter(private val context: Context, private val movies: List<Movie>) :
-    RecyclerView.Adapter<MoviesRecyclerViewHolder>() {
+    RecyclerView.Adapter<MoviesViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesRecyclerViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.single_movie, parent, false)
-        return MoviesRecyclerViewHolder(view)
+        return MoviesViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: MoviesRecyclerViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         holder.title.text = movies[position].title
         holder.rate.rating = movies[position].rating!!
 
@@ -44,7 +44,7 @@ class MoviesAdapter(private val context: Context, private val movies: List<Movie
     override fun getItemCount() = movies.size
 }
 
-class MoviesRecyclerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class MoviesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val title = view.findViewById<TextView>(R.id.movie_title)
     val releaseYear = view.findViewById<TextView>(R.id.movie_releaseYear)
     val rate = view.findViewById<RatingBar>(R.id.movie_rate)
