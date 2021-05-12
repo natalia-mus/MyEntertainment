@@ -33,4 +33,5 @@
     <string name="song_title">song title</string>
     <string name="artist">artist</string>
     <string name="music_add">add song</string>
+    <string name="no_music">you have no songs</string>
 </resources>
