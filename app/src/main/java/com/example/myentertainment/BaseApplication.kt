@@ -13,10 +13,6 @@ class BaseApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        /*baseApplicationComponent = DaggerBaseApplicationComponent.builder()
-            .firebaseModule(FirebaseModule())
-            .build()*/
-
         baseApplicationComponent = DaggerBaseApplicationComponent.create()
     }
 }

@@ -22,6 +22,7 @@ class AddActivity : AppCompatActivity() {
     private fun setFragment(category: String) {
         when (category) {
             CategoryObject.MOVIES -> fragment = AddMovieFragment()
+            CategoryObject.BOOKS -> fragment = AddBookFragment()
         }
     }
 

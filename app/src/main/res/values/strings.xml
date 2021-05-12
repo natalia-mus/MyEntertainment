@@ -14,12 +14,15 @@
     <string name="bottomNavigation_music">Music</string>
     <string name="sign_out">sign out</string>
     <string name="movie_title">movie title</string>
-    <string name="movie_release_year">release year</string>
-    <string name="movie_director">director</string>
-    <string name="movie_genre">genre</string>
-    <string name="movie_rating">your rate:</string>
+    <string name="release_year">release year</string>
+    <string name="director">director</string>
+    <string name="genre">genre</string>
+    <string name="rating">your rate:</string>
     <string name="movie_add">add movie</string>
-    <string name="genre">genre:</string>
-    <string name="director">director:</string>
+    <string name="genre_label">genre:</string>
+    <string name="director_label">director:</string>
     <string name="no_movies">you have no movies</string>
+    <string name="book_title">book title</string>
+    <string name="author">author</string>
+    <string name="book_add">add book</string>
 </resources>
