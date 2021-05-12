@@ -11,14 +11,14 @@ import com.example.myentertainment.R
 import com.example.myentertainment.data.Book
 
 class BooksAdapter(private val context: Context, private val books: List<Book>) :
-    RecyclerView.Adapter<BooksRecyclerViewHolder>() {
+    RecyclerView.Adapter<BooksViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BooksRecyclerViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BooksViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.single_book, parent, false)
-        return BooksRecyclerViewHolder(view)
+        return BooksViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: BooksRecyclerViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BooksViewHolder, position: Int) {
         holder.title.text = books[position].title
         holder.rate.rating = books[position].rating!!
 
@@ -44,7 +44,7 @@ class BooksAdapter(private val context: Context, private val books: List<Book>) 
     override fun getItemCount() = books.size
 }
 
-class BooksRecyclerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class BooksViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val title = view.findViewById<TextView>(R.id.book_title)
     val author = view.findViewById<TextView>(R.id.book_author)
     val rate = view.findViewById<RatingBar>(R.id.book_rate)

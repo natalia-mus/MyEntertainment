@@ -31,13 +31,13 @@ class MoviesFragment : Fragment() {
     ): View {
         fragmentView = inflater.inflate(R.layout.fragment_movies, container, false)
         viewModel = ViewModelProvider(this).get(MoviesFragmentViewModel::class.java)
-        setView()
+        initView()
         setObservers()
         viewModel.fetchMovies()
         return fragmentView
     }
 
-    private fun setView() {
+    private fun initView() {
         moviesList = fragmentView.findViewById(R.id.movies_list)
         loadingSection = fragmentView.findViewById(R.id.movies_loadingSection)
         noMoviesLabel = fragmentView.findViewById(R.id.movies_noMoviesLabel)
@@ -49,6 +49,7 @@ class MoviesFragment : Fragment() {
 
     private fun updateView(movies: List<Movie>) {
         if (movies.isEmpty()) {
+            loadingSection.visibility = View.INVISIBLE
             noMoviesLabel.visibility = View.VISIBLE
         } else {
             loadingSection.visibility = View.INVISIBLE

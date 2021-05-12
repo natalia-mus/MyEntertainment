@@ -23,6 +23,7 @@ class AddActivity : AppCompatActivity() {
         when (category) {
             CategoryObject.MOVIES -> fragment = AddMovieFragment()
             CategoryObject.BOOKS -> fragment = AddBookFragment()
+            CategoryObject.GAMES -> fragment = AddGameFragment()
         }
     }
 
