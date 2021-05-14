@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Book
 import com.example.myentertainment.view.main.adapters.BooksAdapter
-import com.example.myentertainment.viewmodel.BooksFragmentViewModel
+import com.example.myentertainment.viewmodel.main.BooksFragmentViewModel
 
 class BooksFragment : Fragment() {
 

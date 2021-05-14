@@ -34,4 +34,17 @@
     <string name="artist">artist</string>
     <string name="music_add">add song</string>
     <string name="no_music">you have no songs</string>
+    <string name="movie_no_title">Please, enter movie title</string>
+    <string name="movie_added">Movie added</string>
+    <string name="book_no_title">Please, enter book title</string>
+    <string name="book_added">Book added</string>
+    <string name="game_no_title">Please, enter game title</string>
+    <string name="game_added">Game added</string>
+    <string name="music_no_title">Please, enter song title</string>
+    <string name="music_added">Song added</string>
+    <string name="enter_both_email_and_password">Enter both e-mail and password</string>
+    <string name="your_email_address_is_invalid">Your e-mail address is invalid</string>
+    <string name="password_too_short">Your password should be at least 6 characters long</string>
+    <string name="failed_to_sign_in">Failed to sign in</string>
+    <string name="user_can_not_be_created">Unfortunately, user can not be created</string>
 </resources>

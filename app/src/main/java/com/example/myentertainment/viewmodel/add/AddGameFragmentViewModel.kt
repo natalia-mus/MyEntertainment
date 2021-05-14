@@ -1,8 +1,9 @@
-package com.example.myentertainment.viewmodel
+package com.example.myentertainment.viewmodel.add
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
+import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.data.Game
 import com.google.firebase.auth.FirebaseAuth
@@ -15,11 +16,13 @@ import javax.inject.Inject
 class AddGameFragmentViewModel : ViewModel() {
 
     private val user: String
+    private val mainPath: DatabaseReference
     private var itemId: String = "0"
 
     init {
         BaseApplication.baseApplicationComponent.inject(this)
         user = databaseAuth.uid.toString()
+        mainPath = databaseReference.child(user).child(CategoryObject.GAMES)
         setItemId()
     }
 
@@ -37,7 +40,7 @@ class AddGameFragmentViewModel : ViewModel() {
     fun addToDatabase(game: Game) {
         loading.value = true
         if (validation(game)) {
-            databaseReference.child(user).child("games").child(itemId).setValue(game)
+            mainPath.child(itemId).setValue(game)
                 .addOnCompleteListener() { task ->
                     if (task.isSuccessful) {
                         loading.value = false
@@ -51,7 +54,7 @@ class AddGameFragmentViewModel : ViewModel() {
     }
 
     private fun setItemId() {
-        databaseReference.child(user).child("games")
+        mainPath
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {}
 

@@ -1,4 +1,4 @@
-package com.example.myentertainment.viewmodel
+package com.example.myentertainment.viewmodel.authentication
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

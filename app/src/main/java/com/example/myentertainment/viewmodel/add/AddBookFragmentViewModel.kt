@@ -1,10 +1,11 @@
-package com.example.myentertainment.viewmodel
+package com.example.myentertainment.viewmodel.add
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
+import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.`object`.ValidationObject
-import com.example.myentertainment.data.Music
+import com.example.myentertainment.data.Book
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -12,14 +13,16 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import javax.inject.Inject
 
-class AddMusicFragmentViewModel : ViewModel() {
+class AddBookFragmentViewModel : ViewModel() {
 
     private val user: String
+    private val mainPath: DatabaseReference
     private var itemId: String = "0"
 
     init {
         BaseApplication.baseApplicationComponent.inject(this)
         user = databaseAuth.uid.toString()
+        mainPath = databaseReference.child(user).child(CategoryObject.BOOKS)
         setItemId()
     }
 
@@ -33,26 +36,25 @@ class AddMusicFragmentViewModel : ViewModel() {
     val validationResult = MutableLiveData<Int>()
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
-    fun addToDatabase(music: Music) {
+
+    fun addToDatabase(book: Book) {
         loading.value = true
-        if (validation(music)) {
-            databaseReference.child(user).child("music").child(itemId).setValue(music)
+        if (validation(book)) {
+            mainPath.child(itemId).setValue(book)
                 .addOnCompleteListener() { task ->
-                    if (task.isComplete) {
-                        if (task.isSuccessful) {
-                            loading.value = false
-                            addingToDatabaseResult.value = true
-                        } else {
-                            loading.value = false
-                            addingToDatabaseResult.value = false
-                        }
+                    if (task.isSuccessful) {
+                        loading.value = false
+                        addingToDatabaseResult.value = true
+                    } else {
+                        loading.value = false
+                        addingToDatabaseResult.value = false
                     }
                 }
         }
     }
 
     private fun setItemId() {
-        databaseReference.child(user).child("music")
+        mainPath
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {}
 
@@ -70,8 +72,8 @@ class AddMusicFragmentViewModel : ViewModel() {
             })
     }
 
-    private fun validation(music: Music): Boolean {
-        return if (music.title.isNullOrEmpty()) {
+    private fun validation(book: Book): Boolean {
+        return if (book.title.isNullOrEmpty()) {
             loading.value = false
             validationResult.value = ValidationObject.EMPTY_VALUES
             false

@@ -11,7 +11,7 @@ import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.view.add.AddActivity
 import com.example.myentertainment.view.authentication.AuthenticationActivity
-import com.example.myentertainment.viewmodel.MainActivityViewModel
+import com.example.myentertainment.viewmodel.main.MainActivityViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -22,7 +22,8 @@ class MainActivity : AppCompatActivity() {
     private val booksFragment = BooksFragment()
     private val gamesFragment = GamesFragment()
     private val musicFragment = MusicFragment()
-    private var currentFragment = CategoryObject.MOVIES
+
+    private lateinit var currentFragment: String
 
     private lateinit var bottomNavigation: BottomNavigationView
     private lateinit var addButton: FloatingActionButton
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         initView()
-        changeCurrentFragment(moviesFragment)
+        checkCategory()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -76,6 +77,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkCategory() {
+        if (intent.hasExtra("category")) {
+            currentFragment = intent.getStringExtra("category").toString()
+            when (currentFragment) {
+                CategoryObject.MOVIES -> changeCurrentFragment(moviesFragment)
+                CategoryObject.BOOKS -> changeCurrentFragment(booksFragment)
+                CategoryObject.GAMES -> changeCurrentFragment(gamesFragment)
+                CategoryObject.MUSIC -> changeCurrentFragment(musicFragment)
+            }
+        } else {
+            changeCurrentFragment(moviesFragment)
+        }
+    }
+
     private fun changeCurrentFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.mainActivity_fragment, fragment)
@@ -83,10 +98,22 @@ class MainActivity : AppCompatActivity() {
         }
 
         when (fragment) {
-            is MoviesFragment -> currentFragment = CategoryObject.MOVIES
-            is BooksFragment -> currentFragment = CategoryObject.BOOKS
-            is GamesFragment -> currentFragment = CategoryObject.GAMES
-            is MusicFragment -> currentFragment = CategoryObject.MUSIC
+            is MoviesFragment -> {
+                currentFragment = CategoryObject.MOVIES
+                bottomNavigation.menu.getItem(0).setChecked(true)
+            }
+            is BooksFragment -> {
+                currentFragment = CategoryObject.BOOKS
+                bottomNavigation.menu.getItem(1).setChecked(true)
+            }
+            is GamesFragment -> {
+                currentFragment = CategoryObject.GAMES
+                bottomNavigation.menu.getItem(2).setChecked(true)
+            }
+            is MusicFragment -> {
+                currentFragment = CategoryObject.MUSIC
+                bottomNavigation.menu.getItem(3).setChecked(true)
+            }
         }
     }
 

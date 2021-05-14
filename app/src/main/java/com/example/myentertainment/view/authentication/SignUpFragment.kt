@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.view.main.MainActivity
-import com.example.myentertainment.viewmodel.SignUpFragmentViewModel
+import com.example.myentertainment.viewmodel.authentication.SignUpFragmentViewModel
 
 class SignUpFragment : Fragment() {
 
@@ -73,13 +73,13 @@ class SignUpFragment : Fragment() {
     private fun validationResult(validationResult: Int) {
         when (validationResult) {
             ValidationObject.EMPTY_VALUES -> {
-                message = "Enter both e-mail and password"
+                message = getString(R.string.enter_both_email_and_password)
             }
             ValidationObject.PASSWORD_TOO_SHORT -> {
-                message = "Your password should be at least 6 characters long"
+                message = getString(R.string.password_too_short)
             }
             ValidationObject.INVALID_EMAIL -> {
-                message = "Your e-mail address is invalid"
+                message = getString(R.string.your_email_address_is_invalid)
             }
         }
         toast(message)
@@ -92,7 +92,7 @@ class SignUpFragment : Fragment() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         } else {
-            message = "Unfortunately, user can not be created"
+            message = getString(R.string.user_can_not_be_created)
             toast(message)
         }
     }

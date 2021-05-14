@@ -1,14 +1,15 @@
-package com.example.myentertainment.viewmodel
+package com.example.myentertainment.viewmodel.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
-import com.example.myentertainment.data.Book
+import com.example.myentertainment.`object`.CategoryObject
+import com.example.myentertainment.data.Music
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
 
-class BooksFragmentViewModel : ViewModel() {
+class MusicFragmentViewModel : ViewModel() {
 
     init {
         BaseApplication.baseApplicationComponent.inject(this)
@@ -22,19 +23,19 @@ class BooksFragmentViewModel : ViewModel() {
 
     private val user = databaseAuth.uid.toString()
 
-    val books = MutableLiveData<List<Book>>()
+    val music = MutableLiveData<List<Music>>()
 
 
-    fun fetchBooks() {
-        databaseReference.child(user).child("books").get().addOnSuccessListener {
+    fun fetchMusic() {
+        databaseReference.child(user).child(CategoryObject.MUSIC).get().addOnSuccessListener {
             val countItems = it.childrenCount
-            val booksList: MutableList<Book> = mutableListOf()
+            val musicList: MutableList<Music> = mutableListOf()
 
             for (i in 0 until countItems) {
-                val singleBook = it.child(i.toString()).getValue(Book::class.java)
-                booksList.add(singleBook!!)
+                val singleMusic = it.child(i.toString()).getValue(Music::class.java)
+                musicList.add(singleMusic!!)
             }
-            books.value = booksList
+            music.value = musicList
         }
     }
 }
