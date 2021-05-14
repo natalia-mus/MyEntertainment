@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Movie
 import com.example.myentertainment.view.main.adapters.MoviesAdapter
-import com.example.myentertainment.viewmodel.MoviesFragmentViewModel
+import com.example.myentertainment.viewmodel.main.MoviesFragmentViewModel
 
 class MoviesFragment : Fragment() {
 

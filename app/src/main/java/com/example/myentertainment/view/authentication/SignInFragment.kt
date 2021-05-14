@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.view.main.MainActivity
-import com.example.myentertainment.viewmodel.SignInFragmentViewModel
+import com.example.myentertainment.viewmodel.authentication.SignInFragmentViewModel
 
 class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fragment() {
 
@@ -91,8 +91,10 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
 
     private fun validationResult(validationResult: Int) {
         when (validationResult) {
-            ValidationObject.EMPTY_VALUES -> message = "Enter both e-mail and password"
-            ValidationObject.INVALID_EMAIL -> message = "Your e-mail address is invalid"
+            ValidationObject.EMPTY_VALUES -> message =
+                getString(R.string.enter_both_email_and_password)
+            ValidationObject.INVALID_EMAIL -> message =
+                getString(R.string.your_email_address_is_invalid)
         }
         toast(message)
     }
@@ -100,7 +102,7 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
     private fun signingInResult(signingUpResult: Boolean) {
         if (signingUpResult) goToMainActivity()
         else {
-            val message = "Failed to sign in"
+            val message = getString(R.string.failed_to_sign_in)
             toast(message)
         }
     }

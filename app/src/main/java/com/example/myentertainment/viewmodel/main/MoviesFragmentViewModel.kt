@@ -1,8 +1,9 @@
-package com.example.myentertainment.viewmodel
+package com.example.myentertainment.viewmodel.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
+import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.data.Movie
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -25,7 +26,7 @@ class MoviesFragmentViewModel : ViewModel() {
     val movies = MutableLiveData<List<Movie>>()
 
     fun fetchMovies() {
-        databaseReference.child(user).child("movies").get().addOnSuccessListener {
+        databaseReference.child(user).child(CategoryObject.MOVIES).get().addOnSuccessListener {
             val countItems = it.childrenCount
             val moviesList: MutableList<Movie> = mutableListOf()
 

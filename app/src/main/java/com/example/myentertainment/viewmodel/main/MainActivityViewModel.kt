@@ -1,4 +1,4 @@
-package com.example.myentertainment.viewmodel
+package com.example.myentertainment.viewmodel.main
 
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication

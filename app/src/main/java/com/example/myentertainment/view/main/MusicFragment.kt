@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Music
 import com.example.myentertainment.view.main.adapters.MusicAdapter
-import com.example.myentertainment.viewmodel.MusicFragmentViewModel
+import com.example.myentertainment.viewmodel.main.MusicFragmentViewModel
 
 class MusicFragment : Fragment() {
 
