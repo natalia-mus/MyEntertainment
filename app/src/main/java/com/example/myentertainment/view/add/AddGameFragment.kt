@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
+import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.data.Game
 import com.example.myentertainment.interfaces.AddFragmentViewModelInterface
 import com.example.myentertainment.viewmodel.add.AddGameFragmentViewModel
@@ -70,6 +71,13 @@ class AddGameFragment : Fragment(), AddFragmentViewModelInterface {
             { validationResult(it, requireContext(), noTitleMessage) })
         viewModel.addingToDatabaseResult.observe(
             this,
-            { addingToDatabaseResult(it, requireContext(), gameAddedMessage) })
+            {
+                addingToDatabaseResult(
+                    it,
+                    requireContext(),
+                    gameAddedMessage,
+                    CategoryObject.GAMES
+                )
+            })
     }
 }

@@ -31,11 +31,17 @@ interface AddFragmentViewModelInterface {
         }
     }
 
-    fun addingToDatabaseResult(addingToDatabaseResult: Boolean, context: Context, message: String) {
+    fun addingToDatabaseResult(
+        addingToDatabaseResult: Boolean,
+        context: Context,
+        message: String,
+        category: String
+    ) {
         if (addingToDatabaseResult) {
             Toast.makeText(context, message, Toast.LENGTH_LONG)
                 .show()
             val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra("category", category)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         } else {
