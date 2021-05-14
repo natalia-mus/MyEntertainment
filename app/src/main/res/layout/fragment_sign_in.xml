@@ -79,7 +79,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:text="@string/create_one"
-                android:textColor="@color/blue_dark"
+                android:textColor="@color/blue_light"
                 android:textStyle="bold" />
 
             <TextView

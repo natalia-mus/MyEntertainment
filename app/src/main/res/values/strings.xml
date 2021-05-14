@@ -16,7 +16,7 @@
     <string name="movie_title">movie title</string>
     <string name="release_year">release year</string>
     <string name="release_year_label">release year:</string>
-    <string name="director">director: </string>
+    <string name="director">director</string>
     <string name="genre">genre</string>
     <string name="rating">your rate:</string>
     <string name="movie_add">add movie</string>
