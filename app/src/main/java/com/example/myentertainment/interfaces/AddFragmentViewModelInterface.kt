@@ -42,6 +42,7 @@ interface AddFragmentViewModelInterface {
                 .show()
             val intent = Intent(context, MainActivity::class.java)
             intent.putExtra("category", category)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         } else {
