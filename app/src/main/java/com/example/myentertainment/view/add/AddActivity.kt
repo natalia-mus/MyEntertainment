@@ -15,7 +15,7 @@ class AddActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
         category = intent.getStringExtra("category")
-        setFragment(category!!)
+        category?.let { setFragment(it) }
         showFragment(fragment)
     }
 

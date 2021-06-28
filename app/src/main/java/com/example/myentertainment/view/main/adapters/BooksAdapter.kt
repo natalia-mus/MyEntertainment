@@ -20,7 +20,7 @@ class BooksAdapter(private val context: Context, private val books: List<Book>) 
 
     override fun onBindViewHolder(holder: BooksViewHolder, position: Int) {
         holder.title.text = books[position].title
-        holder.rate.rating = books[position].rating!!
+        books[position].rating?.let { it -> holder.rate.rating = it }
 
         if (books[position].author.isNullOrEmpty()) {
             holder.author.visibility = View.GONE

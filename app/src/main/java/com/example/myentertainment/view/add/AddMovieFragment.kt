@@ -71,13 +71,13 @@ class AddMovieFragment : Fragment(), AddFragmentViewModelInterface {
         viewModel.loading.observe(this, { updateView(it, loadingSection) })
         viewModel.validationResult.observe(
             this,
-            { validationResult(it, activity!!.baseContext, noTitleMessage) })
+            { validationResult(it, requireContext(), noTitleMessage) })
         viewModel.addingToDatabaseResult.observe(
             this,
             {
                 addingToDatabaseResult(
                     it,
-                    activity!!.baseContext,
+                    requireContext(),
                     movieAddedMessage,
                     CategoryObject.MOVIES
                 )

@@ -33,7 +33,7 @@ class BooksFragmentViewModel : ViewModel() {
 
             for (i in 0 until countItems) {
                 val singleBook = it.child(i.toString()).getValue(Book::class.java)
-                booksList.add(singleBook!!)
+                singleBook?.let { book -> booksList.add(book) }
             }
             books.value = booksList
         }

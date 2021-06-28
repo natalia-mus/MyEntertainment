@@ -20,7 +20,7 @@ class MusicAdapter(private val context: Context, private val music: List<Music>)
 
     override fun onBindViewHolder(holder: MusicViewHolder, position: Int) {
         holder.title.text = music[position].title
-        holder.rate.rating = music[position].rating!!
+        music[position].rating?.let { it -> holder.rate.rating = it }
 
         if (music[position].artist.isNullOrEmpty()) {
             holder.artist.visibility = View.GONE

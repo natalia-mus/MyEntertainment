@@ -33,7 +33,7 @@ class GamesFragmentViewModel : ViewModel() {
 
             for (i in 0 until countItems) {
                 val singleGame = it.child(i.toString()).getValue(Game::class.java)
-                gamesList.add(singleGame!!)
+                singleGame?.let { game -> gamesList.add(game) }
             }
             games.value = gamesList
         }
