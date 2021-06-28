@@ -33,7 +33,7 @@ class MusicFragmentViewModel : ViewModel() {
 
             for (i in 0 until countItems) {
                 val singleMusic = it.child(i.toString()).getValue(Music::class.java)
-                musicList.add(singleMusic!!)
+                singleMusic?.let { music -> musicList.add(music) }
             }
             music.value = musicList
         }

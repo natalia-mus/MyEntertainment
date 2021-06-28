@@ -20,7 +20,7 @@ class GamesAdapter(private val context: Context, private val games: List<Game>) 
 
     override fun onBindViewHolder(holder: GamesViewHolder, position: Int) {
         holder.title.text = games[position].title
-        holder.rate.rating = games[position].rating!!
+        games[position].rating?.let { it -> holder.rate.rating = it }
 
         if (games[position].releaseYear.isNullOrEmpty()) {
             holder.releaseYear.visibility = View.GONE

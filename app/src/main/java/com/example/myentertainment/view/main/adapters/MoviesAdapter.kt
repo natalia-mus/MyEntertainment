@@ -20,7 +20,7 @@ class MoviesAdapter(private val context: Context, private val movies: List<Movie
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         holder.title.text = movies[position].title
-        holder.rate.rating = movies[position].rating!!
+        movies[position].rating?.let { it -> holder.rate.rating = it }
 
         if (movies[position].releaseYear.isNullOrEmpty()) {
             holder.releaseYear.visibility = View.GONE

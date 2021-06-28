@@ -32,7 +32,7 @@ class MoviesFragmentViewModel : ViewModel() {
 
             for (i in 0 until countItems) {
                 val singleMovie = it.child(i.toString()).getValue(Movie::class.java)
-                moviesList.add(singleMovie!!)
+                singleMovie?.let { movie -> moviesList.add(movie) }
             }
             movies.value = moviesList
         }
