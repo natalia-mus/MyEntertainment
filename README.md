@@ -9,7 +9,7 @@ To use app it is necessary to create an account with an e-mail and at least 6 ch
 
 ![my_entertainment_signup_signin](https://user-images.githubusercontent.com/56269299/118413362-3dee1300-b69f-11eb-99d4-0b79917a6fb5.png)
 
-MyEntertainment is based on Firebase Realtime Database, which provides signing up, signing in and is a database for storing user's movies/books/games/music.
+MyEntertainment is based on Firebase Realtime Database, which is a database for storing user's movies/books/games/music. Firebase also provides authorization.
 
 Project was built according to MVVM architecture pattern. It uses Dagger2 for dependency injection. 
 
