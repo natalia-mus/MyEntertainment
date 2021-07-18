@@ -2,102 +2,105 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginVertical="70dp">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:id="@+id/signIn_section"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         android:visibility="invisible">
 
-        <EditText
-            android:id="@+id/signIn_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="40dp"
-            android:layout_marginBottom="20dp"
-            android:hint="@string/email_address"
-            android:inputType="textEmailAddress"
-            android:padding="13dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/signIn_password"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/signIn_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="40dp"
-            android:layout_marginBottom="20dp"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:padding="13dp"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@id/signIn_buttonOk"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signIn_email" />
-
-        <Button
-            android:id="@+id/signIn_buttonOk"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginHorizontal="80dp"
-            android:layout_marginTop="60dp"
-            android:text="@string/sign_in"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@id/signIn_signUpSection"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signIn_password" />
-
         <LinearLayout
-            android:id="@+id/signIn_signUpSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="80dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signIn_buttonOk">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/signIn_signUpMessage"
+            <EditText
+                android:id="@+id/signIn_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginBottom="60dp"
+                android:hint="@string/email_address"
+                android:inputType="textEmailAddress"
+                android:padding="13dp"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/signIn_password"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/signIn_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginBottom="80dp"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:padding="13dp"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@id/signIn_buttonOk"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signIn_email" />
+
+            <Button
+                android:id="@+id/signIn_buttonOk"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginHorizontal="80dp"
+                android:text="@string/sign_in"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toTopOf="@id/signIn_signUpSection"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signIn_password" />
+
+            <LinearLayout
+                android:id="@+id/signIn_signUpSection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sign_in_message" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginHorizontal="80dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="40dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signIn_buttonOk">
 
-            <TextView
-                android:id="@+id/signIn_signUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:text="@string/create_one"
-                android:textColor="@color/blue_light"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/signIn_signUpMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_in_message" />
 
-            <TextView
-                android:id="@+id/signIn_signUpDot"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dot" />
+                <TextView
+                    android:id="@+id/signIn_signUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="@string/create_one"
+                    android:textColor="@color/blue_light"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/signIn_loadingSection"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white_transparent"
-        android:elevation="100dp"
         android:visibility="visible">
 
         <ProgressBar
