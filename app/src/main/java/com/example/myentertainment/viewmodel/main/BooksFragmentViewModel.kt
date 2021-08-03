@@ -38,9 +38,8 @@ class BooksFragmentViewModel : ViewModel() {
                 }
                 i++
             }
-            lastChild--
 
-            for (j in 0 until lastChild + 1) {
+            for (j in 0 until lastChild) {
                 val singleBook = it.child(j.toString()).getValue(Book::class.java)
                 singleBook?.let { book -> booksList.add(book) }
             }

@@ -28,13 +28,22 @@ class MusicFragmentViewModel : ViewModel() {
 
     fun fetchMusic() {
         databaseReference.child(user).child(CategoryObject.MUSIC).get().addOnSuccessListener {
-            val countItems = it.childrenCount
             val musicList: MutableList<Music> = mutableListOf()
+            var lastChild = it.childrenCount
 
-            for (i in 0 until countItems) {
-                val singleMusic = it.child(i.toString()).getValue(Music::class.java)
+            var i = 0
+            while (i < lastChild) {
+                if (!it.child(i.toString()).exists()) {
+                    lastChild++
+                }
+                i++
+            }
+
+            for (j in 0 until lastChild) {
+                val singleMusic = it.child(j.toString()).getValue(Music::class.java)
                 singleMusic?.let { music -> musicList.add(music) }
             }
+
             music.value = musicList
         }
     }

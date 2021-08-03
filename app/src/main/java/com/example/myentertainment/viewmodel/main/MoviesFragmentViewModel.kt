@@ -27,13 +27,22 @@ class MoviesFragmentViewModel : ViewModel() {
 
     fun fetchMovies() {
         databaseReference.child(user).child(CategoryObject.MOVIES).get().addOnSuccessListener {
-            val countItems = it.childrenCount
             val moviesList: MutableList<Movie> = mutableListOf()
+            var lastChild = it.childrenCount
 
-            for (i in 0 until countItems) {
-                val singleMovie = it.child(i.toString()).getValue(Movie::class.java)
+            var i = 0
+            while (i < lastChild) {
+                if (!it.child(i.toString()).exists()) {
+                    lastChild++
+                }
+                i++
+            }
+
+            for (j in 0 until lastChild) {
+                val singleMovie = it.child(j.toString()).getValue(Movie::class.java)
                 singleMovie?.let { movie -> moviesList.add(movie) }
             }
+
             movies.value = moviesList
         }
     }

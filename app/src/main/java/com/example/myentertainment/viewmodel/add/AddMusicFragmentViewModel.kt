@@ -36,8 +36,17 @@ class AddMusicFragmentViewModel : ViewModel() {
     val validationResult = MutableLiveData<Int>()
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
-    fun addToDatabase(music: Music) {
+    fun addToDatabase(item: Music) {
         loading.value = true
+
+        val title = item.title
+        val artist = item.artist
+        val releaseYear = item.releaseYear
+        val genre = item.genre
+        val rating = item.rating
+
+        val music = Music(itemId, title, artist, releaseYear, genre, rating)
+
         if (validation(music)) {
             mainPath.child(itemId).setValue(music)
                 .addOnCompleteListener() { task ->

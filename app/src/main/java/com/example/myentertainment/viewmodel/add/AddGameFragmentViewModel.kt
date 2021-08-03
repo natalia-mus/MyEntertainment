@@ -37,8 +37,16 @@ class AddGameFragmentViewModel : ViewModel() {
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
 
-    fun addToDatabase(game: Game) {
+    fun addToDatabase(item: Game) {
         loading.value = true
+
+        val title = item.title
+        val releaseYear = item.releaseYear
+        val genre = item.genre
+        val rating = item.rating
+
+        val game = Game(itemId, title, releaseYear, genre, rating)
+
         if (validation(game)) {
             mainPath.child(itemId).setValue(game)
                 .addOnCompleteListener() { task ->

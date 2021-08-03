@@ -59,7 +59,7 @@ class AddGameFragment : Fragment(), AddFragmentViewModelInterface {
             val genre = genreEditText.text.toString()
             val rate = ratingBar.rating
 
-            val game = Game(title, releaseYear, genre, rate)
+            val game = Game(null, title, releaseYear, genre, rate)
             viewModel.addToDatabase(game)
         }
     }
