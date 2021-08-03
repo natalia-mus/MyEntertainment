@@ -28,13 +28,23 @@ class BooksFragmentViewModel : ViewModel() {
 
     fun fetchBooks() {
         databaseReference.child(user).child(CategoryObject.BOOKS).get().addOnSuccessListener {
-            val countItems = it.childrenCount
             val booksList: MutableList<Book> = mutableListOf()
+            var lastChild = it.childrenCount
 
-            for (i in 0 until countItems) {
-                val singleBook = it.child(i.toString()).getValue(Book::class.java)
+            var i = 0
+            while (i < lastChild) {
+                if (!it.child(i.toString()).exists()) {
+                    lastChild++
+                }
+                i++
+            }
+            lastChild--
+
+            for (j in 0 until lastChild + 1) {
+                val singleBook = it.child(j.toString()).getValue(Book::class.java)
                 singleBook?.let { book -> booksList.add(book) }
             }
+
             books.value = booksList
         }
     }

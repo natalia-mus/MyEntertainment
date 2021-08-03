@@ -37,8 +37,17 @@ class AddBookFragmentViewModel : ViewModel() {
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
 
-    fun addToDatabase(book: Book) {
+    fun addToDatabase(item: Book) {
         loading.value = true
+
+        val title = item.title
+        val author = item.author
+        val releaseYear = item.releaseYear
+        val genre = item.genre
+        val rating = item.rating
+
+        val book = Book(itemId, title, author, releaseYear, genre, rating)
+
         if (validation(book)) {
             mainPath.child(itemId).setValue(book)
                 .addOnCompleteListener() { task ->

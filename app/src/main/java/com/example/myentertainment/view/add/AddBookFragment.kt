@@ -62,7 +62,7 @@ class AddBookFragment : Fragment(), AddFragmentViewModelInterface {
             val genre = genreEditText.text.toString()
             val rating = ratingBar.rating
 
-            val book = Book(title, author, releaseYear, genre, rating)
+            val book = Book(null, title, author, releaseYear, genre, rating)
             viewModel.addToDatabase(book)
         }
     }
