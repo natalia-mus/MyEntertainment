@@ -12,10 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Movie
+import com.example.myentertainment.interfaces.OnItemClickAction
 import com.example.myentertainment.view.main.adapters.MoviesAdapter
 import com.example.myentertainment.viewmodel.main.MoviesFragmentViewModel
 
-class MoviesFragment : Fragment() {
+class MoviesFragment : Fragment(), OnItemClickAction {
 
     private lateinit var viewModel: MoviesFragmentViewModel
     private lateinit var fragmentView: View
@@ -50,12 +51,17 @@ class MoviesFragment : Fragment() {
     private fun updateView(movies: List<Movie>) {
         if (movies.isEmpty()) {
             loadingSection.visibility = View.INVISIBLE
+            moviesList.visibility = View.INVISIBLE
             noMoviesLabel.visibility = View.VISIBLE
         } else {
             loadingSection.visibility = View.INVISIBLE
             moviesList.layoutManager =
                 LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            moviesList.adapter = MoviesAdapter(requireContext(), movies)
+            moviesList.adapter = MoviesAdapter(requireContext(), movies, this)
         }
+    }
+
+    override fun onItemLongClicked(id: String?) {
+        viewModel.deleteMovie(id)
     }
 }

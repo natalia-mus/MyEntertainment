@@ -6,11 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Music
+import com.example.myentertainment.interfaces.OnItemClickAction
 
-class MusicAdapter(private val context: Context, private val music: List<Music>) :
+class MusicAdapter(
+    private val context: Context,
+    private val music: List<Music>,
+    private val onItemClickAction: OnItemClickAction
+) :
     RecyclerView.Adapter<MusicViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicViewHolder {
@@ -40,6 +46,13 @@ class MusicAdapter(private val context: Context, private val music: List<Music>)
             holder.releaseYear.text = music[position].releaseYear
         }
 
+
+        holder.item.setOnLongClickListener() {
+            val id = music[position].id
+            onItemClickAction.onItemLongClicked(id)
+            true
+        }
+
     }
 
     override fun getItemCount() = music.size
@@ -47,6 +60,8 @@ class MusicAdapter(private val context: Context, private val music: List<Music>)
 
 
 class MusicViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val item = view.findViewById<ConstraintLayout>(R.id.music_item)
+
     val title = view.findViewById<TextView>(R.id.music_title)
     val artist = view.findViewById<TextView>(R.id.music_artist)
     val rate = view.findViewById<RatingBar>(R.id.music_rate)

@@ -1,5 +1,6 @@
 package com.example.myentertainment.viewmodel.main
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
@@ -46,5 +47,17 @@ class MusicFragmentViewModel : ViewModel() {
 
             music.value = musicList
         }
+    }
+
+
+    fun deleteMusic(id: String?) {
+        databaseReference.child(user).child(CategoryObject.MUSIC).child(id.toString()).removeValue()
+            .addOnCompleteListener() { task ->
+                if (task.isSuccessful) {
+                    fetchMusic()
+                } else {
+                    Log.e("error", "error")
+                }
+            }
     }
 }

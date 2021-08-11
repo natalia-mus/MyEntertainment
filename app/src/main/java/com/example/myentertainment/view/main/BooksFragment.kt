@@ -12,10 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Book
+import com.example.myentertainment.interfaces.OnItemClickAction
 import com.example.myentertainment.view.main.adapters.BooksAdapter
 import com.example.myentertainment.viewmodel.main.BooksFragmentViewModel
 
-class BooksFragment : Fragment() {
+class BooksFragment : Fragment(), OnItemClickAction {
 
     private lateinit var fragmentView: View
     private lateinit var viewModel: BooksFragmentViewModel
@@ -50,12 +51,17 @@ class BooksFragment : Fragment() {
     private fun updateView(books: List<Book>) {
         if (books.isEmpty()) {
             loadingSection.visibility = View.INVISIBLE
+            booksList.visibility = View.INVISIBLE
             noBooksLabel.visibility = View.VISIBLE
         } else {
             loadingSection.visibility = View.INVISIBLE
             booksList.layoutManager =
                 LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            booksList.adapter = BooksAdapter(requireContext(), books)
+            booksList.adapter = BooksAdapter(requireContext(), books, this)
         }
+    }
+
+    override fun onItemLongClicked(id: String?) {
+        viewModel.deleteBook(id)
     }
 }
