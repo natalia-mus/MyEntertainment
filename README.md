@@ -13,4 +13,9 @@ MyEntertainment is based on Firebase Realtime Database, which is a database for 
 
 Project was built according to MVVM architecture pattern. It uses Dagger2 for dependency injection. 
 
-As a work is still in progress, application - for now - doesn't allow to delete or edit items, but those functionalities are going to be allowed in the near future.
+As a work is still in progress, application - for now - doesn't allow to edit items, but this functionality is going to be allowed in the near future.
+
+<br/><br/>
+### <b> update: </b>
+ 
+Now deleting items is possible - in order to delete item user needs to tap and hold one.
