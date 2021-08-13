@@ -6,11 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Game
+import com.example.myentertainment.interfaces.OnItemClickAction
 
-class GamesAdapter(private val context: Context, private val games: List<Game>) :
+class GamesAdapter(
+    private val context: Context,
+    private var games: List<Game>,
+    private val onItemClickAction: OnItemClickAction
+) :
     RecyclerView.Adapter<GamesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GamesViewHolder {
@@ -33,12 +39,27 @@ class GamesAdapter(private val context: Context, private val games: List<Game>) 
         } else {
             holder.genre.text = games[position].genre
         }
+
+
+        holder.item.setOnLongClickListener() {
+            val id = games[position].id
+            onItemClickAction.onItemLongClicked(id)
+            true
+        }
     }
 
     override fun getItemCount() = games.size
+
+    fun dataSetChanged(newDataSet: List<Game>) {
+        games = newDataSet
+        notifyDataSetChanged()
+    }
+
 }
 
 class GamesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val item = view.findViewById<ConstraintLayout>(R.id.game_item)
+
     val title = view.findViewById<TextView>(R.id.game_title)
     val releaseYear = view.findViewById<TextView>(R.id.game_releaseYear)
     val rate = view.findViewById<RatingBar>(R.id.game_rate)

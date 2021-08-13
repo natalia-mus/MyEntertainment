@@ -6,11 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Movie
+import com.example.myentertainment.interfaces.OnItemClickAction
 
-class MoviesAdapter(private val context: Context, private val movies: List<Movie>) :
+class MoviesAdapter(
+    private val context: Context,
+    private var movies: List<Movie>,
+    private val onItemClickAction: OnItemClickAction
+) :
     RecyclerView.Adapter<MoviesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
@@ -39,12 +45,27 @@ class MoviesAdapter(private val context: Context, private val movies: List<Movie
         } else {
             holder.director.text = movies[position].director
         }
+
+
+        holder.item.setOnLongClickListener() {
+            val id = movies[position].id
+            onItemClickAction.onItemLongClicked(id)
+            true
+        }
     }
 
     override fun getItemCount() = movies.size
+
+    fun dataSetChanged(newDataSet: List<Movie>) {
+        movies = newDataSet
+        notifyDataSetChanged()
+    }
+
 }
 
 class MoviesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val item = view.findViewById<ConstraintLayout>(R.id.movie_item)
+
     val title = view.findViewById<TextView>(R.id.movie_title)
     val releaseYear = view.findViewById<TextView>(R.id.movie_releaseYear)
     val rate = view.findViewById<RatingBar>(R.id.movie_rate)

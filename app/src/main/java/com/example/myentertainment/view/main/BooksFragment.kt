@@ -12,15 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Book
+import com.example.myentertainment.interfaces.OnItemClickAction
 import com.example.myentertainment.view.main.adapters.BooksAdapter
 import com.example.myentertainment.viewmodel.main.BooksFragmentViewModel
 
-class BooksFragment : Fragment() {
+class BooksFragment : Fragment(), OnItemClickAction {
 
     private lateinit var fragmentView: View
     private lateinit var viewModel: BooksFragmentViewModel
 
     private lateinit var booksList: RecyclerView
+    private lateinit var booksAdapter: BooksAdapter
     private lateinit var loadingSection: ConstraintLayout
     private lateinit var noBooksLabel: TextView
 
@@ -48,14 +50,23 @@ class BooksFragment : Fragment() {
     }
 
     private fun updateView(books: List<Book>) {
+        loadingSection.visibility = View.INVISIBLE
         if (books.isEmpty()) {
-            loadingSection.visibility = View.INVISIBLE
+            booksList.visibility = View.INVISIBLE
             noBooksLabel.visibility = View.VISIBLE
         } else {
-            loadingSection.visibility = View.INVISIBLE
-            booksList.layoutManager =
-                LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            booksList.adapter = BooksAdapter(requireContext(), books)
+            if (viewModel.itemDeleted.value == true) {
+                booksAdapter.dataSetChanged(books)
+            } else {
+                booksList.layoutManager =
+                    LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+                booksAdapter = BooksAdapter(requireContext(), books, this)
+                booksList.adapter = booksAdapter
+            }
         }
+    }
+
+    override fun onItemLongClicked(id: String?) {
+        viewModel.deleteBook(id)
     }
 }

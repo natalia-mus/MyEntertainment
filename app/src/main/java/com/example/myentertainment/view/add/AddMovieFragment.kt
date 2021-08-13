@@ -62,7 +62,7 @@ class AddMovieFragment : Fragment(), AddFragmentViewModelInterface {
             val director = directorEditText.text.toString()
             val rating = ratingBar.rating
 
-            val movie = Movie(title, releaseYear, genre, director, rating)
+            val movie = Movie(null, title, releaseYear, genre, director, rating)
             viewModel.addToDatabase(movie)
         }
     }

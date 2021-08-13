@@ -62,7 +62,7 @@ class AddMusicFragment : Fragment(), AddFragmentViewModelInterface {
             val genre = genreEditText.text.toString()
             val rating = ratingBar.rating
 
-            val music = Music(title, artist, releaseYear, genre, rating)
+            val music = Music(null, title, artist, releaseYear, genre, rating)
             viewModel.addToDatabase(music)
         }
     }

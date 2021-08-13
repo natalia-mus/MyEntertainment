@@ -1,5 +1,6 @@
 package com.example.myentertainment.viewmodel.main
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
@@ -24,18 +25,42 @@ class GamesFragmentViewModel : ViewModel() {
     private val user = databaseAuth.uid.toString()
 
     val games = MutableLiveData<List<Game>>()
+    val itemDeleted = MutableLiveData<Boolean>(false)
 
 
     fun fetchGames() {
         databaseReference.child(user).child(CategoryObject.GAMES).get().addOnSuccessListener {
-            val countItems = it.childrenCount
             val gamesList: MutableList<Game> = mutableListOf()
+            var lastChild = it.childrenCount
 
-            for (i in 0 until countItems) {
-                val singleGame = it.child(i.toString()).getValue(Game::class.java)
+            var i = 0
+            while (i < lastChild) {
+                if (!it.child(i.toString()).exists()) {
+                    lastChild++
+                }
+                i++
+            }
+
+            for (j in 0 until lastChild) {
+                val singleGame = it.child(j.toString()).getValue(Game::class.java)
                 singleGame?.let { game -> gamesList.add(game) }
             }
+
             games.value = gamesList
         }
+    }
+
+
+    fun deleteGame(id: String?) {
+        itemDeleted.value = false
+        databaseReference.child(user).child(CategoryObject.GAMES).child(id.toString()).removeValue()
+            .addOnCompleteListener() { task ->
+                if (task.isSuccessful) {
+                    fetchGames()
+                    itemDeleted.value = true
+                } else {
+                    Log.e("error", "error")
+                }
+            }
     }
 }

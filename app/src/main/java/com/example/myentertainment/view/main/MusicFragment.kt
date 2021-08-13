@@ -12,15 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Music
+import com.example.myentertainment.interfaces.OnItemClickAction
 import com.example.myentertainment.view.main.adapters.MusicAdapter
 import com.example.myentertainment.viewmodel.main.MusicFragmentViewModel
 
-class MusicFragment : Fragment() {
+class MusicFragment : Fragment(), OnItemClickAction {
 
     private lateinit var fragmentView: View
     private lateinit var viewModel: MusicFragmentViewModel
 
     private lateinit var musicList: RecyclerView
+    private lateinit var musicAdapter: MusicAdapter
     private lateinit var loadingSection: ConstraintLayout
     private lateinit var noMusicLabel: TextView
 
@@ -28,7 +30,7 @@ class MusicFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         fragmentView = inflater.inflate(R.layout.fragment_music, container, false)
         initView()
         viewModel = ViewModelProvider(this).get(MusicFragmentViewModel::class.java)
@@ -48,14 +50,23 @@ class MusicFragment : Fragment() {
     }
 
     private fun updateView(music: List<Music>) {
+        loadingSection.visibility = View.INVISIBLE
         if (music.isEmpty()) {
-            loadingSection.visibility = View.INVISIBLE
+            musicList.visibility = View.INVISIBLE
             noMusicLabel.visibility = View.VISIBLE
         } else {
-            loadingSection.visibility = View.INVISIBLE
-            musicList.layoutManager =
-                LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            musicList.adapter = MusicAdapter(requireContext(), music)
+            if (viewModel.itemDeleted.value == true) {
+                musicAdapter.dataSetChanged(music)
+            } else {
+                musicList.layoutManager =
+                    LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+                musicAdapter = MusicAdapter(requireContext(), music, this)
+                musicList.adapter = musicAdapter
+            }
         }
+    }
+
+    override fun onItemLongClicked(id: String?) {
+        viewModel.deleteMusic(id)
     }
 }

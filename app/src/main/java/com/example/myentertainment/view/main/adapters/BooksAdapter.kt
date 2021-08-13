@@ -6,11 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Book
+import com.example.myentertainment.interfaces.OnItemClickAction
 
-class BooksAdapter(private val context: Context, private val books: List<Book>) :
+class BooksAdapter(
+    private val context: Context,
+    private var books: List<Book>,
+    private val onItemClickAction: OnItemClickAction
+) :
     RecyclerView.Adapter<BooksViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BooksViewHolder {
@@ -39,12 +45,27 @@ class BooksAdapter(private val context: Context, private val books: List<Book>) 
         } else {
             holder.releaseYear.text = books[position].releaseYear
         }
+
+
+        holder.item.setOnLongClickListener() {
+            val id = books[position].id
+            onItemClickAction.onItemLongClicked(id)
+            true
+        }
     }
 
     override fun getItemCount() = books.size
+
+    fun dataSetChanged(newDataSet: List<Book>) {
+        books = newDataSet
+        notifyDataSetChanged()
+    }
+
 }
 
 class BooksViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val item = view.findViewById<ConstraintLayout>(R.id.book_item)
+
     val title = view.findViewById<TextView>(R.id.book_title)
     val author = view.findViewById<TextView>(R.id.book_author)
     val rate = view.findViewById<RatingBar>(R.id.book_rate)

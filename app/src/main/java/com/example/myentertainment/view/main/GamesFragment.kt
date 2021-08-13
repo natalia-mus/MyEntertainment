@@ -12,15 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Game
+import com.example.myentertainment.interfaces.OnItemClickAction
 import com.example.myentertainment.view.main.adapters.GamesAdapter
 import com.example.myentertainment.viewmodel.main.GamesFragmentViewModel
 
-class GamesFragment : Fragment() {
+class GamesFragment : Fragment(), OnItemClickAction {
 
     private lateinit var fragmentView: View
     private lateinit var viewModel: GamesFragmentViewModel
 
     private lateinit var gamesList: RecyclerView
+    private lateinit var gamesAdapter: GamesAdapter
     private lateinit var loadingSection: ConstraintLayout
     private lateinit var noGamesLabel: TextView
 
@@ -48,14 +50,23 @@ class GamesFragment : Fragment() {
     }
 
     private fun updateView(games: List<Game>) {
+        loadingSection.visibility = View.INVISIBLE
         if (games.isEmpty()) {
-            loadingSection.visibility = View.INVISIBLE
+            gamesList.visibility = View.INVISIBLE
             noGamesLabel.visibility = View.VISIBLE
         } else {
-            loadingSection.visibility = View.INVISIBLE
-            gamesList.layoutManager =
-                LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            gamesList.adapter = GamesAdapter(requireContext(), games)
+            if (viewModel.itemDeleted.value == true) {
+                gamesAdapter.dataSetChanged(games)
+            } else {
+                gamesList.layoutManager =
+                    LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+                gamesAdapter = GamesAdapter(requireContext(), games, this)
+                gamesList.adapter = gamesAdapter
+            }
         }
+    }
+
+    override fun onItemLongClicked(id: String?) {
+        viewModel.deleteGame(id)
     }
 }

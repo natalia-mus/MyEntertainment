@@ -12,15 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Movie
+import com.example.myentertainment.interfaces.OnItemClickAction
 import com.example.myentertainment.view.main.adapters.MoviesAdapter
 import com.example.myentertainment.viewmodel.main.MoviesFragmentViewModel
 
-class MoviesFragment : Fragment() {
+class MoviesFragment : Fragment(), OnItemClickAction {
 
     private lateinit var viewModel: MoviesFragmentViewModel
     private lateinit var fragmentView: View
 
     private lateinit var moviesList: RecyclerView
+    private lateinit var moviesAdapter: MoviesAdapter
     private lateinit var loadingSection: ConstraintLayout
     private lateinit var noMoviesLabel: TextView
 
@@ -48,14 +50,23 @@ class MoviesFragment : Fragment() {
     }
 
     private fun updateView(movies: List<Movie>) {
+        loadingSection.visibility = View.INVISIBLE
         if (movies.isEmpty()) {
-            loadingSection.visibility = View.INVISIBLE
+            moviesList.visibility = View.INVISIBLE
             noMoviesLabel.visibility = View.VISIBLE
         } else {
-            loadingSection.visibility = View.INVISIBLE
-            moviesList.layoutManager =
-                LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            moviesList.adapter = MoviesAdapter(requireContext(), movies)
+            if (viewModel.itemDeleted.value == true) {
+                moviesAdapter.dataSetChanged(movies)
+            } else {
+                moviesList.layoutManager =
+                    LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+                moviesAdapter = MoviesAdapter(requireContext(), movies, this)
+                moviesList.adapter = moviesAdapter
+            }
         }
+    }
+
+    override fun onItemLongClicked(id: String?) {
+        viewModel.deleteMovie(id)
     }
 }
