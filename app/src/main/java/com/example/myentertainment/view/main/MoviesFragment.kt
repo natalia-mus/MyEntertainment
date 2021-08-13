@@ -22,6 +22,7 @@ class MoviesFragment : Fragment(), OnItemClickAction {
     private lateinit var fragmentView: View
 
     private lateinit var moviesList: RecyclerView
+    private lateinit var moviesAdapter: MoviesAdapter
     private lateinit var loadingSection: ConstraintLayout
     private lateinit var noMoviesLabel: TextView
 
@@ -49,15 +50,19 @@ class MoviesFragment : Fragment(), OnItemClickAction {
     }
 
     private fun updateView(movies: List<Movie>) {
+        loadingSection.visibility = View.INVISIBLE
         if (movies.isEmpty()) {
-            loadingSection.visibility = View.INVISIBLE
             moviesList.visibility = View.INVISIBLE
             noMoviesLabel.visibility = View.VISIBLE
         } else {
-            loadingSection.visibility = View.INVISIBLE
-            moviesList.layoutManager =
-                LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            moviesList.adapter = MoviesAdapter(requireContext(), movies, this)
+            if (viewModel.itemDeleted.value == true) {
+                moviesAdapter.dataSetChanged(movies)
+            } else {
+                moviesList.layoutManager =
+                    LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+                moviesAdapter = MoviesAdapter(requireContext(), movies, this)
+                moviesList.adapter = moviesAdapter
+            }
         }
     }
 

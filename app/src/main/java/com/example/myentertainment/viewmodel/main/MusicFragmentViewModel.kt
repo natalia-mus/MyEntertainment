@@ -25,6 +25,7 @@ class MusicFragmentViewModel : ViewModel() {
     private val user = databaseAuth.uid.toString()
 
     val music = MutableLiveData<List<Music>>()
+    val itemDeleted = MutableLiveData<Boolean>(false)
 
 
     fun fetchMusic() {
@@ -51,10 +52,12 @@ class MusicFragmentViewModel : ViewModel() {
 
 
     fun deleteMusic(id: String?) {
+        itemDeleted.value = false
         databaseReference.child(user).child(CategoryObject.MUSIC).child(id.toString()).removeValue()
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     fetchMusic()
+                    itemDeleted.value = true
                 } else {
                     Log.e("error", "error")
                 }

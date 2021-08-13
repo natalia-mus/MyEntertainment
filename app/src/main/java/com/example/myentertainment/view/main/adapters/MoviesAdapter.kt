@@ -14,7 +14,7 @@ import com.example.myentertainment.interfaces.OnItemClickAction
 
 class MoviesAdapter(
     private val context: Context,
-    private val movies: List<Movie>,
+    private var movies: List<Movie>,
     private val onItemClickAction: OnItemClickAction
 ) :
     RecyclerView.Adapter<MoviesViewHolder>() {
@@ -55,6 +55,12 @@ class MoviesAdapter(
     }
 
     override fun getItemCount() = movies.size
+
+    fun dataSetChanged(newDataSet: List<Movie>) {
+        movies = newDataSet
+        notifyDataSetChanged()
+    }
+
 }
 
 class MoviesViewHolder(view: View) : RecyclerView.ViewHolder(view) {

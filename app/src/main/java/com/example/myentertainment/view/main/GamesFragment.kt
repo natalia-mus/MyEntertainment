@@ -22,6 +22,7 @@ class GamesFragment : Fragment(), OnItemClickAction {
     private lateinit var viewModel: GamesFragmentViewModel
 
     private lateinit var gamesList: RecyclerView
+    private lateinit var gamesAdapter: GamesAdapter
     private lateinit var loadingSection: ConstraintLayout
     private lateinit var noGamesLabel: TextView
 
@@ -49,15 +50,19 @@ class GamesFragment : Fragment(), OnItemClickAction {
     }
 
     private fun updateView(games: List<Game>) {
+        loadingSection.visibility = View.INVISIBLE
         if (games.isEmpty()) {
-            loadingSection.visibility = View.INVISIBLE
             gamesList.visibility = View.INVISIBLE
             noGamesLabel.visibility = View.VISIBLE
         } else {
-            loadingSection.visibility = View.INVISIBLE
-            gamesList.layoutManager =
-                LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            gamesList.adapter = GamesAdapter(requireContext(), games, this)
+            if (viewModel.itemDeleted.value == true) {
+                gamesAdapter.dataSetChanged(games)
+            } else {
+                gamesList.layoutManager =
+                    LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+                gamesAdapter = GamesAdapter(requireContext(), games, this)
+                gamesList.adapter = gamesAdapter
+            }
         }
     }
 

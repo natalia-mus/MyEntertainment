@@ -14,7 +14,7 @@ import com.example.myentertainment.interfaces.OnItemClickAction
 
 class BooksAdapter(
     private val context: Context,
-    private val books: List<Book>,
+    private var books: List<Book>,
     private val onItemClickAction: OnItemClickAction
 ) :
     RecyclerView.Adapter<BooksViewHolder>() {
@@ -55,6 +55,11 @@ class BooksAdapter(
     }
 
     override fun getItemCount() = books.size
+
+    fun dataSetChanged(newDataSet: List<Book>) {
+        books = newDataSet
+        notifyDataSetChanged()
+    }
 
 }
 

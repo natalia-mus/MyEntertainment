@@ -22,6 +22,7 @@ class MusicFragment : Fragment(), OnItemClickAction {
     private lateinit var viewModel: MusicFragmentViewModel
 
     private lateinit var musicList: RecyclerView
+    private lateinit var musicAdapter: MusicAdapter
     private lateinit var loadingSection: ConstraintLayout
     private lateinit var noMusicLabel: TextView
 
@@ -49,15 +50,19 @@ class MusicFragment : Fragment(), OnItemClickAction {
     }
 
     private fun updateView(music: List<Music>) {
+        loadingSection.visibility = View.INVISIBLE
         if (music.isEmpty()) {
-            loadingSection.visibility = View.INVISIBLE
             musicList.visibility = View.INVISIBLE
             noMusicLabel.visibility = View.VISIBLE
         } else {
-            loadingSection.visibility = View.INVISIBLE
-            musicList.layoutManager =
-                LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            musicList.adapter = MusicAdapter(requireContext(), music, this)
+            if (viewModel.itemDeleted.value == true) {
+                musicAdapter.dataSetChanged(music)
+            } else {
+                musicList.layoutManager =
+                    LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+                musicAdapter = MusicAdapter(requireContext(), music, this)
+                musicList.adapter = musicAdapter
+            }
         }
     }
 

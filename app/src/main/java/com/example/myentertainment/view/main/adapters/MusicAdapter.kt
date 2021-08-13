@@ -14,7 +14,7 @@ import com.example.myentertainment.interfaces.OnItemClickAction
 
 class MusicAdapter(
     private val context: Context,
-    private val music: List<Music>,
+    private var music: List<Music>,
     private val onItemClickAction: OnItemClickAction
 ) :
     RecyclerView.Adapter<MusicViewHolder>() {
@@ -56,6 +56,12 @@ class MusicAdapter(
     }
 
     override fun getItemCount() = music.size
+
+    fun dataSetChanged(newDataSet: List<Music>) {
+        music = newDataSet
+        notifyDataSetChanged()
+    }
+
 }
 
 

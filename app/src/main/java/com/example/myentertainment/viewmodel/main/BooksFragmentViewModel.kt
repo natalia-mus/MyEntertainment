@@ -25,6 +25,7 @@ class BooksFragmentViewModel : ViewModel() {
     private val user = databaseAuth.uid.toString()
 
     val books = MutableLiveData<List<Book>>()
+    val itemDeleted = MutableLiveData<Boolean>(false)
 
 
     fun fetchBooks() {
@@ -51,10 +52,12 @@ class BooksFragmentViewModel : ViewModel() {
 
 
     fun deleteBook(id: String?) {
+        itemDeleted.value = false
         databaseReference.child(user).child(CategoryObject.BOOKS).child(id.toString()).removeValue()
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     fetchBooks()
+                    itemDeleted.value = true
                 } else {
                     Log.e("error", "error")
                 }

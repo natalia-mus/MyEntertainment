@@ -22,6 +22,7 @@ class BooksFragment : Fragment(), OnItemClickAction {
     private lateinit var viewModel: BooksFragmentViewModel
 
     private lateinit var booksList: RecyclerView
+    private lateinit var booksAdapter: BooksAdapter
     private lateinit var loadingSection: ConstraintLayout
     private lateinit var noBooksLabel: TextView
 
@@ -49,15 +50,19 @@ class BooksFragment : Fragment(), OnItemClickAction {
     }
 
     private fun updateView(books: List<Book>) {
+        loadingSection.visibility = View.INVISIBLE
         if (books.isEmpty()) {
-            loadingSection.visibility = View.INVISIBLE
             booksList.visibility = View.INVISIBLE
             noBooksLabel.visibility = View.VISIBLE
         } else {
-            loadingSection.visibility = View.INVISIBLE
-            booksList.layoutManager =
-                LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            booksList.adapter = BooksAdapter(requireContext(), books, this)
+            if (viewModel.itemDeleted.value == true) {
+                booksAdapter.dataSetChanged(books)
+            } else {
+                booksList.layoutManager =
+                    LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+                booksAdapter = BooksAdapter(requireContext(), books, this)
+                booksList.adapter = booksAdapter
+            }
         }
     }
 
