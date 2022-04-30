@@ -10,6 +10,8 @@ import android.widget.RatingBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.myentertainment.Constants
+import com.example.myentertainment.OpeningContext
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.data.Book
@@ -18,6 +20,7 @@ import com.example.myentertainment.viewmodel.add.AddBookFragmentViewModel
 
 class AddBookFragment : Fragment(), AddFragmentViewModelInterface {
 
+    private lateinit var openingContext: OpeningContext
     private lateinit var fragmentView: View
     private lateinit var viewModel: AddBookFragmentViewModel
 
@@ -41,6 +44,7 @@ class AddBookFragment : Fragment(), AddFragmentViewModelInterface {
         initView()
         viewModel = ViewModelProvider(this).get(AddBookFragmentViewModel::class.java)
         setObservers()
+        checkOpeningContext()
         return fragmentView
     }
 
@@ -82,5 +86,12 @@ class AddBookFragment : Fragment(), AddFragmentViewModelInterface {
                     CategoryObject.BOOKS
                 )
             })
+    }
+
+    private fun checkOpeningContext() {
+        val id = arguments?.getString(Constants.ID)
+
+        openingContext = if (id != null) OpeningContext.EDIT
+        else OpeningContext.ADD
     }
 }

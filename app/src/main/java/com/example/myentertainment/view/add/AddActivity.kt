@@ -3,6 +3,7 @@ package com.example.myentertainment.view.add
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
 
@@ -14,8 +15,9 @@ class AddActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
-        category = intent.getStringExtra("category")
+        category = intent.getStringExtra(Constants.CATEGORY)
         category?.let { setFragment(it) }
+        establishOpeningContext()
         showFragment(fragment)
     }
 
@@ -25,6 +27,15 @@ class AddActivity : AppCompatActivity() {
             CategoryObject.BOOKS -> fragment = AddBookFragment()
             CategoryObject.GAMES -> fragment = AddGameFragment()
             CategoryObject.MUSIC -> fragment = AddMusicFragment()
+        }
+    }
+
+    private fun establishOpeningContext() {
+        if (intent.hasExtra(Constants.ID)) {
+            val id = intent.getStringExtra(Constants.ID)
+            val bundle = Bundle()
+            bundle.putString(Constants.ID, id)
+            fragment.arguments = bundle
         }
     }
 

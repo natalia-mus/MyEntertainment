@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.View
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.myentertainment.Constants
 import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.view.main.MainActivity
 
@@ -41,7 +42,7 @@ interface AddFragmentViewModelInterface {
             Toast.makeText(context, message, Toast.LENGTH_LONG)
                 .show()
             val intent = Intent(context, MainActivity::class.java)
-            intent.putExtra("category", category)
+            intent.putExtra(Constants.CATEGORY, category)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)

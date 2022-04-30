@@ -66,6 +66,10 @@ class MusicFragment : Fragment(), OnItemClickAction {
         }
     }
 
+    override fun onItemClicked(id: String?) {
+        TODO("Not yet implemented")
+    }
+
     override fun onItemLongClicked(id: String?) {
         viewModel.deleteMusic(id)
     }

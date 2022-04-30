@@ -47,6 +47,11 @@ class BooksAdapter(
         }
 
 
+        holder.item.setOnClickListener() {
+            val id = books[position].id
+            onItemClickAction.onItemClicked(id)
+        }
+
         holder.item.setOnLongClickListener() {
             val id = books[position].id
             onItemClickAction.onItemLongClicked(id)
