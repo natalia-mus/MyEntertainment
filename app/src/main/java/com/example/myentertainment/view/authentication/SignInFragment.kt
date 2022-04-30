@@ -9,6 +9,7 @@ import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.view.main.MainActivity
@@ -70,7 +71,7 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
     }
 
     private fun updateActivity(userId: String?) {
-        if (userId != "null") {
+        if (userId != Constants.NULL) {
             goToMainActivity()
         } else {
             loadingSection.visibility = View.INVISIBLE

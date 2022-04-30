@@ -41,10 +41,10 @@ class AddBookFragment : Fragment(), AddFragmentViewModelInterface {
         savedInstanceState: Bundle?
     ): View {
         fragmentView = inflater.inflate(R.layout.fragment_add_book, container, false)
-        initView()
         viewModel = ViewModelProvider(this).get(AddBookFragmentViewModel::class.java)
         setObservers()
-        checkOpeningContext()
+        establishOpeningContext()
+        initView()
         return fragmentView
     }
 
@@ -57,6 +57,36 @@ class AddBookFragment : Fragment(), AddFragmentViewModelInterface {
         addButton = fragmentView.findViewById(R.id.addBook_addButton)
         loadingSection = fragmentView.findViewById(R.id.addBook_loadingSection)
         noTitleMessage = getString(R.string.book_no_title)
+
+        if (openingContext == OpeningContext.ADD) {
+            prepareViewForAddContext()
+        }
+    }
+
+    override fun setObservers() {
+        viewModel.loading.observe(this, { updateView(it, loadingSection) })
+        viewModel.book.observe(this, { prepareViewForEditContext(it) })
+        viewModel.validationResult.observe(this, { validationResult(it, requireContext(), noTitleMessage) })
+        viewModel.addingToDatabaseResult.observe(this, {
+            addingToDatabaseResult(
+                it,
+                requireContext(),
+                bookAddedMessage,
+                CategoryObject.BOOKS
+            )
+        })
+    }
+
+    private fun establishOpeningContext() {
+        val id = arguments?.getString(Constants.ID)
+
+        if (id != null) {
+            openingContext = OpeningContext.EDIT
+            viewModel.getBook(id)
+        } else openingContext = OpeningContext.ADD
+    }
+
+    private fun prepareViewForAddContext() {
         bookAddedMessage = getString(R.string.book_added)
 
         addButton.setOnClickListener() {
@@ -71,27 +101,18 @@ class AddBookFragment : Fragment(), AddFragmentViewModelInterface {
         }
     }
 
-    override fun setObservers() {
-        viewModel.loading.observe(this, { updateView(it, loadingSection) })
-        viewModel.validationResult.observe(
-            this,
-            { validationResult(it, requireContext(), noTitleMessage) })
-        viewModel.addingToDatabaseResult.observe(
-            this,
-            {
-                addingToDatabaseResult(
-                    it,
-                    requireContext(),
-                    bookAddedMessage,
-                    CategoryObject.BOOKS
-                )
-            })
-    }
+    private fun prepareViewForEditContext(item: Book) {
+        bookAddedMessage = getString(R.string.book_edited)
+        addButton.text = getString(R.string.book_edit)
 
-    private fun checkOpeningContext() {
-        val id = arguments?.getString(Constants.ID)
+        addButton.setOnClickListener() {
+            // TODO
+        }
 
-        openingContext = if (id != null) OpeningContext.EDIT
-        else OpeningContext.ADD
+        titleEditText.setText(item.title)
+        authorEditText.setText(item.author)
+        releaseYearEditText.setText(item.releaseYear)
+        genreEditText.setText(item.genre)
+        if (item.rating != null) ratingBar.rating = item.rating
     }
 }

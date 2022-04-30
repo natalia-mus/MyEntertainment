@@ -3,6 +3,7 @@ package com.example.myentertainment.viewmodel.add
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
+import com.example.myentertainment.Constants
 import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.data.Game
@@ -73,7 +74,7 @@ class AddGameFragmentViewModel : ViewModel() {
 
                         for (i in 0 until childrenCount) {
                             val child = snapshot.child(i.toString()).value
-                            if (child.toString() == "null") itemId = i.toString()
+                            if (child.toString() == Constants.NULL) itemId = i.toString()
                         }
                     }
                 }

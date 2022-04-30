@@ -25,6 +25,7 @@
     <string name="book_title">book title</string>
     <string name="author">author</string>
     <string name="book_add">add book</string>
+    <string name="book_edit">edit book</string>
     <string name="no_books">you have no books</string>
     <string name="no_games">you have no games</string>
     <string name="game_add">add game</string>
@@ -37,6 +38,7 @@
     <string name="movie_added">Movie added</string>
     <string name="book_no_title">Please, enter book title</string>
     <string name="book_added">Book added</string>
+    <string name="book_edited">Book edited</string>
     <string name="game_no_title">Please, enter game title</string>
     <string name="game_added">Game added</string>
     <string name="music_no_title">Please, enter song title</string>
