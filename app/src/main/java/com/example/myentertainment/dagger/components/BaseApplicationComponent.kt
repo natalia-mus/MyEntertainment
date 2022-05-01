@@ -9,6 +9,7 @@ import com.example.myentertainment.viewmodel.add.AddMusicFragmentViewModel
 import com.example.myentertainment.viewmodel.authentication.SignInFragmentViewModel
 import com.example.myentertainment.viewmodel.authentication.SignUpFragmentViewModel
 import com.example.myentertainment.viewmodel.main.*
+import com.example.myentertainment.viewmodel.userprofile.UserProfileActivityViewModel
 import dagger.Component
 import javax.inject.Singleton
 
@@ -19,6 +20,7 @@ interface BaseApplicationComponent {
     fun inject(baseApplication: Application)
     fun inject(viewModel: SignInFragmentViewModel)
     fun inject(viewModel: SignUpFragmentViewModel)
+    fun inject(viewModel: UserProfileActivityViewModel)
     fun inject(viewModel: MainActivityViewModel)
     fun inject(viewModel: AddMovieFragmentViewModel)
     fun inject(viewModel: MoviesFragmentViewModel)

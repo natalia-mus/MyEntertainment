@@ -22,7 +22,7 @@
             android:name=".view.main.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.userprofile.UserProfile"
+            android:name=".view.userprofile.UserProfileActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.add.AddActivity"
