@@ -51,6 +51,7 @@
     <string name="rating">your rate:</string>
     <string name="release_year">release year</string>
     <string name="release_year_label">release year:</string>
+    <string name="save">save</string>
     <string name="sign_in">sign in</string>
     <string name="sign_in_message">Don\'t have an account?</string>
     <string name="sign_out">sign out</string>
