@@ -4,21 +4,21 @@
     <item
         android:id="@+id/item_movies"
         android:icon="@drawable/ic_baseline_movie_24"
-        android:title="@string/bottomNavigation_movies" />
+        android:title="@string/movies" />
 
     <item
         android:id="@+id/item_books"
         android:icon="@drawable/ic_baseline_menu_book_24"
-        android:title="@string/bottomNavigation_books" />
+        android:title="@string/books" />
 
     <item
         android:id="@+id/item_games"
         android:icon="@drawable/ic_baseline_videogame_asset_24"
-        android:title="@string/bottomNavigation_games" />
+        android:title="@string/games" />
 
     <item
         android:id="@+id/item_music"
         android:icon="@drawable/ic_baseline_music_note_24"
-        android:title="@string/bottomNavigation_music" />
+        android:title="@string/music" />
 
 </menu>
