@@ -29,6 +29,7 @@
     <string name="no_books">you have no books</string>
     <string name="no_games">you have no games</string>
     <string name="game_add">add game</string>
+    <string name="game_edit">edit game</string>
     <string name="game_title">game title</string>
     <string name="song_title">song title</string>
     <string name="artist">artist</string>
@@ -41,6 +42,7 @@
     <string name="book_edited">Book edited</string>
     <string name="game_no_title">Please, enter game title</string>
     <string name="game_added">Game added</string>
+    <string name="game_edited">Game edited</string>
     <string name="music_no_title">Please, enter song title</string>
     <string name="music_added">Song added</string>
     <string name="enter_both_email_and_password">Enter both e-mail and password</string>
