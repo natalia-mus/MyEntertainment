@@ -41,6 +41,11 @@ class GamesAdapter(
         }
 
 
+        holder.item.setOnClickListener() {
+            val id = games[position].id
+            onItemClickAction.onItemClicked(id)
+        }
+
         holder.item.setOnLongClickListener() {
             val id = games[position].id
             onItemClickAction.onItemLongClicked(id)

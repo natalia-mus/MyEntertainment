@@ -3,6 +3,7 @@ package com.example.myentertainment.viewmodel.add
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
+import com.example.myentertainment.Constants
 import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.data.Music
@@ -33,8 +34,16 @@ class AddMusicFragmentViewModel : ViewModel() {
     lateinit var databaseReference: DatabaseReference
 
     val loading = MutableLiveData<Boolean>()
+    val song = MutableLiveData<Music>()
     val validationResult = MutableLiveData<Int>()
     val addingToDatabaseResult = MutableLiveData<Boolean>()
+
+
+    fun getSong(id: String) {
+        databaseReference.child(user).child(CategoryObject.MUSIC).get().addOnSuccessListener {
+            song.value = it.child(id).getValue(Music::class.java)
+        }
+    }
 
     fun addToDatabase(item: Music) {
         loading.value = true
@@ -63,6 +72,23 @@ class AddMusicFragmentViewModel : ViewModel() {
         }
     }
 
+    fun updateItem(item: Music) {
+        loading.value = true
+
+        if (validation(item)) {
+            val song = hashMapOf<String, Any>(item.id.toString() to item)
+            mainPath.updateChildren(song).addOnCompleteListener() { task ->
+                if (task.isSuccessful) {
+                    loading.value = false
+                    addingToDatabaseResult.value = true
+                } else {
+                    loading.value = false
+                    addingToDatabaseResult.value = false
+                }
+            }
+        }
+    }
+
     private fun setItemId() {
         mainPath
             .addValueEventListener(object : ValueEventListener {
@@ -75,7 +101,7 @@ class AddMusicFragmentViewModel : ViewModel() {
 
                         for (i in 0 until childrenCount) {
                             val child = snapshot.child(i.toString()).value
-                            if (child.toString() == "null") itemId = i.toString()
+                            if (child.toString() == Constants.NULL) itemId = i.toString()
                         }
                     }
                 }

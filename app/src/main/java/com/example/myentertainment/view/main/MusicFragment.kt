@@ -1,5 +1,6 @@
 package com.example.myentertainment.view.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myentertainment.Constants
 import com.example.myentertainment.R
+import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.data.Music
 import com.example.myentertainment.interfaces.OnItemClickAction
+import com.example.myentertainment.view.add.AddActivity
 import com.example.myentertainment.view.main.adapters.MusicAdapter
 import com.example.myentertainment.viewmodel.main.MusicFragmentViewModel
 
@@ -64,6 +68,17 @@ class MusicFragment : Fragment(), OnItemClickAction {
                 musicList.adapter = musicAdapter
             }
         }
+    }
+
+    private fun editSong(id: String?) {
+        val intent = Intent(activity, AddActivity::class.java)
+        intent.putExtra(Constants.CATEGORY, CategoryObject.MUSIC)
+        intent.putExtra(Constants.ID, id!!)
+        startActivity(intent)
+    }
+
+    override fun onItemClicked(id: String?) {
+        editSong(id)
     }
 
     override fun onItemLongClicked(id: String?) {

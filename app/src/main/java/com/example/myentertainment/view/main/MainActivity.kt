@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.view.add.AddActivity
@@ -72,14 +73,14 @@ class MainActivity : AppCompatActivity() {
 
         addButton.setOnClickListener() {
             val intent = Intent(this, AddActivity::class.java)
-            intent.putExtra("category", currentFragment)
+            intent.putExtra(Constants.CATEGORY, currentFragment)
             startActivity(intent)
         }
     }
 
     private fun checkCategory() {
-        if (intent.hasExtra("category")) {
-            currentFragment = intent.getStringExtra("category").toString()
+        if (intent.hasExtra(Constants.CATEGORY)) {
+            currentFragment = intent.getStringExtra(Constants.CATEGORY).toString()
             when (currentFragment) {
                 CategoryObject.MOVIES -> changeCurrentFragment(moviesFragment)
                 CategoryObject.BOOKS -> changeCurrentFragment(booksFragment)
