@@ -1,7 +1,7 @@
 package com.example.myentertainment.data
 
 data class Book(
-    val id: String? = null,
+    var id: String? = null,
     val title: String? = null,
     val author: String? = null,
     val releaseYear: String? = null,

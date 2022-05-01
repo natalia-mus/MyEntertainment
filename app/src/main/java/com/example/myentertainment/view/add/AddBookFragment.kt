@@ -35,6 +35,8 @@ class AddBookFragment : Fragment(), AddFragmentViewModelInterface {
     private lateinit var noTitleMessage: String
     private lateinit var bookAddedMessage: String
 
+    private var itemId: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -78,11 +80,11 @@ class AddBookFragment : Fragment(), AddFragmentViewModelInterface {
     }
 
     private fun establishOpeningContext() {
-        val id = arguments?.getString(Constants.ID)
+        itemId = arguments?.getString(Constants.ID)
 
-        if (id != null) {
+        if (itemId != null) {
             openingContext = OpeningContext.EDIT
-            viewModel.getBook(id)
+            viewModel.getBook(itemId!!)
         } else openingContext = OpeningContext.ADD
     }
 
@@ -106,7 +108,15 @@ class AddBookFragment : Fragment(), AddFragmentViewModelInterface {
         addButton.text = getString(R.string.book_edit)
 
         addButton.setOnClickListener() {
-            // TODO
+            val id = itemId
+            val title = titleEditText.text.toString()
+            val author = authorEditText.text.toString()
+            val releaseYear = releaseYearEditText.text.toString()
+            val genre = genreEditText.text.toString()
+            val rating = ratingBar.rating
+
+            val book = Book(id, title, author, releaseYear, genre, rating)
+            viewModel.updateItem(book)
         }
 
         titleEditText.setText(item.title)

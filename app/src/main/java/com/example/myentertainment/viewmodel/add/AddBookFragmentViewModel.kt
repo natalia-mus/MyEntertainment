@@ -69,6 +69,23 @@ class AddBookFragmentViewModel : ViewModel() {
         }
     }
 
+    fun updateItem(item: Book) {
+        loading.value = true
+
+        if (validation(item)) {
+            val book = hashMapOf<String, Any>(item.id.toString() to item)
+            mainPath.updateChildren(book).addOnCompleteListener() { task ->
+                if (task.isSuccessful) {
+                    loading.value = false
+                    addingToDatabaseResult.value = true
+                } else {
+                    loading.value = false
+                    addingToDatabaseResult.value = false
+                }
+            }
+        }
+    }
+
     private fun setItemId() {
         mainPath
             .addValueEventListener(object : ValueEventListener {
