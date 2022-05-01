@@ -34,8 +34,16 @@ class AddMovieFragmentViewModel : ViewModel() {
     lateinit var databaseReference: DatabaseReference
 
     val loading = MutableLiveData<Boolean>()
+    val movie = MutableLiveData<Movie>()
     val validationResult = MutableLiveData<Int>()
     val addingToDatabaseResult = MutableLiveData<Boolean>()
+
+
+    fun getMovie(id: String) {
+        databaseReference.child(user).child(CategoryObject.MOVIES).get().addOnSuccessListener {
+            movie.value = it.child(id).getValue(Movie::class.java)
+        }
+    }
 
     fun addToDatabase(item: Movie) {
         loading.value = true
@@ -61,6 +69,23 @@ class AddMovieFragmentViewModel : ViewModel() {
                         }
                     }
                 }
+        }
+    }
+
+    fun updateItem(item: Movie) {
+        loading.value = true
+
+        if (validation(item)) {
+            val movie = hashMapOf<String, Any>(item.id.toString() to item)
+            mainPath.updateChildren(movie).addOnCompleteListener() { task ->
+                if (task.isSuccessful) {
+                    loading.value = false
+                    addingToDatabaseResult.value = true
+                } else {
+                    loading.value = false
+                    addingToDatabaseResult.value = false
+                }
+            }
         }
     }
 

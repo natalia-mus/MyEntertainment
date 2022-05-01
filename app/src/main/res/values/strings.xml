@@ -37,6 +37,8 @@
     <string name="no_music">you have no songs</string>
     <string name="movie_no_title">Please, enter movie title</string>
     <string name="movie_added">Movie added</string>
+    <string name="movie_edited">Movie edited</string>
+    <string name="movie_edit">edit movie</string>
     <string name="book_no_title">Please, enter book title</string>
     <string name="book_added">Book added</string>
     <string name="book_edited">Book edited</string>

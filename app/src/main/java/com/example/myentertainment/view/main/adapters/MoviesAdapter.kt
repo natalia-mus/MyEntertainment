@@ -47,6 +47,11 @@ class MoviesAdapter(
         }
 
 
+        holder.item.setOnClickListener() {
+            val id = movies[position].id
+            onItemClickAction.onItemClicked(id)
+        }
+
         holder.item.setOnLongClickListener() {
             val id = movies[position].id
             onItemClickAction.onItemLongClicked(id)
