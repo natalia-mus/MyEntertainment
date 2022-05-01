@@ -47,6 +47,11 @@ class MusicAdapter(
         }
 
 
+        holder.item.setOnClickListener() {
+            val id = music[position].id
+            onItemClickAction.onItemClicked(id)
+        }
+
         holder.item.setOnLongClickListener() {
             val id = music[position].id
             onItemClickAction.onItemLongClicked(id)
