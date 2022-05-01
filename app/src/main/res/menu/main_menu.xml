@@ -4,6 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menuItem_userProfile"
+        android:icon="@drawable/ic_user"
+        android:title="user_profile"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/menuItem_sign_out"
         android:icon="@drawable/ic_baseline_logout_24"
         android:title="@string/sign_out"

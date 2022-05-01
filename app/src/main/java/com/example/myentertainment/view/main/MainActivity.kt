@@ -12,6 +12,7 @@ import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.view.add.AddActivity
 import com.example.myentertainment.view.authentication.AuthenticationActivity
+import com.example.myentertainment.view.userprofile.UserProfile
 import com.example.myentertainment.viewmodel.main.MainActivityViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -45,13 +46,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.menuItem_userProfile -> {
+                val intent = Intent(this, UserProfile::class.java)
+                startActivity(intent)
+            }
             R.id.menuItem_sign_out -> {
                 viewModel.signOut()
                 val intent = Intent(this, AuthenticationActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
-                return true
             }
         }
         return super.onOptionsItemSelected(item)

@@ -1,4 +1,5 @@
 <resources>
+    <string name="age">age:</string>
     <string name="app_name">MyEntertainment</string>
     <string name="artist">artist</string>
     <string name="author">author</string>
@@ -9,9 +10,12 @@
     <string name="book_edited">Book edited</string>
     <string name="book_no_title">Please, enter book title</string>
     <string name="book_title">book title</string>
+    <string name="city">city:</string>
+    <string name="country">country:</string>
     <string name="create_one"> <u>Create one</u> </string>
     <string name="director">director</string>
     <string name="director_label">director:</string>
+    <string name="email">e-mail:</string>
     <string name="email_address">e-mail address</string>
     <string name="enter_both_email_and_password">Enter both e-mail and password</string>
     <string name="failed_to_sign_in">Failed to sign in</string>
@@ -53,5 +57,6 @@
     <string name="sign_up">sign up</string>
     <string name="sign_up_message">Create your account</string>
     <string name="user_can_not_be_created">Unfortunately, user can not be created</string>
+    <string name="user_profile">user profile</string>
     <string name="your_email_address_is_invalid">Your e-mail address is invalid</string>
 </resources>
