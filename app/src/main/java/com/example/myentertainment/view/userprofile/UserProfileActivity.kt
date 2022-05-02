@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
+import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.viewmodel.userprofile.UserProfileActivityViewModel
 
@@ -43,6 +44,7 @@ class UserProfileActivity : AppCompatActivity() {
     private fun setObservers() {
         viewModel.loading.observe(this, { loadingStatusChanged(it) })
         viewModel.userProfile.observe(this, { updateView(it) })
+        viewModel.validationResult.observe(this, { validationResult(it) })
         viewModel.addingToDatabaseResult.observe(this, { addingToDatabaseResult(it) })
     }
 
@@ -149,6 +151,13 @@ class UserProfileActivity : AppCompatActivity() {
             viewModel.getUserProfileData()
         } else {
             Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
+    private fun validationResult(validationResult: Int) {
+        if (validationResult == ValidationObject.EMPTY_VALUES) {
+            Toast.makeText(this, getString(R.string.username_can_not_be_empty), Toast.LENGTH_LONG)
                 .show()
         }
     }
