@@ -35,13 +35,13 @@ class MoviesAdapter(
         }
 
         if (movies[position].genre.isNullOrEmpty()) {
-            holder.genre.text = "-"
+            holder.genre.text = context.getString(R.string.none)
         } else {
             holder.genre.text = movies[position].genre
         }
 
         if (movies[position].director.isNullOrEmpty()) {
-            holder.director.text = "-"
+            holder.director.text = context.getString(R.string.none)
         } else {
             holder.director.text = movies[position].director
         }

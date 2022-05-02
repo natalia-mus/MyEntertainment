@@ -35,7 +35,7 @@ class GamesAdapter(
         }
 
         if (games[position].genre.isNullOrEmpty()) {
-            holder.genre.text = "-"
+            holder.genre.text = context.getString(R.string.none)
         } else {
             holder.genre.text = games[position].genre
         }

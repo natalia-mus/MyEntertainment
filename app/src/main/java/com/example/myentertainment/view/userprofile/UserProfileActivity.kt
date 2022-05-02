@@ -1,12 +1,12 @@
 package com.example.myentertainment.view.userprofile
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
 import com.example.myentertainment.data.UserProfile
@@ -23,12 +23,12 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var age: TextView
     private lateinit var editButton: ImageButton
     private lateinit var saveButton: Button
-
     private lateinit var usernameEditable: EditText
     private lateinit var realNameEditable: EditText
     private lateinit var cityEditable: EditText
     private lateinit var countryEditable: EditText
     private lateinit var ageEditable: EditText
+    private lateinit var loadingSection: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,13 +37,16 @@ class UserProfileActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(UserProfileActivityViewModel::class.java)
         setObservers()
         viewModel.getUserProfileData()
+        initView()
     }
 
     private fun setObservers() {
-        viewModel.userProfile.observe(this, { initView(it) })
+        viewModel.loading.observe(this, { loadingStatusChanged(it) })
+        viewModel.userProfile.observe(this, { updateView(it) })
+        viewModel.addingToDatabaseResult.observe(this, { addingToDatabaseResult(it) })
     }
 
-    private fun initView(userProfileData: UserProfile?) {
+    private fun initView() {
         username = findViewById(R.id.userProfile_username)
         realName = findViewById(R.id.userProfile_realName)
         city = findViewById(R.id.userProfile_city)
@@ -65,19 +68,37 @@ class UserProfileActivity : AppCompatActivity() {
         saveButton.setOnClickListener() {
             updateUserProfileData()
         }
+    }
 
+    private fun updateView(userProfileData: UserProfile?) {
         if (userProfileData != null) {
+            username.visibility = View.VISIBLE
+            realName.visibility = View.VISIBLE
+            city.visibility = View.VISIBLE
+            country.visibility = View.VISIBLE
+            age.visibility = View.VISIBLE
+            usernameEditable.visibility = View.GONE
+            realNameEditable.visibility = View.GONE
+            cityEditable.visibility = View.GONE
+            countryEditable.visibility = View.GONE
+            ageEditable.visibility = View.GONE
+            saveButton.visibility = View.GONE
+            editButton.visibility = View.VISIBLE
+
             username.text = userProfileData.username
             realName.text = userProfileData.realName
-            city.text = userProfileData.city
-            country.text = userProfileData.country
-            age.text = userProfileData.age.toString()
+            city.text = if (userProfileData.city?.isNotEmpty() == true) userProfileData.city else getString(R.string.none)
+            country.text = if (userProfileData.country?.isNotEmpty() == true) userProfileData.country else getString(R.string.none)
+            age.text = if (userProfileData.age?.toString()?.isNotEmpty() == true) userProfileData.age.toString() else getString(R.string.none)
 
             usernameEditable.setText(userProfileData.username)
             realNameEditable.setText(userProfileData.realName)
             cityEditable.setText(userProfileData.city)
             countryEditable.setText(userProfileData.country)
             ageEditable.setText(userProfileData.age.toString())
+        } else {
+            onBackPressed()
+            Toast.makeText(applicationContext, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -105,5 +126,37 @@ class UserProfileActivity : AppCompatActivity() {
 
         val userProfileData = UserProfile(username, realName, city, country, age)
         viewModel.updateUserProfileData(userProfileData)
+    }
+
+    private fun loadingStatusChanged(loading: Boolean) {
+        if (!this::loadingSection.isInitialized) {
+            loadingSection = findViewById(R.id.userProfile_loadingSection)
+        }
+        if (loading) {
+            loadingSection.visibility = View.VISIBLE
+        } else {
+            loadingSection.visibility = View.GONE
+        }
+    }
+
+    private fun addingToDatabaseResult(
+        addingToDatabaseResult: Boolean
+    ) {
+        if (addingToDatabaseResult) {
+            Toast.makeText(this, getString(R.string.user_profile_data_updated), Toast.LENGTH_LONG)
+                .show()
+            hideKeyboard()
+            viewModel.getUserProfileData()
+        } else {
+            Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
+    private fun hideKeyboard() {
+        val inputMethodManager =
+            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val view = findViewById<View>(android.R.id.content).rootView
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

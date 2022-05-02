@@ -35,13 +35,13 @@ class MusicAdapter(
         }
 
         if (music[position].genre.isNullOrEmpty()) {
-            holder.genre.text = "-"
+            holder.genre.text = context.getString(R.string.none)
         } else {
             holder.genre.text = music[position].genre
         }
 
         if (music[position].releaseYear.isNullOrEmpty()) {
-            holder.releaseYear.text = "-"
+            holder.releaseYear.text = context.getString(R.string.none)
         } else {
             holder.releaseYear.text = music[position].releaseYear
         }

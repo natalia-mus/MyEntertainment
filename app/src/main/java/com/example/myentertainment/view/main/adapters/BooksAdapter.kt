@@ -35,13 +35,13 @@ class BooksAdapter(
         }
 
         if (books[position].genre.isNullOrEmpty()) {
-            holder.genre.text = "-"
+            holder.genre.text = context.getString(R.string.none)
         } else {
             holder.genre.text = books[position].genre
         }
 
         if (books[position].releaseYear.isNullOrEmpty()) {
-            holder.releaseYear.text = "-"
+            holder.releaseYear.text = context.getString(R.string.none)
         } else {
             holder.releaseYear.text = books[position].releaseYear
         }

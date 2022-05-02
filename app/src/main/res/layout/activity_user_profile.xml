@@ -1,260 +1,282 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/userProfile_loadingSection"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:background="@color/white_transparent"
+        android:elevation="100dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="30dp">
-
-            <ImageButton
-                android:id="@+id/userProfile_buttonEdit"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="6dp"
-                android:background="@color/transparent"
-                android:src="@drawable/ic_edit"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/userProfile_photo"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_margin="50dp"
-                android:background="#7B1FA2"
-                android:src="@drawable/ic_user"
-                app:layout_constraintBottom_toTopOf="@+id/userProfile_username"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/userProfile_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:textSize="28dp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userProfile_photo"
-                tools:text="Username" />
-
-            <EditText
-                android:id="@+id/userProfile_username_editable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:paddingHorizontal="12dp"
-                android:textSize="24dp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userProfile_photo"
-                tools:text="Username" />
-
-            <TextView
-                android:id="@+id/userProfile_realName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userProfile_username"
-                tools:text="Jane Doe" />
-
-            <EditText
-                android:id="@+id/userProfile_realName_editable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
-                android:textSize="16dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userProfile_username_editable"
-                tools:text="Jane Doe" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <LinearLayout
-            android:id="@+id/userProfile_infoSection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="10dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp">
-
-            <RelativeLayout
-                android:id="@+id/ssssssss"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:id="@+id/userProfile_city_label"
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:text="@string/city"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/userProfile_city"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/userProfile_city_label"
-                    android:textSize="18dp"
-                    tools:text="Los Angeles" />
-
-                <EditText
-                    android:id="@+id/userProfile_city_editable"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-7dp"
-                    android:layout_toEndOf="@+id/userProfile_city_label"
-                    android:paddingHorizontal="10dp"
-                    android:textSize="16dp"
-                    android:visibility="gone"
-                    tools:text="Los Angeles" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:id="@+id/userProfile_country_label"
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:text="@string/country"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/userProfile_country"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/userProfile_country_label"
-                    android:textSize="18dp"
-                    tools:text="USA" />
-
-                <EditText
-                    android:id="@+id/userProfile_country_editable"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-7dp"
-                    android:layout_toEndOf="@+id/userProfile_country_label"
-                    android:paddingHorizontal="10dp"
-                    android:textSize="16dp"
-                    android:visibility="gone"
-                    tools:text="USA" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:id="@+id/userProfile_age_label"
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:text="@string/age"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/userProfile_age"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/userProfile_age_label"
-                    android:textSize="18dp"
-                    tools:text="23" />
-
-                <EditText
-                    android:id="@+id/userProfile_age_editable"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-7dp"
-                    android:layout_toEndOf="@+id/userProfile_age_label"
-                    android:paddingHorizontal="10dp"
-                    android:textSize="16dp"
-                    android:visibility="gone"
-                    tools:text="23" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:id="@+id/userProfile_email_label"
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:text="@string/email"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/userProfile_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/userProfile_email_label"
-                    android:textSize="18dp"
-                    tools:text="jane@doe.com" />
-
-                <EditText
-                    android:id="@+id/userProfile_email_editable"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-7dp"
-                    android:layout_toEndOf="@+id/userProfile_email_label"
-                    android:paddingHorizontal="10dp"
-                    android:textSize="16dp"
-                    android:visibility="gone"
-                    tools:text="jane@doe.com" />
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/userProfile_buttonSave"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginHorizontal="80dp"
-            android:layout_marginVertical="30dp"
-            android:text="@string/save"
-            android:textSize="20dp"
-            android:visibility="gone"
+        <ProgressBar
+            android:id="@+id/userProfile_progressBar"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userProfile_infoSection" />
+            app:layout_constraintTop_toTopOf="parent" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</ScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="30dp">
+
+                <ImageButton
+                    android:id="@+id/userProfile_buttonEdit"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="6dp"
+                    android:background="@color/transparent"
+                    android:src="@drawable/ic_edit"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/userProfile_photo"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_margin="50dp"
+                    android:background="#7B1FA2"
+                    android:src="@drawable/ic_user"
+                    app:layout_constraintBottom_toTopOf="@+id/userProfile_username"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/userProfile_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:textSize="28dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userProfile_photo"
+                    tools:text="Username" />
+
+                <EditText
+                    android:id="@+id/userProfile_username_editable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:paddingHorizontal="12dp"
+                    android:textSize="24dp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userProfile_photo"
+                    tools:text="Username" />
+
+                <TextView
+                    android:id="@+id/userProfile_realName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userProfile_username"
+                    tools:text="Jane Doe" />
+
+                <EditText
+                    android:id="@+id/userProfile_realName_editable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="10dp"
+                    android:textSize="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userProfile_username_editable"
+                    tools:text="Jane Doe" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/userProfile_infoSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:id="@+id/userProfile_city_label"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/city"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/userProfile_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/userProfile_city_label"
+                        android:textSize="18dp"
+                        tools:text="Los Angeles" />
+
+                    <EditText
+                        android:id="@+id/userProfile_city_editable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-7dp"
+                        android:layout_toEndOf="@+id/userProfile_city_label"
+                        android:paddingHorizontal="10dp"
+                        android:textSize="16dp"
+                        android:visibility="gone"
+                        tools:text="Los Angeles" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:id="@+id/userProfile_country_label"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/country"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/userProfile_country"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/userProfile_country_label"
+                        android:textSize="18dp"
+                        tools:text="USA" />
+
+                    <EditText
+                        android:id="@+id/userProfile_country_editable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-7dp"
+                        android:layout_toEndOf="@+id/userProfile_country_label"
+                        android:paddingHorizontal="10dp"
+                        android:textSize="16dp"
+                        android:visibility="gone"
+                        tools:text="USA" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:id="@+id/userProfile_age_label"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/age"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/userProfile_age"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/userProfile_age_label"
+                        android:textSize="18dp"
+                        tools:text="23" />
+
+                    <EditText
+                        android:id="@+id/userProfile_age_editable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-7dp"
+                        android:layout_toEndOf="@+id/userProfile_age_label"
+                        android:paddingHorizontal="10dp"
+                        android:textSize="16dp"
+                        android:visibility="gone"
+                        tools:text="23" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:id="@+id/userProfile_email_label"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/email"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/userProfile_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/userProfile_email_label"
+                        android:textSize="18dp"
+                        tools:text="jane@doe.com" />
+
+                    <EditText
+                        android:id="@+id/userProfile_email_editable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-7dp"
+                        android:layout_toEndOf="@+id/userProfile_email_label"
+                        android:paddingHorizontal="10dp"
+                        android:textSize="16dp"
+                        android:visibility="gone"
+                        tools:text="jane@doe.com" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/userProfile_buttonSave"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginHorizontal="80dp"
+                android:layout_marginVertical="30dp"
+                android:text="@string/save"
+                android:textSize="20dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/userProfile_infoSection" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
