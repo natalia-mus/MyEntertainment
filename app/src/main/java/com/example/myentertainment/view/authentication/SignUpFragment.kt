@@ -21,11 +21,13 @@ class SignUpFragment : Fragment() {
     private lateinit var fragmentView: View
     private lateinit var viewModel: SignUpFragmentViewModel
 
+    private lateinit var usernameEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var signUpButton: Button
     private lateinit var loadingSection: ConstraintLayout
 
+    private lateinit var username: String
     private lateinit var email: String
     private lateinit var password: String
 
@@ -44,15 +46,17 @@ class SignUpFragment : Fragment() {
     }
 
     private fun initView() {
+        usernameEditText = fragmentView.findViewById(R.id.signUp_username)
         emailEditText = fragmentView.findViewById(R.id.signUp_email)
         passwordEditText = fragmentView.findViewById(R.id.signUp_password)
         signUpButton = fragmentView.findViewById(R.id.signUp_buttonOk)
         loadingSection = fragmentView.findViewById(R.id.signUp_loadingSection)
 
         signUpButton.setOnClickListener() {
+            username = usernameEditText.text.toString()
             email = emailEditText.text.toString()
             password = passwordEditText.text.toString()
-            viewModel.signUp(email, password)
+            viewModel.signUp(username, email, password)
         }
     }
 

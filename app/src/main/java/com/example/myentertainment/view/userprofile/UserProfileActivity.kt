@@ -22,14 +22,17 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var city: TextView
     private lateinit var country: TextView
     private lateinit var age: TextView
+    private lateinit var email: TextView
     private lateinit var editButton: ImageButton
     private lateinit var saveButton: Button
+    private lateinit var cancelButton: Button
     private lateinit var usernameEditable: EditText
     private lateinit var realNameEditable: EditText
     private lateinit var cityEditable: EditText
     private lateinit var countryEditable: EditText
     private lateinit var ageEditable: EditText
     private lateinit var loadingSection: ConstraintLayout
+    private lateinit var buttonsSection: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,8 +57,11 @@ class UserProfileActivity : AppCompatActivity() {
         city = findViewById(R.id.userProfile_city)
         country = findViewById(R.id.userProfile_country)
         age = findViewById(R.id.userProfile_age)
+        email = findViewById(R.id.userProfile_email)
         editButton = findViewById(R.id.userProfile_buttonEdit)
         saveButton = findViewById(R.id.userProfile_buttonSave)
+        cancelButton = findViewById(R.id.userProfile_buttonCancel)
+        buttonsSection = findViewById(R.id.userProfile_buttonsSection)
 
         usernameEditable = findViewById(R.id.userProfile_username_editable)
         realNameEditable = findViewById(R.id.userProfile_realName_editable)
@@ -64,11 +70,15 @@ class UserProfileActivity : AppCompatActivity() {
         ageEditable = findViewById(R.id.userProfile_age_editable)
 
         editButton.setOnClickListener() {
-            prepareEditing()
+            switchViewMode(true)
         }
 
         saveButton.setOnClickListener() {
             updateUserProfileData()
+        }
+
+        cancelButton.setOnClickListener() {
+            switchViewMode(false)
         }
     }
 
@@ -84,7 +94,7 @@ class UserProfileActivity : AppCompatActivity() {
             cityEditable.visibility = View.GONE
             countryEditable.visibility = View.GONE
             ageEditable.visibility = View.GONE
-            saveButton.visibility = View.GONE
+            buttonsSection.visibility = View.GONE
             editButton.visibility = View.VISIBLE
 
             username.text = userProfileData.username
@@ -92,31 +102,53 @@ class UserProfileActivity : AppCompatActivity() {
             city.text = if (userProfileData.city?.isNotEmpty() == true) userProfileData.city else getString(R.string.none)
             country.text = if (userProfileData.country?.isNotEmpty() == true) userProfileData.country else getString(R.string.none)
             age.text = if (userProfileData.age?.toString()?.isNotEmpty() == true) userProfileData.age.toString() else getString(R.string.none)
+            email.text = userProfileData.email
 
             usernameEditable.setText(userProfileData.username)
             realNameEditable.setText(userProfileData.realName)
             cityEditable.setText(userProfileData.city)
             countryEditable.setText(userProfileData.country)
-            ageEditable.setText(userProfileData.age.toString())
+            ageEditable.setText(if (userProfileData.age?.toString()?.isNotEmpty() == true) userProfileData.age.toString() else "")
         } else {
             onBackPressed()
             Toast.makeText(applicationContext, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
         }
     }
 
-    private fun prepareEditing() {
-        editButton.visibility = View.GONE
-        saveButton.visibility = View.VISIBLE
-        username.visibility = View.GONE
-        realName.visibility = View.GONE
-        city.visibility = View.GONE
-        country.visibility = View.GONE
-        age.visibility = View.GONE
-        usernameEditable.visibility = View.VISIBLE
-        realNameEditable.visibility = View.VISIBLE
-        cityEditable.visibility = View.VISIBLE
-        countryEditable.visibility = View.VISIBLE
-        ageEditable.visibility = View.VISIBLE
+    private fun switchViewMode(switchToEditMode: Boolean) {
+        if (switchToEditMode) {
+            editButton.visibility = View.GONE
+            buttonsSection.visibility = View.VISIBLE
+            username.visibility = View.GONE
+            realName.visibility = View.GONE
+            city.visibility = View.GONE
+            country.visibility = View.GONE
+            age.visibility = View.GONE
+            usernameEditable.visibility = View.VISIBLE
+            realNameEditable.visibility = View.VISIBLE
+            cityEditable.visibility = View.VISIBLE
+            countryEditable.visibility = View.VISIBLE
+            ageEditable.visibility = View.VISIBLE
+        } else {
+            editButton.visibility = View.VISIBLE
+            buttonsSection.visibility = View.GONE
+            username.visibility = View.VISIBLE
+            realName.visibility = View.VISIBLE
+            city.visibility = View.VISIBLE
+            country.visibility = View.VISIBLE
+            age.visibility = View.VISIBLE
+            usernameEditable.visibility = View.GONE
+            realNameEditable.visibility = View.GONE
+            cityEditable.visibility = View.GONE
+            countryEditable.visibility = View.GONE
+            ageEditable.visibility = View.GONE
+
+            usernameEditable.setText(if (username.text != "-") username.text else "")
+            realNameEditable.setText(if (realName.text != "-") realName.text else "")
+            cityEditable.setText(if (city.text != "-") city.text else "")
+            countryEditable.setText(if (country.text != "-") country.text else "")
+            ageEditable.setText(if (age.text != "-") age.text else "")
+        }
     }
 
     private fun updateUserProfileData() {
@@ -125,8 +157,9 @@ class UserProfileActivity : AppCompatActivity() {
         val city = cityEditable.text.toString()
         val country = countryEditable.text.toString()
         val age = ageEditable.text.toString().toInt()
+        val email = email.text.toString()
 
-        val userProfileData = UserProfile(username, realName, city, country, age)
+        val userProfileData = UserProfile(username, realName, city, country, age, email)
         viewModel.updateUserProfileData(userProfileData)
     }
 
