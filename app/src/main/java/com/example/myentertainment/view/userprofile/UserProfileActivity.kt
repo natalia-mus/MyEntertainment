@@ -2,6 +2,7 @@ package com.example.myentertainment.view.userprofile
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -12,11 +13,13 @@ import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.viewmodel.userprofile.UserProfileActivityViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var viewModel: UserProfileActivityViewModel
 
+    private lateinit var photo: ImageView
     private lateinit var username: TextView
     private lateinit var realName: TextView
     private lateinit var city: TextView
@@ -52,6 +55,7 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+        photo = findViewById(R.id.userProfile_photo)
         username = findViewById(R.id.userProfile_username)
         realName = findViewById(R.id.userProfile_realName)
         city = findViewById(R.id.userProfile_city)
@@ -68,6 +72,10 @@ class UserProfileActivity : AppCompatActivity() {
         cityEditable = findViewById(R.id.userProfile_city_editable)
         countryEditable = findViewById(R.id.userProfile_country_editable)
         ageEditable = findViewById(R.id.userProfile_age_editable)
+
+        photo.setOnClickListener() {
+            changeProfilePhoto()
+        }
 
         editButton.setOnClickListener() {
             switchViewMode(true)
@@ -186,6 +194,25 @@ class UserProfileActivity : AppCompatActivity() {
             Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG)
                 .show()
         }
+    }
+
+    private fun changeProfilePhoto() {
+        val photoSourcePanel = BottomSheetDialog(this)
+        val photoSourcePanelView = LayoutInflater.from(this)
+            .inflate(R.layout.panel_photo_source, findViewById(R.id.panelPhotoSource_container))
+
+        photoSourcePanelView.findViewById<LinearLayout>(R.id.photoSource_camera)
+            .setOnClickListener() {
+                // TODO
+            }
+
+        photoSourcePanelView.findViewById<LinearLayout>(R.id.photoSource_gallery)
+            .setOnClickListener() {
+                // TODO
+            }
+
+        photoSourcePanel.setContentView(photoSourcePanelView)
+        photoSourcePanel.show()
     }
 
     private fun validationResult(validationResult: Int) {

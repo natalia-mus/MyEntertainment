@@ -53,12 +53,12 @@
                     android:layout_width="200dp"
                     android:layout_height="200dp"
                     android:layout_margin="50dp"
-                    android:background="#7B1FA2"
                     android:src="@drawable/ic_user"
                     app:layout_constraintBottom_toTopOf="@+id/userProfile_username"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/gray" />
 
                 <TextView
                     android:id="@+id/userProfile_username"
