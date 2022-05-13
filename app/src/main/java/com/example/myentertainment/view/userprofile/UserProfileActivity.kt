@@ -1,14 +1,20 @@
 package com.example.myentertainment.view.userprofile
 
 import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.data.UserProfile
@@ -203,7 +209,8 @@ class UserProfileActivity : AppCompatActivity() {
 
         photoSourcePanelView.findViewById<LinearLayout>(R.id.photoSource_camera)
             .setOnClickListener() {
-                // TODO
+                tryToOpenCamera()
+                photoSourcePanel.dismiss()
             }
 
         photoSourcePanelView.findViewById<LinearLayout>(R.id.photoSource_gallery)
@@ -213,6 +220,36 @@ class UserProfileActivity : AppCompatActivity() {
 
         photoSourcePanel.setContentView(photoSourcePanelView)
         photoSourcePanel.show()
+    }
+
+    private fun tryToOpenCamera() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            openCamera()
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.CAMERA),
+                Constants.REQUEST_CODE_PERMISSION_CAMERA
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == Constants.REQUEST_CODE_PERMISSION_CAMERA && grantResults[0] == PackageManager.PERMISSION_GRANTED) openCamera()
+    }
+
+    private fun openCamera() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_CAMERA_IMAGE)
     }
 
     private fun validationResult(validationResult: Int) {
