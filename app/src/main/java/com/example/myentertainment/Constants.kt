@@ -9,4 +9,7 @@ object Constants {
 
     const val REQUEST_CODE_PERMISSION_CAMERA = 101
     const val REQUEST_CODE_CAPTURE_CAMERA_IMAGE = 102
+    const val REQUEST_CODE_CAPTURE_GALLERY_IMAGE = 103
+
+    const val INTENT_TYPE_IMAGE = "image/*"
 }

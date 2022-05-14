@@ -215,7 +215,8 @@ class UserProfileActivity : AppCompatActivity() {
 
         photoSourcePanelView.findViewById<LinearLayout>(R.id.photoSource_gallery)
             .setOnClickListener() {
-                // TODO
+                openGallery()
+                photoSourcePanel.dismiss()
             }
 
         photoSourcePanel.setContentView(photoSourcePanelView)
@@ -250,6 +251,12 @@ class UserProfileActivity : AppCompatActivity() {
     private fun openCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_CAMERA_IMAGE)
+    }
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = Constants.INTENT_TYPE_IMAGE
+        startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE)
     }
 
     private fun validationResult(validationResult: Int) {
