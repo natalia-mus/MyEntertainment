@@ -8,6 +8,7 @@ import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.data.UserProfile
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.storage.StorageReference
 import javax.inject.Inject
 
 class UserProfileActivityViewModel : ViewModel() {
@@ -21,6 +22,9 @@ class UserProfileActivityViewModel : ViewModel() {
 
     @Inject
     lateinit var databaseReference: DatabaseReference
+
+    @Inject
+    lateinit var databaseStorage: StorageReference
 
     private val user = databaseAuth.uid.toString()
 
