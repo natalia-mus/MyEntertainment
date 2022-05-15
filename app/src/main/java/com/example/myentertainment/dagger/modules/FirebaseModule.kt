@@ -29,6 +29,6 @@ class FirebaseModule {
     @Singleton
     @Provides
     fun provideFirebaseStorageReference(): StorageReference {
-        return Firebase.storage.reference.child("images")
+        return Firebase.storage.reference
     }
 }

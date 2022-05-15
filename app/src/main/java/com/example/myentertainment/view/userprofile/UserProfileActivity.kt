@@ -259,6 +259,24 @@ class UserProfileActivity : AppCompatActivity() {
         startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                Constants.REQUEST_CODE_CAPTURE_CAMERA_IMAGE -> {
+                    // TODO
+                }
+                Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE -> {
+                    if (data != null && data.data != null) {
+                        val file = data.data!!
+                        viewModel.changeProfilePicture(file)
+                    }
+                }
+            }
+        }
+    }
+
     private fun validationResult(validationResult: Int) {
         if (validationResult == ValidationObject.EMPTY_VALUES) {
             Toast.makeText(this, getString(R.string.username_can_not_be_empty), Toast.LENGTH_LONG)

@@ -1,9 +1,12 @@
 package com.example.myentertainment.viewmodel.userprofile
 
+import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.Constants
+import com.example.myentertainment.`object`.StoragePathObject
 import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.data.UserProfile
 import com.google.firebase.auth.FirebaseAuth
@@ -24,7 +27,7 @@ class UserProfileActivityViewModel : ViewModel() {
     lateinit var databaseReference: DatabaseReference
 
     @Inject
-    lateinit var databaseStorage: StorageReference
+    lateinit var storageReference: StorageReference
 
     private val user = databaseAuth.uid.toString()
 
@@ -61,6 +64,20 @@ class UserProfileActivityViewModel : ViewModel() {
                     loading.value = false
                     addingToDatabaseResult.value = false
                 }
+            }
+        }
+    }
+
+    fun changeProfilePicture(file: Uri) {
+        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + user + ".jpg"
+        val reference = storageReference.child(path)
+        val uploadTask = reference.putFile(file)
+
+        uploadTask.addOnCompleteListener() { task ->
+            if (task.isSuccessful) {
+                Log.e("uploadTask", "success")
+            } else {
+                Log.e("uploadTask", "failure")
             }
         }
     }
