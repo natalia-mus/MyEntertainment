@@ -69,14 +69,17 @@ class UserProfileActivityViewModel : ViewModel() {
     }
 
     fun changeProfilePicture(file: Uri) {
-        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + user + ".jpg"
+        loading.value = true
+        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + user
         val reference = storageReference.child(path)
         val uploadTask = reference.putFile(file)
 
         uploadTask.addOnCompleteListener() { task ->
             if (task.isSuccessful) {
+                loading.value = false
                 Log.e("uploadTask", "success")
             } else {
+                loading.value = false
                 Log.e("uploadTask", "failure")
             }
         }
