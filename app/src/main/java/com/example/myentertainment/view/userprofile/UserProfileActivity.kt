@@ -3,6 +3,7 @@ package com.example.myentertainment.view.userprofile
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -20,6 +21,7 @@ import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.viewmodel.userprofile.UserProfileActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import java.io.ByteArrayOutputStream
 
 class UserProfileActivity : AppCompatActivity() {
 
@@ -265,7 +267,12 @@ class UserProfileActivity : AppCompatActivity() {
         if (resultCode == RESULT_OK) {
             when (requestCode) {
                 Constants.REQUEST_CODE_CAPTURE_CAMERA_IMAGE -> {
-                    // TODO
+                    val file = data?.getParcelableExtra<Bitmap>("data")
+                    if (file != null) {
+                        val outputStream = ByteArrayOutputStream()
+                        file.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                        viewModel.changeProfilePicture(outputStream.toByteArray())
+                    }
                 }
                 Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE -> {
                     if (data != null && data.data != null) {

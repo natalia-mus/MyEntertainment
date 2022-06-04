@@ -12,6 +12,7 @@ import com.example.myentertainment.data.UserProfile
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 import javax.inject.Inject
 
 class UserProfileActivityViewModel : ViewModel() {
@@ -68,12 +69,23 @@ class UserProfileActivityViewModel : ViewModel() {
         }
     }
 
+    fun changeProfilePicture(file: ByteArray) {
+        loading.value = true
+        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + user
+        val reference = storageReference.child(path)
+        val uploadTask = reference.putBytes(file)
+        changeProfilePicture(uploadTask)
+    }
+
     fun changeProfilePicture(file: Uri) {
         loading.value = true
         val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + user
         val reference = storageReference.child(path)
         val uploadTask = reference.putFile(file)
+        changeProfilePicture(uploadTask)
+    }
 
+    private fun changeProfilePicture(uploadTask: UploadTask) {
         uploadTask.addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 loading.value = false
