@@ -36,15 +36,21 @@ class UserProfileActivityViewModel : ViewModel() {
     val userProfile = MutableLiveData<UserProfile?>()
     val validationResult = MutableLiveData<Int>()
     val addingToDatabaseResult = MutableLiveData<Boolean>()
+    val profilePicture = MutableLiveData<Uri>()
 
+
+    private fun profilePictureReference() : StorageReference {
+        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + user
+        return storageReference.child(path)
+    }
 
     fun getUserProfileData() {
         loading.value = true
         databaseReference.child(user).child(Constants.USER_PROFILE_DATA).get()
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
-                    loading.value = false
                     userProfile.value = task.result?.getValue(UserProfile::class.java)
+                    getProfilePicture()
                 } else {
                     loading.value = false
                     userProfile.value = null
@@ -71,37 +77,35 @@ class UserProfileActivityViewModel : ViewModel() {
 
     fun changeProfilePicture(file: ByteArray) {
         loading.value = true
-        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + user
-        val reference = storageReference.child(path)
-        val uploadTask = reference.putBytes(file)
-        changeProfilePicture(uploadTask, reference)
+        val uploadTask = profilePictureReference().putBytes(file)
+        changeProfilePicture(uploadTask)
     }
 
     fun changeProfilePicture(file: Uri) {
         loading.value = true
-        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + user
-        val reference = storageReference.child(path)
-        val uploadTask = reference.putFile(file)
-        changeProfilePicture(uploadTask, reference)
+        val uploadTask = profilePictureReference().putFile(file)
+        changeProfilePicture(uploadTask)
     }
 
-    private fun changeProfilePicture(uploadTask: UploadTask, reference: StorageReference) {
+    private fun changeProfilePicture(uploadTask: UploadTask) {
         uploadTask.addOnCompleteListener() { task ->
             if (task.isSuccessful) {
-                refreshProfilePicture(reference)
+                getProfilePicture()
             } else {
+                // TODO
                 loading.value = false
                 Log.e("uploadTask", "failure")
             }
         }
     }
 
-    private fun refreshProfilePicture(pictureReference: StorageReference) {
-        pictureReference.downloadUrl.addOnCompleteListener() { task ->
+    private fun getProfilePicture() {
+        profilePictureReference().downloadUrl.addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 loading.value = false
-                Log.e("downloadUrl", "success")
+                profilePicture.value = task.result
             } else {
+                // TODO
                 loading.value = false
                 Log.e("downloadUrl", "failure")
             }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -14,7 +15,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationObject
@@ -58,6 +61,7 @@ class UserProfileActivity : AppCompatActivity() {
     private fun setObservers() {
         viewModel.loading.observe(this, { loadingStatusChanged(it) })
         viewModel.userProfile.observe(this, { updateView(it) })
+        viewModel.profilePicture.observe(this, {refreshProfilePicture(it)})
         viewModel.validationResult.observe(this, { validationResult(it) })
         viewModel.addingToDatabaseResult.observe(this, { addingToDatabaseResult(it) })
     }
@@ -82,7 +86,7 @@ class UserProfileActivity : AppCompatActivity() {
         ageEditable = findViewById(R.id.userProfile_age_editable)
 
         photo.setOnClickListener() {
-            changeProfilePhoto()
+            changeProfilePicture()
         }
 
         editButton.setOnClickListener() {
@@ -204,7 +208,7 @@ class UserProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun changeProfilePhoto() {
+    private fun changeProfilePicture() {
         val photoSourcePanel = BottomSheetDialog(this)
         val photoSourcePanelView = LayoutInflater.from(this)
             .inflate(R.layout.panel_photo_source, findViewById(R.id.panelPhotoSource_container))
@@ -223,6 +227,15 @@ class UserProfileActivity : AppCompatActivity() {
 
         photoSourcePanel.setContentView(photoSourcePanelView)
         photoSourcePanel.show()
+    }
+
+    private fun refreshProfilePicture(uri: Uri) {
+        val placeholder = ResourcesCompat.getDrawable(resources, R.drawable.placeholder_user, null)
+        Glide.with(this)
+            .load(uri)
+            .placeholder(placeholder)
+            .circleCrop()
+            .into(photo)
     }
 
     private fun tryToOpenCamera() {
