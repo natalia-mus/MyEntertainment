@@ -63,7 +63,8 @@ class UserProfileActivity : AppCompatActivity() {
         viewModel.userProfile.observe(this, { updateView(it) })
         viewModel.profilePicture.observe(this, {refreshProfilePicture(it)})
         viewModel.validationResult.observe(this, { validationResult(it) })
-        viewModel.addingToDatabaseResult.observe(this, { addingToDatabaseResult(it) })
+        viewModel.updatingUserProfileDataSuccessful.observe(this, {updatingUserProfileDataResult(it)})
+        viewModel.databaseTaskExecutionSuccessful.observe(this, { databaseTaskExecutionResult(it) })
     }
 
     private fun initView() {
@@ -194,15 +195,17 @@ class UserProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun addingToDatabaseResult(
-        addingToDatabaseResult: Boolean
-    ) {
-        if (addingToDatabaseResult) {
+    private fun updatingUserProfileDataResult(successful: Boolean) {
+        if (successful) {
             Toast.makeText(this, getString(R.string.user_profile_data_updated), Toast.LENGTH_LONG)
                 .show()
             hideKeyboard()
             viewModel.getUserProfileData()
-        } else {
+        } else databaseTaskExecutionResult(false)
+    }
+
+    private fun databaseTaskExecutionResult(successful: Boolean) {
+        if (!successful) {
             Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG)
                 .show()
         }

@@ -1,7 +1,6 @@
 package com.example.myentertainment.viewmodel.userprofile
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
@@ -35,7 +34,8 @@ class UserProfileActivityViewModel : ViewModel() {
     val loading = MutableLiveData<Boolean>()
     val userProfile = MutableLiveData<UserProfile?>()
     val validationResult = MutableLiveData<Int>()
-    val addingToDatabaseResult = MutableLiveData<Boolean>()
+    val updatingUserProfileDataSuccessful = MutableLiveData<Boolean>()
+    val databaseTaskExecutionSuccessful = MutableLiveData<Boolean>()
     val profilePicture = MutableLiveData<Uri>()
 
 
@@ -50,7 +50,7 @@ class UserProfileActivityViewModel : ViewModel() {
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     userProfile.value = task.result?.getValue(UserProfile::class.java)
-                    getProfilePicture()
+                    getProfilePictureUrl()
                 } else {
                     loading.value = false
                     userProfile.value = null
@@ -66,10 +66,10 @@ class UserProfileActivityViewModel : ViewModel() {
             databaseReference.child(user).updateChildren(data).addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     loading.value = false
-                    addingToDatabaseResult.value = true
+                    updatingUserProfileDataSuccessful.value = true
                 } else {
                     loading.value = false
-                    addingToDatabaseResult.value = false
+                    updatingUserProfileDataSuccessful.value = false
                 }
             }
         }
@@ -90,24 +90,22 @@ class UserProfileActivityViewModel : ViewModel() {
     private fun changeProfilePicture(uploadTask: UploadTask) {
         uploadTask.addOnCompleteListener() { task ->
             if (task.isSuccessful) {
-                getProfilePicture()
+                getProfilePictureUrl()
             } else {
-                // TODO
                 loading.value = false
-                Log.e("uploadTask", "failure")
+                databaseTaskExecutionSuccessful.value = false
             }
         }
     }
 
-    private fun getProfilePicture() {
+    private fun getProfilePictureUrl() {
         profilePictureReference().downloadUrl.addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 loading.value = false
                 profilePicture.value = task.result
             } else {
-                // TODO
                 loading.value = false
-                Log.e("downloadUrl", "failure")
+                databaseTaskExecutionSuccessful.value = false
             }
         }
     }
