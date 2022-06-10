@@ -10,6 +10,7 @@ import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.data.UserProfile
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import javax.inject.Inject
@@ -36,7 +37,7 @@ class UserProfileActivityViewModel : ViewModel() {
     val validationResult = MutableLiveData<Int>()
     val updatingUserProfileDataSuccessful = MutableLiveData<Boolean>()
     val databaseTaskExecutionSuccessful = MutableLiveData<Boolean>()
-    val profilePicture = MutableLiveData<Uri>()
+    val profilePicture = MutableLiveData<Uri?>()
 
 
     private fun profilePictureReference() : StorageReference {
@@ -75,6 +76,18 @@ class UserProfileActivityViewModel : ViewModel() {
         }
     }
 
+    fun removeProfilePicture() {
+        loading.value = true
+        profilePictureReference().delete().addOnCompleteListener() { task ->
+            if (task.isSuccessful) {
+                getProfilePictureUrl()
+            } else {
+                loading.value = false
+                databaseTaskExecutionSuccessful.value = false
+            }
+        }
+    }
+
     fun changeProfilePicture(file: ByteArray) {
         loading.value = true
         val uploadTask = profilePictureReference().putBytes(file)
@@ -99,15 +112,21 @@ class UserProfileActivityViewModel : ViewModel() {
     }
 
     private fun getProfilePictureUrl() {
-        profilePictureReference().downloadUrl.addOnCompleteListener() { task ->
-            if (task.isSuccessful) {
+        profilePictureReference().downloadUrl
+            .addOnSuccessListener {
                 loading.value = false
-                profilePicture.value = task.result
-            } else {
+                profilePicture.value = it
+
+            }.addOnFailureListener {
                 loading.value = false
-                databaseTaskExecutionSuccessful.value = false
+                val errorCode = (it as StorageException).errorCode
+
+                if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                    profilePicture.value = null
+                } else {
+                    databaseTaskExecutionSuccessful.value = false
+                }
             }
-        }
     }
 
     private fun validation(userProfileData: UserProfile): Boolean {

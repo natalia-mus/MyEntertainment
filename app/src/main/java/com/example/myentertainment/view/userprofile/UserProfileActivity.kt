@@ -228,11 +228,41 @@ class UserProfileActivity : AppCompatActivity() {
                 photoSourcePanel.dismiss()
             }
 
+        if (viewModel.profilePicture.value == null) {
+            photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove).visibility =
+                View.GONE
+
+        } else {
+            photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove)
+                .setOnClickListener() {
+                    removeProfilePicture()
+                    photoSourcePanel.dismiss()
+                }
+        }
+
         photoSourcePanel.setContentView(photoSourcePanelView)
         photoSourcePanel.show()
     }
 
-    private fun refreshProfilePicture(uri: Uri) {
+    private fun removeProfilePicture() {
+        val removePhotoPanel = BottomSheetDialog(this)
+        val removePhotoPanelView = LayoutInflater.from(this).inflate(R.layout.panel_remove_photo, findViewById(R.id.panelRemovePhoto))
+
+        removePhotoPanelView.findViewById<LinearLayout>(R.id.panelRemovePhoto_removeButton).setOnClickListener() {
+            removePhotoPanel.dismiss()
+            viewModel.removeProfilePicture()
+        }
+
+        removePhotoPanelView.findViewById<LinearLayout>(R.id.panelRemovePhoto_backButton).setOnClickListener() {
+            removePhotoPanel.dismiss()
+            changeProfilePicture()
+        }
+
+        removePhotoPanel.setContentView(removePhotoPanelView)
+        removePhotoPanel.show()
+    }
+
+    private fun refreshProfilePicture(uri: Uri?) {
         val placeholder = ResourcesCompat.getDrawable(resources, R.drawable.placeholder_user, null)
         Glide.with(this)
             .load(uri)

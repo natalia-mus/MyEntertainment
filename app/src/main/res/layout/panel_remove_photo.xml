@@ -1,28 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/panelRemovePhoto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <TextView
+        android:id="@+id/panelRemovePhoto_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="30dp"
+        android:gravity="center"
+        android:paddingHorizontal="30dp"
+        android:text="@string/remove_profile_picture_message"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/panelRemovePhoto_buttons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
-        android:id="@+id/panelPhotoSource_container"
+        android:id="@+id/panelRemovePhoto_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingVertical="40dp"
+        android:paddingVertical="10dp"
         android:weightSum="2"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/panelRemovePhoto_message">
 
         <LinearLayout
-            android:id="@+id/photoSource_camera"
+            android:id="@+id/panelRemovePhoto_removeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:layout_weight="1"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/photoSource_gallery"
+            app:layout_constraintEnd_toStartOf="@+id/panelRemovePhoto_cancelButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -31,19 +48,22 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_camera" />
+                android:src="@drawable/ic_delete"
+                app:tint="@color/red" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@string/camera"
+                android:text="@string/yes_remove"
+                android:textAllCaps="true"
+                android:textColor="@color/red"
                 android:textStyle="bold" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/photoSource_gallery"
+            android:id="@+id/panelRemovePhoto_backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -51,7 +71,7 @@
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/photoSource_camera"
+            app:layout_constraintStart_toEndOf="@+id/panelRemovePhoto_removeButton"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
@@ -59,43 +79,17 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_image" />
+                android:src="@drawable/ic_back" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@string/gallery"
+                android:text="@string/no_go_back"
+                android:textAllCaps="true"
                 android:textStyle="bold" />
 
         </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/panelPhotoSource_remove"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/panelPhotoSource_container">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_delete"
-            app:tint="@color/red" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="@string/remove_profile_picture"
-            android:textColor="@color/red"
-            android:textStyle="bold" />
 
     </LinearLayout>
 
