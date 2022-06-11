@@ -177,7 +177,7 @@ class UserProfileActivity : AppCompatActivity() {
         val realName = realNameEditable.text.toString()
         val city = cityEditable.text.toString()
         val country = countryEditable.text.toString()
-        val age = ageEditable.text.toString().toInt()
+        val age = if (ageEditable.text.isNotEmpty()) ageEditable.text.toString().toInt() else null
         val email = email.text.toString()
 
         val userProfileData = UserProfile(username, realName, city, country, age, email)
