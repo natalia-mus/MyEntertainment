@@ -53,6 +53,7 @@ class SignUpFragment : Fragment() {
         loadingSection = fragmentView.findViewById(R.id.signUp_loadingSection)
 
         signUpButton.setOnClickListener() {
+            //signUpAsTestUser()
             username = usernameEditText.text.toString()
             email = emailEditText.text.toString()
             password = passwordEditText.text.toString()
@@ -103,5 +104,16 @@ class SignUpFragment : Fragment() {
 
     private fun toast(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
+    // method to improve signing up as one of the test users with the same domain and password
+    private fun signUpAsTestUser() {
+        val username = usernameEditText.text.toString()
+        val email = "$username@example.com"
+        val password = ""
+
+        usernameEditText.setText(username)
+        emailEditText.setText(email)
+        passwordEditText.setText(password)
     }
 }

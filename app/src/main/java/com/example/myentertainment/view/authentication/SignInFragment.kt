@@ -53,6 +53,7 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
         signUp = fragmentView.findViewById(R.id.signIn_signUp)
 
         signInButton.setOnClickListener() {
+            //signInAsTestUser()
             email = emailEditText.text.toString()
             password = passwordEditText.text.toString()
             viewModel.signIn(email, password)
@@ -114,6 +115,15 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
 
     private fun toast(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
+    // method to improve logging in as one of the test users with the same domain and password
+    private fun signInAsTestUser() {
+        val domain = "@example.com"
+        val password = ""
+
+        emailEditText.text = emailEditText.text.append(domain)
+        passwordEditText.setText(password)
     }
 }
 
