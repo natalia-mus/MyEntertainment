@@ -1,8 +1,8 @@
 <resources>
-    <string name="age">age:</string>
     <string name="app_name">MyEntertainment</string>
     <string name="artist">artist</string>
     <string name="author">author</string>
+    <string name="birth_date">birth date:</string>
     <string name="books">Books</string>
     <string name="book_add">add book</string>
     <string name="book_added">Book added</string>
@@ -59,6 +59,7 @@
     <string name="remove_profile_picture">Remove profile picture</string>
     <string name="remove_profile_picture_message">Are you sure you want to remove your profile picture?</string>
     <string name="save">save</string>
+    <string name="set_your_birth_date">Set your birth date:</string>
     <string name="sign_in">sign in</string>
     <string name="sign_in_message">Don\'t have an account?</string>
     <string name="sign_out">sign out</string>
@@ -72,4 +73,5 @@
     <string name="username_can_not_be_empty">Username can not be empty</string>
     <string name="yes_remove">yes, remove</string>
     <string name="your_email_address_is_invalid">Your e-mail address is invalid</string>
+    <string name="yrs">yrs</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.myentertainment.view.userprofile
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -19,6 +20,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.myentertainment.Constants
+import com.example.myentertainment.Date
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.data.UserProfile
@@ -35,6 +37,7 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var realName: TextView
     private lateinit var city: TextView
     private lateinit var country: TextView
+    private lateinit var birthDate: TextView
     private lateinit var age: TextView
     private lateinit var email: TextView
     private lateinit var editButton: ImageButton
@@ -44,9 +47,10 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var realNameEditable: EditText
     private lateinit var cityEditable: EditText
     private lateinit var countryEditable: EditText
-    private lateinit var ageEditable: EditText
     private lateinit var loadingSection: ConstraintLayout
     private lateinit var buttonsSection: LinearLayout
+
+    private var newBirthDate: Date? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +77,7 @@ class UserProfileActivity : AppCompatActivity() {
         realName = findViewById(R.id.userProfile_realName)
         city = findViewById(R.id.userProfile_city)
         country = findViewById(R.id.userProfile_country)
+        birthDate = findViewById(R.id.userProfile_birthDate)
         age = findViewById(R.id.userProfile_age)
         email = findViewById(R.id.userProfile_email)
         editButton = findViewById(R.id.userProfile_buttonEdit)
@@ -84,7 +89,6 @@ class UserProfileActivity : AppCompatActivity() {
         realNameEditable = findViewById(R.id.userProfile_realName_editable)
         cityEditable = findViewById(R.id.userProfile_city_editable)
         countryEditable = findViewById(R.id.userProfile_country_editable)
-        ageEditable = findViewById(R.id.userProfile_age_editable)
 
         photo.setOnClickListener() {
             changeProfilePicture()
@@ -109,12 +113,11 @@ class UserProfileActivity : AppCompatActivity() {
             realName.visibility = View.VISIBLE
             city.visibility = View.VISIBLE
             country.visibility = View.VISIBLE
-            age.visibility = View.VISIBLE
+            birthDate.visibility = View.VISIBLE
             usernameEditable.visibility = View.GONE
             realNameEditable.visibility = View.GONE
             cityEditable.visibility = View.GONE
             countryEditable.visibility = View.GONE
-            ageEditable.visibility = View.GONE
             buttonsSection.visibility = View.GONE
             editButton.visibility = View.VISIBLE
 
@@ -122,14 +125,23 @@ class UserProfileActivity : AppCompatActivity() {
             realName.text = userProfileData.realName
             city.text = if (userProfileData.city?.isNotEmpty() == true) userProfileData.city else getString(R.string.none)
             country.text = if (userProfileData.country?.isNotEmpty() == true) userProfileData.country else getString(R.string.none)
-            age.text = if (userProfileData.age?.toString()?.isNotEmpty() == true) userProfileData.age.toString() else getString(R.string.none)
             email.text = userProfileData.email
+            if (userProfileData.birthDate != null) {
+                val month = userProfileData.birthDate.getMonthShortName()
+                val day = userProfileData.birthDate.day.toString()
+                val year = userProfileData.birthDate.year.toString()
+                val userAge = userProfileData.birthDate.getUserAge().toString()
+                birthDate.text = "$month $day, $year"
+                age.text = "($userAge yrs)"
+            } else {
+                birthDate.text = "-"
+                age.visibility = View.GONE
+            }
 
             usernameEditable.setText(userProfileData.username)
             realNameEditable.setText(userProfileData.realName)
             cityEditable.setText(userProfileData.city)
             countryEditable.setText(userProfileData.country)
-            ageEditable.setText(if (userProfileData.age?.toString()?.isNotEmpty() == true) userProfileData.age.toString() else "")
         } else {
             onBackPressed()
             Toast.makeText(applicationContext, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
@@ -144,12 +156,16 @@ class UserProfileActivity : AppCompatActivity() {
             realName.visibility = View.GONE
             city.visibility = View.GONE
             country.visibility = View.GONE
-            age.visibility = View.GONE
             usernameEditable.visibility = View.VISIBLE
             realNameEditable.visibility = View.VISIBLE
             cityEditable.visibility = View.VISIBLE
             countryEditable.visibility = View.VISIBLE
-            ageEditable.visibility = View.VISIBLE
+
+            birthDate.isClickable = true
+            birthDate.setOnClickListener() {
+                showDatePickerDialog()
+            }
+
         } else {
             editButton.visibility = View.VISIBLE
             buttonsSection.visibility = View.GONE
@@ -157,19 +173,45 @@ class UserProfileActivity : AppCompatActivity() {
             realName.visibility = View.VISIBLE
             city.visibility = View.VISIBLE
             country.visibility = View.VISIBLE
-            age.visibility = View.VISIBLE
+            birthDate.visibility = View.VISIBLE
             usernameEditable.visibility = View.GONE
             realNameEditable.visibility = View.GONE
             cityEditable.visibility = View.GONE
             countryEditable.visibility = View.GONE
-            ageEditable.visibility = View.GONE
+
+            birthDate.isClickable = false
 
             usernameEditable.setText(if (username.text != "-") username.text else "")
             realNameEditable.setText(if (realName.text != "-") realName.text else "")
             cityEditable.setText(if (city.text != "-") city.text else "")
             countryEditable.setText(if (country.text != "-") country.text else "")
-            ageEditable.setText(if (age.text != "-") age.text else "")
         }
+    }
+
+    private fun showDatePickerDialog() {
+        val datePickerDialog = Dialog(this)
+        val datePickerDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_date_picker, findViewById(R.id.datePicker_dialog))
+        val datePicker = datePickerDialogView.findViewById<DatePicker>(R.id.datePicker_date)
+
+        datePickerDialogView.findViewById<Button>(R.id.datePicker_buttonSave).setOnClickListener() {
+            val month = datePicker.month
+            val day = datePicker.dayOfMonth
+            val year = datePicker.year
+
+            newBirthDate = Date(year, month, day)
+            val monthName = newBirthDate!!.getMonthShortName().toString()
+            birthDate.text = "$monthName $day, $year"
+            age.text = "(" + newBirthDate!!.getUserAge().toString() + " yrs)"
+
+            datePickerDialog.dismiss()
+        }
+
+        datePickerDialogView.findViewById<Button>(R.id.datePicker_buttonCancel).setOnClickListener() {
+            datePickerDialog.dismiss()
+        }
+
+        datePickerDialog.setContentView(datePickerDialogView)
+        datePickerDialog.show()
     }
 
     private fun updateUserProfileData() {
@@ -177,10 +219,9 @@ class UserProfileActivity : AppCompatActivity() {
         val realName = realNameEditable.text.toString()
         val city = cityEditable.text.toString()
         val country = countryEditable.text.toString()
-        val age = if (ageEditable.text.isNotEmpty()) ageEditable.text.toString().toInt() else null
         val email = email.text.toString()
 
-        val userProfileData = UserProfile(username, realName, city, country, age, email)
+        val userProfileData = UserProfile(username, realName, city, country, newBirthDate, email)
         viewModel.updateUserProfileData(userProfileData)
     }
 

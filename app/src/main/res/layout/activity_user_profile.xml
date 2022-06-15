@@ -202,35 +202,30 @@
                     android:paddingVertical="8dp">
 
                     <TextView
-                        android:id="@+id/userProfile_age_label"
+                        android:id="@+id/userProfile_birthDate_label"
                         android:layout_width="130dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:text="@string/age"
+                        android:text="@string/birth_date"
                         android:textSize="18dp"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/userProfile_birthDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/userProfile_birthDate_label"
+                        android:textSize="18dp"
+                        tools:text="Oct 17, 1994" />
 
                     <TextView
                         android:id="@+id/userProfile_age"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toEndOf="@+id/userProfile_age_label"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@+id/userProfile_birthDate"
                         android:textSize="18dp"
-                        tools:text="23" />
-
-                    <EditText
-                        android:id="@+id/userProfile_age_editable"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="-7dp"
-                        android:layout_toEndOf="@+id/userProfile_age_label"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:minWidth="60dp"
-                        android:paddingHorizontal="10dp"
-                        android:textSize="16dp"
-                        android:visibility="gone"
-                        tools:text="23" />
+                        tools:text="(28 yrs)" />
 
                 </RelativeLayout>
 
