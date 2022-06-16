@@ -227,6 +227,16 @@
                         android:textSize="18dp"
                         tools:text="(28 yrs)" />
 
+                    <ImageView
+                        android:id="@+id/userProfile_removeBirthDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_toEndOf="@id/userProfile_age"
+                        android:src="@drawable/ic_delete"
+                        android:visibility="gone"
+                        app:tint="@color/red" />
+
                 </RelativeLayout>
 
                 <RelativeLayout

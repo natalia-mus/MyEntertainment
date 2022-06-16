@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -39,6 +40,9 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var country: TextView
     private lateinit var birthDate: TextView
     private lateinit var age: TextView
+    private lateinit var removeBirthDate: ImageView
+    private lateinit var datePickerDialogView: View
+    private lateinit var datePicker: DatePicker
     private lateinit var email: TextView
     private lateinit var editButton: ImageButton
     private lateinit var saveButton: Button
@@ -51,11 +55,14 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var buttonsSection: LinearLayout
 
     private var newBirthDate: Date? = null
+    private var currentBirthDate: Date? = null
+    private lateinit var yrs: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
 
+        yrs = resources.getString(R.string.yrs)
         viewModel = ViewModelProvider(this).get(UserProfileActivityViewModel::class.java)
         setObservers()
         viewModel.getUserProfileData()
@@ -79,16 +86,18 @@ class UserProfileActivity : AppCompatActivity() {
         country = findViewById(R.id.userProfile_country)
         birthDate = findViewById(R.id.userProfile_birthDate)
         age = findViewById(R.id.userProfile_age)
+        removeBirthDate = findViewById(R.id.userProfile_removeBirthDate)
         email = findViewById(R.id.userProfile_email)
         editButton = findViewById(R.id.userProfile_buttonEdit)
         saveButton = findViewById(R.id.userProfile_buttonSave)
         cancelButton = findViewById(R.id.userProfile_buttonCancel)
         buttonsSection = findViewById(R.id.userProfile_buttonsSection)
-
         usernameEditable = findViewById(R.id.userProfile_username_editable)
         realNameEditable = findViewById(R.id.userProfile_realName_editable)
         cityEditable = findViewById(R.id.userProfile_city_editable)
         countryEditable = findViewById(R.id.userProfile_country_editable)
+        datePickerDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_date_picker, findViewById(R.id.datePicker_dialog))
+        datePicker = datePickerDialogView.findViewById(R.id.datePicker_date)
 
         photo.setOnClickListener() {
             changeProfilePicture()
@@ -127,14 +136,12 @@ class UserProfileActivity : AppCompatActivity() {
             country.text = if (userProfileData.country?.isNotEmpty() == true) userProfileData.country else getString(R.string.none)
             email.text = userProfileData.email
             if (userProfileData.birthDate != null) {
-                val month = userProfileData.birthDate.getMonthShortName()
-                val day = userProfileData.birthDate.day.toString()
-                val year = userProfileData.birthDate.year.toString()
-                val userAge = userProfileData.birthDate.getUserAge().toString()
-                birthDate.text = "$month $day, $year"
-                age.text = "($userAge yrs)"
+                currentBirthDate = userProfileData.birthDate
+                prepareBirthDate(currentBirthDate!!)
+                datePicker.updateDate(currentBirthDate!!.year!!, currentBirthDate!!.month!!, currentBirthDate!!.day!!)
+
             } else {
-                birthDate.text = "-"
+                birthDate.text = resources.getString(R.string.unknown)
                 age.visibility = View.GONE
             }
 
@@ -166,6 +173,13 @@ class UserProfileActivity : AppCompatActivity() {
                 showDatePickerDialog()
             }
 
+            if (currentBirthDate != null) {
+                removeBirthDate.visibility = View.VISIBLE
+                removeBirthDate.setOnClickListener() {
+                    removeBirthDate()
+                }
+            }
+
         } else {
             editButton.visibility = View.VISIBLE
             buttonsSection.visibility = View.GONE
@@ -180,6 +194,8 @@ class UserProfileActivity : AppCompatActivity() {
             countryEditable.visibility = View.GONE
 
             birthDate.isClickable = false
+            if (currentBirthDate != null) prepareBirthDate(currentBirthDate!!)
+            removeBirthDate.visibility = View.GONE
 
             usernameEditable.setText(if (username.text != "-") username.text else "")
             realNameEditable.setText(if (realName.text != "-") realName.text else "")
@@ -190,8 +206,6 @@ class UserProfileActivity : AppCompatActivity() {
 
     private fun showDatePickerDialog() {
         val datePickerDialog = Dialog(this)
-        val datePickerDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_date_picker, findViewById(R.id.datePicker_dialog))
-        val datePicker = datePickerDialogView.findViewById<DatePicker>(R.id.datePicker_date)
 
         datePickerDialogView.findViewById<Button>(R.id.datePicker_buttonSave).setOnClickListener() {
             val month = datePicker.month
@@ -199,9 +213,7 @@ class UserProfileActivity : AppCompatActivity() {
             val year = datePicker.year
 
             newBirthDate = Date(year, month, day)
-            val monthName = newBirthDate!!.getMonthShortName().toString()
-            birthDate.text = "$monthName $day, $year"
-            age.text = "(" + newBirthDate!!.getUserAge().toString() + " yrs)"
+            prepareBirthDate(newBirthDate!!)
 
             datePickerDialog.dismiss()
         }
@@ -210,8 +222,25 @@ class UserProfileActivity : AppCompatActivity() {
             datePickerDialog.dismiss()
         }
 
+        if (datePickerDialogView.parent != null) {
+            val parent = datePickerDialogView.parent as ViewGroup
+            parent.removeView(datePickerDialogView)
+        }
         datePickerDialog.setContentView(datePickerDialogView)
         datePickerDialog.show()
+    }
+
+    private fun prepareBirthDate(date: Date) {
+        val monthName = date!!.getMonthShortName()
+        val day = date!!.day!!
+        val year = date!!.year!!
+        val userAge = date!!.getUserAge()!!
+        birthDate.text = "$monthName $day, $year"
+        age.text = "($userAge $yrs)"
+    }
+
+    private fun removeBirthDate() {
+        // TODO
     }
 
     private fun updateUserProfileData() {

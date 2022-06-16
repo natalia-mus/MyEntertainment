@@ -66,6 +66,7 @@
     <string name="sign_up">sign up</string>
     <string name="sign_up_message">Create your account</string>
     <string name="something_went_wrong">Something went wrong. Try again</string>
+    <string name="unknown">unknown</string>
     <string name="user_can_not_be_created">Unfortunately, user can not be created</string>
     <string name="user_profile">user profile</string>
     <string name="user_profile_data_updated">User profile data has been updated</string>
