@@ -99,6 +99,8 @@ class UserProfileActivity : AppCompatActivity() {
         datePickerDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_date_picker, findViewById(R.id.datePicker_dialog))
         datePicker = datePickerDialogView.findViewById(R.id.datePicker_date)
 
+        removeBirthDate.visibility = View.GONE
+
         photo.setOnClickListener() {
             changeProfilePicture()
         }
@@ -123,6 +125,7 @@ class UserProfileActivity : AppCompatActivity() {
             city.visibility = View.VISIBLE
             country.visibility = View.VISIBLE
             birthDate.visibility = View.VISIBLE
+            removeBirthDate.visibility = View.GONE
             usernameEditable.visibility = View.GONE
             realNameEditable.visibility = View.GONE
             cityEditable.visibility = View.GONE
@@ -137,6 +140,7 @@ class UserProfileActivity : AppCompatActivity() {
             email.text = userProfileData.email
             if (userProfileData.birthDate != null) {
                 currentBirthDate = userProfileData.birthDate
+                newBirthDate = currentBirthDate
                 prepareBirthDate(currentBirthDate!!)
                 datePicker.updateDate(currentBirthDate!!.year!!, currentBirthDate!!.month!!, currentBirthDate!!.day!!)
 
@@ -231,10 +235,10 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun prepareBirthDate(date: Date) {
-        val monthName = date!!.getMonthShortName()
-        val day = date!!.day!!
-        val year = date!!.year!!
-        val userAge = date!!.getUserAge()!!
+        val monthName = date.getMonthShortName()
+        val day = date.day!!
+        val year = date.year!!
+        val userAge = date.getUserAge()!!
         birthDate.text = "$monthName $day, $year"
         age.text = "($userAge $yrs)"
     }
