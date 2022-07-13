@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/panelRemovePhoto"
+    android:id="@+id/panelRemove"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/panelRemovePhoto_message"
+        android:id="@+id/panelRemove_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="30dp"
         android:gravity="center"
         android:paddingHorizontal="30dp"
-        android:text="@string/remove_profile_picture_message"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/panelRemovePhoto_buttons"
+        app:layout_constraintBottom_toTopOf="@id/panelRemove_buttons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/panelRemovePhoto_buttons"
+        android:id="@+id/panelRemove_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -29,10 +28,10 @@
         android:paddingVertical="10dp"
         android:weightSum="2"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/panelRemovePhoto_message">
+        app:layout_constraintTop_toBottomOf="@+id/panelRemove_message">
 
         <LinearLayout
-            android:id="@+id/panelRemovePhoto_removeButton"
+            android:id="@+id/panelRemove_confirmationButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -63,7 +62,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/panelRemovePhoto_backButton"
+            android:id="@+id/panelRemove_dismissButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -71,7 +70,7 @@
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/panelRemovePhoto_removeButton"
+            app:layout_constraintStart_toEndOf="@+id/panelRemove_confirmationButton"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView

@@ -56,6 +56,7 @@
     <string name="rating">your rate:</string>
     <string name="release_year">release year</string>
     <string name="release_year_label">release year:</string>
+    <string name="remove_birthdate_message">Are you sure you want to remove your birth date?</string>
     <string name="remove_profile_picture">Remove profile picture</string>
     <string name="remove_profile_picture_message">Are you sure you want to remove your profile picture?</string>
     <string name="save">save</string>

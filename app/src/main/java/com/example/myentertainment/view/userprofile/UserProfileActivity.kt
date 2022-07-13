@@ -244,7 +244,22 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun removeBirthDate() {
-        // TODO
+        val removePanel = BottomSheetDialog(this)
+        val removePanelView = LayoutInflater.from(this).inflate(R.layout.panel_remove, findViewById(R.id.panelRemove))
+
+        removePanelView.findViewById<TextView>(R.id.panelRemove_message).text = resources.getString(R.string.remove_birthdate_message)
+
+        removePanelView.findViewById<LinearLayout>(R.id.panelRemove_confirmationButton).setOnClickListener() {
+            removePanel.dismiss()
+            newBirthDate = null
+        }
+
+        removePanelView.findViewById<LinearLayout>(R.id.panelRemove_dismissButton).setOnClickListener() {
+            removePanel.dismiss()
+        }
+
+        removePanel.setContentView(removePanelView)
+        removePanel.show()
     }
 
     private fun updateUserProfileData() {
@@ -319,21 +334,23 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun removeProfilePicture() {
-        val removePhotoPanel = BottomSheetDialog(this)
-        val removePhotoPanelView = LayoutInflater.from(this).inflate(R.layout.panel_remove_photo, findViewById(R.id.panelRemovePhoto))
+        val removePanel = BottomSheetDialog(this)
+        val removePanelView = LayoutInflater.from(this).inflate(R.layout.panel_remove, findViewById(R.id.panelRemove))
 
-        removePhotoPanelView.findViewById<LinearLayout>(R.id.panelRemovePhoto_removeButton).setOnClickListener() {
-            removePhotoPanel.dismiss()
+        removePanelView.findViewById<TextView>(R.id.panelRemove_message).text = resources.getString(R.string.remove_profile_picture_message)
+
+        removePanelView.findViewById<LinearLayout>(R.id.panelRemove_confirmationButton).setOnClickListener() {
+            removePanel.dismiss()
             viewModel.removeProfilePicture()
         }
 
-        removePhotoPanelView.findViewById<LinearLayout>(R.id.panelRemovePhoto_backButton).setOnClickListener() {
-            removePhotoPanel.dismiss()
+        removePanelView.findViewById<LinearLayout>(R.id.panelRemove_dismissButton).setOnClickListener() {
+            removePanel.dismiss()
             changeProfilePicture()
         }
 
-        removePhotoPanel.setContentView(removePhotoPanelView)
-        removePhotoPanel.show()
+        removePanel.setContentView(removePanelView)
+        removePanel.show()
     }
 
     private fun refreshProfilePicture(uri: Uri?) {
