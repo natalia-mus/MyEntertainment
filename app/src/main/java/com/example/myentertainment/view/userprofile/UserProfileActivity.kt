@@ -142,7 +142,6 @@ class UserProfileActivity : AppCompatActivity() {
                 currentBirthDate = userProfileData.birthDate
                 newBirthDate = currentBirthDate
                 prepareBirthDate(currentBirthDate!!)
-                datePicker.updateDate(currentBirthDate!!.year!!, currentBirthDate!!.month!!, currentBirthDate!!.day!!)
 
             } else {
                 birthDate.text = resources.getString(R.string.unknown)
@@ -198,6 +197,7 @@ class UserProfileActivity : AppCompatActivity() {
             countryEditable.visibility = View.GONE
 
             birthDate.isClickable = false
+            newBirthDate = currentBirthDate
             if (currentBirthDate != null) prepareBirthDate(currentBirthDate!!)
             removeBirthDate.visibility = View.GONE
 
@@ -210,6 +210,8 @@ class UserProfileActivity : AppCompatActivity() {
 
     private fun showDatePickerDialog() {
         val datePickerDialog = Dialog(this)
+
+        if (currentBirthDate != null) datePicker.updateDate(currentBirthDate!!.year!!, currentBirthDate!!.month!!, currentBirthDate!!.day!!)
 
         datePickerDialogView.findViewById<Button>(R.id.datePicker_buttonSave).setOnClickListener() {
             val month = datePicker.month
