@@ -32,6 +32,7 @@ import java.io.ByteArrayOutputStream
 class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var viewModel: UserProfileActivityViewModel
+    private var changesToSave = false
 
     private lateinit var photo: ImageView
     private lateinit var username: TextView
@@ -125,6 +126,7 @@ class UserProfileActivity : AppCompatActivity() {
             city.visibility = View.VISIBLE
             country.visibility = View.VISIBLE
             birthDate.visibility = View.VISIBLE
+            age.visibility = View.VISIBLE
             removeBirthDate.visibility = View.GONE
             usernameEditable.visibility = View.GONE
             realNameEditable.visibility = View.GONE
@@ -141,12 +143,9 @@ class UserProfileActivity : AppCompatActivity() {
             if (userProfileData.birthDate != null) {
                 currentBirthDate = userProfileData.birthDate
                 newBirthDate = currentBirthDate
-                prepareBirthDate(currentBirthDate!!)
-
-            } else {
-                birthDate.text = resources.getString(R.string.unknown)
-                age.visibility = View.GONE
             }
+
+            prepareBirthDate(currentBirthDate)
 
             usernameEditable.setText(userProfileData.username)
             realNameEditable.setText(userProfileData.realName)
@@ -166,6 +165,7 @@ class UserProfileActivity : AppCompatActivity() {
             realName.visibility = View.GONE
             city.visibility = View.GONE
             country.visibility = View.GONE
+            age.visibility = View.GONE
             usernameEditable.visibility = View.VISIBLE
             realNameEditable.visibility = View.VISIBLE
             cityEditable.visibility = View.VISIBLE
@@ -176,7 +176,7 @@ class UserProfileActivity : AppCompatActivity() {
                 showDatePickerDialog()
             }
 
-            if (currentBirthDate != null) {
+            if (birthDate.text != resources.getString(R.string.unknown)) {
                 removeBirthDate.visibility = View.VISIBLE
                 removeBirthDate.setOnClickListener() {
                     removeBirthDate()
@@ -191,20 +191,23 @@ class UserProfileActivity : AppCompatActivity() {
             city.visibility = View.VISIBLE
             country.visibility = View.VISIBLE
             birthDate.visibility = View.VISIBLE
+            age.visibility = View.VISIBLE
             usernameEditable.visibility = View.GONE
             realNameEditable.visibility = View.GONE
             cityEditable.visibility = View.GONE
             countryEditable.visibility = View.GONE
 
             birthDate.isClickable = false
+            prepareBirthDate(currentBirthDate)
             newBirthDate = currentBirthDate
-            if (currentBirthDate != null) prepareBirthDate(currentBirthDate!!)
             removeBirthDate.visibility = View.GONE
 
             usernameEditable.setText(if (username.text != "-") username.text else "")
             realNameEditable.setText(if (realName.text != "-") realName.text else "")
             cityEditable.setText(if (city.text != "-") city.text else "")
             countryEditable.setText(if (country.text != "-") country.text else "")
+
+            changesToSave = false
         }
     }
 
@@ -222,6 +225,8 @@ class UserProfileActivity : AppCompatActivity() {
             prepareBirthDate(newBirthDate!!)
 
             datePickerDialog.dismiss()
+            removeBirthDate.visibility = View.VISIBLE
+            changesToSave = true
         }
 
         datePickerDialogView.findViewById<Button>(R.id.datePicker_buttonCancel).setOnClickListener() {
@@ -236,13 +241,18 @@ class UserProfileActivity : AppCompatActivity() {
         datePickerDialog.show()
     }
 
-    private fun prepareBirthDate(date: Date) {
-        val monthName = date.getMonthShortName()
-        val day = date.day!!
-        val year = date.year!!
-        val userAge = date.getUserAge()!!
-        birthDate.text = "$monthName $day, $year"
-        age.text = "($userAge $yrs)"
+    private fun prepareBirthDate(date: Date?) {
+        if (date != null) {
+            val monthName = date.getMonthShortName()
+            val day = date.day!!
+            val year = date.year!!
+            val userAge = date.getUserAge()!!
+            birthDate.text = "$monthName $day, $year"
+            age.text = "($userAge $yrs)"
+        } else {
+            birthDate.text = resources.getString(R.string.unknown)
+            age.visibility = View.GONE
+        }
     }
 
     private fun removeBirthDate() {
@@ -254,6 +264,8 @@ class UserProfileActivity : AppCompatActivity() {
         removePanelView.findViewById<LinearLayout>(R.id.panelRemove_confirmationButton).setOnClickListener() {
             removePanel.dismiss()
             newBirthDate = null
+            prepareBirthDate(newBirthDate)
+            changesToSave = true
         }
 
         removePanelView.findViewById<LinearLayout>(R.id.panelRemove_dismissButton).setOnClickListener() {
@@ -264,15 +276,39 @@ class UserProfileActivity : AppCompatActivity() {
         removePanel.show()
     }
 
-    private fun updateUserProfileData() {
+    private fun changesToSave(): Boolean {
+        if (changesToSave) return true
+
         val username = usernameEditable.text.toString()
         val realName = realNameEditable.text.toString()
         val city = cityEditable.text.toString()
         val country = countryEditable.text.toString()
-        val email = email.text.toString()
 
-        val userProfileData = UserProfile(username, realName, city, country, newBirthDate, email)
-        viewModel.updateUserProfileData(userProfileData)
+        return this.username.text.toString() != username ||
+                this.realName.text.toString() != realName ||
+                areValuesDifferent(this.city.text.toString(), city) ||
+                areValuesDifferent(this.country.text.toString(), country)
+    }
+
+    private fun areValuesDifferent(originalValue: String, newValue: String): Boolean {
+        return if (originalValue == "-" && newValue.isEmpty()) false
+        else originalValue != newValue
+    }
+
+    private fun updateUserProfileData() {
+        if (changesToSave()) {
+            val username = usernameEditable.text.toString()
+            val realName = realNameEditable.text.toString()
+            val city = cityEditable.text.toString()
+            val country = countryEditable.text.toString()
+            val email = email.text.toString()
+
+            val userProfileData =
+                UserProfile(username, realName, city, country, newBirthDate, email)
+            viewModel.updateUserProfileData(userProfileData)
+        } else {
+            switchViewMode(false)
+        }
     }
 
     private fun loadingStatusChanged(loading: Boolean) {
