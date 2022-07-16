@@ -140,11 +140,8 @@ class UserProfileActivity : AppCompatActivity() {
             city.text = if (userProfileData.city?.isNotEmpty() == true) userProfileData.city else getString(R.string.none)
             country.text = if (userProfileData.country?.isNotEmpty() == true) userProfileData.country else getString(R.string.none)
             email.text = userProfileData.email
-            if (userProfileData.birthDate != null) {
-                currentBirthDate = userProfileData.birthDate
-                newBirthDate = currentBirthDate
-            }
-
+            currentBirthDate = userProfileData.birthDate
+            newBirthDate = currentBirthDate
             prepareBirthDate(currentBirthDate)
 
             usernameEditable.setText(userProfileData.username)
@@ -252,6 +249,7 @@ class UserProfileActivity : AppCompatActivity() {
         } else {
             birthDate.text = resources.getString(R.string.unknown)
             age.visibility = View.GONE
+            removeBirthDate.visibility = View.GONE
         }
     }
 
