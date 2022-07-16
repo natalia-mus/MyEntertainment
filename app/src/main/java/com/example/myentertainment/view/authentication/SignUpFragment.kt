@@ -24,12 +24,14 @@ class SignUpFragment : Fragment() {
     private lateinit var usernameEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
+    private lateinit var confirmPasswordEditText: EditText
     private lateinit var signUpButton: Button
     private lateinit var loadingSection: ConstraintLayout
 
     private lateinit var username: String
     private lateinit var email: String
     private lateinit var password: String
+    private lateinit var confirmPassword: String
 
     private var message = ""
 
@@ -49,6 +51,7 @@ class SignUpFragment : Fragment() {
         usernameEditText = fragmentView.findViewById(R.id.signUp_username)
         emailEditText = fragmentView.findViewById(R.id.signUp_email)
         passwordEditText = fragmentView.findViewById(R.id.signUp_password)
+        confirmPasswordEditText = fragmentView.findViewById(R.id.signUp_confirmPassword)
         signUpButton = fragmentView.findViewById(R.id.signUp_buttonOk)
         loadingSection = fragmentView.findViewById(R.id.signUp_loadingSection)
 
@@ -57,7 +60,8 @@ class SignUpFragment : Fragment() {
             username = usernameEditText.text.toString()
             email = emailEditText.text.toString()
             password = passwordEditText.text.toString()
-            viewModel.signUp(username, email, password)
+            confirmPassword = confirmPasswordEditText.text.toString()
+            viewModel.signUp(username, email, password, confirmPassword)
         }
     }
 
@@ -85,6 +89,9 @@ class SignUpFragment : Fragment() {
             }
             ValidationObject.INVALID_EMAIL -> {
                 message = getString(R.string.your_email_address_is_invalid)
+            }
+            ValidationObject.INCOMPATIBLE_PASSWORDS -> {
+                message = getString(R.string.incompatible_passwords)
             }
         }
         toast(message)
@@ -115,5 +122,6 @@ class SignUpFragment : Fragment() {
         usernameEditText.setText(username)
         emailEditText.setText(email)
         passwordEditText.setText(password)
+        confirmPasswordEditText.setText(password)
     }
 }

@@ -13,6 +13,7 @@
     <string name="camera">CAMERA</string>
     <string name="cancel">cancel</string>
     <string name="city">city:</string>
+    <string name="confirm_password">confirm password</string>
     <string name="country">country:</string>
     <string name="create_one"> <u>Create one</u> </string>
     <string name="director">director</string>
@@ -31,6 +32,7 @@
     <string name="games">Games</string>
     <string name="genre">genre</string>
     <string name="genre_label">genre:</string>
+    <string name="incompatible_passwords">Passwords are incompatible</string>
     <string name="movie_add">add movie</string>
     <string name="movie_added">Movie added</string>
     <string name="movie_edit">edit movie</string>

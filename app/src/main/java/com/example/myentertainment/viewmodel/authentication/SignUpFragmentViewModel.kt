@@ -26,10 +26,10 @@ class SignUpFragmentViewModel : ViewModel() {
     @Inject
     lateinit var databaseReference: DatabaseReference
 
-    fun signUp(username: String, email: String, password: String) {
+    fun signUp(username: String, email: String, password: String, confirmPassword: String) {
         loading.value = true
 
-        if (validation(username, email, password)) {
+        if (validation(username, email, password, confirmPassword)) {
             databaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener() { task ->
                     if (task.isSuccessful) {
@@ -59,7 +59,7 @@ class SignUpFragmentViewModel : ViewModel() {
             }
     }
 
-    private fun validation(username: String, email: String, password: String): Boolean {
+    private fun validation(username: String, email: String, password: String, confirmPassword: String): Boolean {
 
         if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
             loading.value = false
@@ -72,6 +72,10 @@ class SignUpFragmentViewModel : ViewModel() {
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             loading.value = false
             validationResult.value = ValidationObject.INVALID_EMAIL
+            return false
+        } else if (password != confirmPassword) {
+            loading.value = false
+            validationResult.value = ValidationObject.INCOMPATIBLE_PASSWORDS
             return false
         } else {
             return true
