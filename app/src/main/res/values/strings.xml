@@ -12,10 +12,12 @@
     <string name="book_title">book title</string>
     <string name="camera">CAMERA</string>
     <string name="cancel">cancel</string>
+    <string name="change_password">Change password</string>
     <string name="city">city:</string>
     <string name="confirm_password">confirm password</string>
     <string name="country">country:</string>
     <string name="create_one"> <u>Create one</u> </string>
+    <string name="current_password">current password</string>
     <string name="director">director</string>
     <string name="director_label">director:</string>
     <string name="email">e-mail:</string>
@@ -47,6 +49,7 @@
     <string name="music_edited">Song edited</string>
     <string name="music_no_title">Please, enter song title</string>
     <string name="music_title">song title</string>
+    <string name="new_password">new password</string>
     <string name="no_books">you have no books</string>
     <string name="no_games">you have no games</string>
     <string name="no_go_back">no, go back</string>

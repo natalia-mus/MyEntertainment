@@ -52,6 +52,7 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var realNameEditable: EditText
     private lateinit var cityEditable: EditText
     private lateinit var countryEditable: EditText
+    private lateinit var changePassword: TextView
     private lateinit var loadingSection: ConstraintLayout
     private lateinit var buttonsSection: LinearLayout
 
@@ -97,6 +98,7 @@ class UserProfileActivity : AppCompatActivity() {
         realNameEditable = findViewById(R.id.userProfile_realName_editable)
         cityEditable = findViewById(R.id.userProfile_city_editable)
         countryEditable = findViewById(R.id.userProfile_country_editable)
+        changePassword = findViewById(R.id.userProfile_changePassword)
         datePickerDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_date_picker, findViewById(R.id.datePicker_dialog))
         datePicker = datePickerDialogView.findViewById(R.id.datePicker_date)
 
@@ -104,6 +106,10 @@ class UserProfileActivity : AppCompatActivity() {
 
         photo.setOnClickListener() {
             changeProfilePicture()
+        }
+
+        changePassword.setOnClickListener() {
+            changePassword()
         }
 
         editButton.setOnClickListener() {
@@ -121,33 +127,14 @@ class UserProfileActivity : AppCompatActivity() {
 
     private fun updateView(userProfileData: UserProfile?) {
         if (userProfileData != null) {
-            username.visibility = View.VISIBLE
-            realName.visibility = View.VISIBLE
-            city.visibility = View.VISIBLE
-            country.visibility = View.VISIBLE
-            birthDate.visibility = View.VISIBLE
-            age.visibility = View.VISIBLE
-            removeBirthDate.visibility = View.GONE
-            usernameEditable.visibility = View.GONE
-            realNameEditable.visibility = View.GONE
-            cityEditable.visibility = View.GONE
-            countryEditable.visibility = View.GONE
-            buttonsSection.visibility = View.GONE
-            editButton.visibility = View.VISIBLE
-
             username.text = userProfileData.username
             realName.text = userProfileData.realName
             city.text = if (userProfileData.city?.isNotEmpty() == true) userProfileData.city else getString(R.string.none)
             country.text = if (userProfileData.country?.isNotEmpty() == true) userProfileData.country else getString(R.string.none)
             email.text = userProfileData.email
-            currentBirthDate = userProfileData.birthDate
-            newBirthDate = currentBirthDate
-            prepareBirthDate(currentBirthDate)
 
-            usernameEditable.setText(userProfileData.username)
-            realNameEditable.setText(userProfileData.realName)
-            cityEditable.setText(userProfileData.city)
-            countryEditable.setText(userProfileData.country)
+            switchViewMode(false)
+
         } else {
             onBackPressed()
             Toast.makeText(applicationContext, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
@@ -167,6 +154,7 @@ class UserProfileActivity : AppCompatActivity() {
             realNameEditable.visibility = View.VISIBLE
             cityEditable.visibility = View.VISIBLE
             countryEditable.visibility = View.VISIBLE
+            changePassword.visibility = View.VISIBLE
 
             birthDate.isClickable = true
             birthDate.setOnClickListener() {
@@ -181,18 +169,20 @@ class UserProfileActivity : AppCompatActivity() {
             }
 
         } else {
-            editButton.visibility = View.VISIBLE
-            buttonsSection.visibility = View.GONE
             username.visibility = View.VISIBLE
             realName.visibility = View.VISIBLE
             city.visibility = View.VISIBLE
             country.visibility = View.VISIBLE
             birthDate.visibility = View.VISIBLE
             age.visibility = View.VISIBLE
+            removeBirthDate.visibility = View.GONE
             usernameEditable.visibility = View.GONE
             realNameEditable.visibility = View.GONE
             cityEditable.visibility = View.GONE
             countryEditable.visibility = View.GONE
+            changePassword.visibility = View.GONE
+            buttonsSection.visibility = View.GONE
+            editButton.visibility = View.VISIBLE
 
             birthDate.isClickable = false
             prepareBirthDate(currentBirthDate)
@@ -367,6 +357,12 @@ class UserProfileActivity : AppCompatActivity() {
 
         photoSourcePanel.setContentView(photoSourcePanelView)
         photoSourcePanel.show()
+    }
+
+    private fun changePassword() {
+        val intent = Intent(this, ChangePasswordActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun removeProfilePicture() {

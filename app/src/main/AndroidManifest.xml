@@ -29,6 +29,10 @@
         <activity
             android:name=".view.add.AddActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.userprofile.ChangePasswordActivity"
+            android:label="@string/change_password"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
