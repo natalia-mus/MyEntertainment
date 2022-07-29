@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
+import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.viewmodel.authentication.ChangePasswordViewModel
 
 class ChangePasswordFragment : Fragment() {
@@ -21,6 +24,7 @@ class ChangePasswordFragment : Fragment() {
     private lateinit var confirmPasswordEditText: EditText
     private lateinit var saveButton: Button
     private lateinit var cancelButton: Button
+    private lateinit var loadingSection: ConstraintLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,6 +34,7 @@ class ChangePasswordFragment : Fragment() {
         fragmentView = inflater.inflate(R.layout.fragment_change_password, container, false)
         viewModel = ViewModelProvider(this).get(ChangePasswordViewModel::class.java)
         initView()
+        setObservers()
         return fragmentView
     }
 
@@ -39,6 +44,7 @@ class ChangePasswordFragment : Fragment() {
         confirmPasswordEditText = fragmentView.findViewById(R.id.changePassword_confirmPassword)
         saveButton = fragmentView.findViewById(R.id.changePassword_buttonSave)
         cancelButton = fragmentView.findViewById(R.id.changePassword_buttonCancel)
+        loadingSection = fragmentView.findViewById(R.id.changePassword_loadingSection)
 
         saveButton.setOnClickListener() {
             val currentPassword = currentPasswordEditText.text.toString()
@@ -51,4 +57,30 @@ class ChangePasswordFragment : Fragment() {
             activity?.finish()
         }
     }
+
+    private fun setObservers() {
+        viewModel.loading.observe(this, { updateView(it) })
+        viewModel.validationResult.observe(this, { validationResult(it) })
+    }
+
+    private fun updateView(loading: Boolean) {
+        if (loading) {
+            loadingSection.visibility = View.VISIBLE
+        } else {
+            loadingSection.visibility = View.GONE
+        }
+    }
+
+    private fun validationResult(validationResult: Int) {
+        var message = ""
+
+        when (validationResult) {
+            ValidationObject.EMPTY_VALUES -> message = getString(R.string.enter_all_required_values)
+            ValidationObject.PASSWORD_TOO_SHORT -> message = getString(R.string.password_too_short)
+            ValidationObject.INCOMPATIBLE_PASSWORDS -> message = getString(R.string.incompatible_passwords)
+        }
+
+        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
 }

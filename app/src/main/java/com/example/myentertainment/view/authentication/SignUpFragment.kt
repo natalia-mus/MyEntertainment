@@ -33,8 +33,6 @@ class SignUpFragment : Fragment() {
     private lateinit var password: String
     private lateinit var confirmPassword: String
 
-    private var message = ""
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -80,9 +78,11 @@ class SignUpFragment : Fragment() {
     }
 
     private fun validationResult(validationResult: Int) {
+        var message = ""
+
         when (validationResult) {
             ValidationObject.EMPTY_VALUES -> {
-                message = getString(R.string.enter_both_email_and_password)
+                message = getString(R.string.enter_all_required_values)
             }
             ValidationObject.PASSWORD_TOO_SHORT -> {
                 message = getString(R.string.password_too_short)
@@ -104,7 +104,7 @@ class SignUpFragment : Fragment() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         } else {
-            message = getString(R.string.user_can_not_be_created)
+            val message = getString(R.string.user_can_not_be_created)
             toast(message)
         }
     }

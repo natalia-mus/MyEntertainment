@@ -29,8 +29,6 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
     private lateinit var email: String
     private lateinit var password: String
 
-    private var message = ""
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -89,9 +87,11 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
     }
 
     private fun validationResult(validationResult: Int) {
+        var message = ""
+
         when (validationResult) {
             ValidationObject.EMPTY_VALUES -> message =
-                getString(R.string.enter_both_email_and_password)
+                getString(R.string.enter_all_required_values)
             ValidationObject.INVALID_EMAIL -> message =
                 getString(R.string.your_email_address_is_invalid)
         }

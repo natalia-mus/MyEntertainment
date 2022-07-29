@@ -22,7 +22,7 @@
     <string name="director_label">director:</string>
     <string name="email">e-mail:</string>
     <string name="email_address">e-mail address</string>
-    <string name="enter_both_email_and_password">Enter both e-mail and password</string>
+    <string name="enter_all_required_values">Enter all required values</string>
     <string name="failed_to_sign_in">Failed to sign in</string>
     <string name="gallery">GALLERY</string>
     <string name="game_add">add game</string>
