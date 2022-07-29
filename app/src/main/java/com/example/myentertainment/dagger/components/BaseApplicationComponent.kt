@@ -6,6 +6,7 @@ import com.example.myentertainment.viewmodel.add.AddBookFragmentViewModel
 import com.example.myentertainment.viewmodel.add.AddGameFragmentViewModel
 import com.example.myentertainment.viewmodel.add.AddMovieFragmentViewModel
 import com.example.myentertainment.viewmodel.add.AddMusicFragmentViewModel
+import com.example.myentertainment.viewmodel.authentication.ChangePasswordViewModel
 import com.example.myentertainment.viewmodel.authentication.SignInFragmentViewModel
 import com.example.myentertainment.viewmodel.authentication.SignUpFragmentViewModel
 import com.example.myentertainment.viewmodel.main.*
@@ -20,6 +21,7 @@ interface BaseApplicationComponent {
     fun inject(baseApplication: Application)
     fun inject(viewModel: SignInFragmentViewModel)
     fun inject(viewModel: SignUpFragmentViewModel)
+    fun inject(viewModel: ChangePasswordViewModel)
     fun inject(viewModel: UserProfileActivityViewModel)
     fun inject(viewModel: MainActivityViewModel)
     fun inject(viewModel: AddMovieFragmentViewModel)

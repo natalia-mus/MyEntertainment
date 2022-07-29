@@ -3,18 +3,20 @@ package com.example.myentertainment.view.authentication
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 
 class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
-
-    private val signInFragment = SignInFragment(this)
-    private val signUpFragment = SignUpFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authentication)
 
-        changeCurrentFragment(signInFragment)
+        if (intent.getBooleanExtra(Constants.IS_PASSWORD_CHANGE, false)) {
+            changeCurrentFragment(ChangePasswordFragment())
+        } else {
+            changeCurrentFragment(SignInFragment(this))
+        }
     }
 
     private fun changeCurrentFragment(fragment: Fragment) {
@@ -25,6 +27,6 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
     }
 
     override fun signUpClicked() {
-        changeCurrentFragment(signUpFragment)
+        changeCurrentFragment(SignUpFragment())
     }
 }

@@ -25,6 +25,7 @@ import com.example.myentertainment.Date
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationObject
 import com.example.myentertainment.data.UserProfile
+import com.example.myentertainment.view.authentication.AuthenticationActivity
 import com.example.myentertainment.viewmodel.userprofile.UserProfileActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.ByteArrayOutputStream
@@ -360,7 +361,8 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun changePassword() {
-        val intent = Intent(this, ChangePasswordActivity::class.java)
+        val intent = Intent(this, AuthenticationActivity::class.java)
+        intent.putExtra(Constants.IS_PASSWORD_CHANGE, true)
         startActivity(intent)
         finish()
     }
