@@ -6,4 +6,5 @@ object ValidationObject {
     const val PASSWORD_TOO_SHORT = 1
     const val INVALID_EMAIL = 2
     const val INCOMPATIBLE_PASSWORDS = 3
+    const val AUTHENTICATION_FAILED = 4
 }

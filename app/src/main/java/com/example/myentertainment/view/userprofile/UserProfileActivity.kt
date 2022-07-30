@@ -362,7 +362,7 @@ class UserProfileActivity : AppCompatActivity() {
 
     private fun changePassword() {
         val intent = Intent(this, AuthenticationActivity::class.java)
-        intent.putExtra(Constants.IS_PASSWORD_CHANGE, true)
+        intent.putExtra(Constants.CHANGE_PASSWORD, true)
         startActivity(intent)
         finish()
     }

@@ -54,13 +54,14 @@ class ChangePasswordFragment : Fragment() {
         }
 
         cancelButton.setOnClickListener() {
-            activity?.finish()
+            activity!!.finish()
         }
     }
 
     private fun setObservers() {
         viewModel.loading.observe(this, { updateView(it) })
         viewModel.validationResult.observe(this, { validationResult(it) })
+        viewModel.changePasswordStatus.observe(this, { passwordChangeResult(it) })
     }
 
     private fun updateView(loading: Boolean) {
@@ -78,9 +79,23 @@ class ChangePasswordFragment : Fragment() {
             ValidationObject.EMPTY_VALUES -> message = getString(R.string.enter_all_required_values)
             ValidationObject.PASSWORD_TOO_SHORT -> message = getString(R.string.password_too_short)
             ValidationObject.INCOMPATIBLE_PASSWORDS -> message = getString(R.string.incompatible_passwords)
+            ValidationObject.AUTHENTICATION_FAILED -> message = getString(R.string.authentication_failed)
         }
 
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun passwordChangeResult(result: Boolean) {
+        var message = ""
+
+        if (result) {
+            message = getString(R.string.password_updated)
+            activity!!.finish()
+        } else {
+            message = getString(R.string.something_went_wrong)
+        }
+
+        Toast.makeText(activity!!.applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
 }

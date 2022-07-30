@@ -12,7 +12,7 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authentication)
 
-        if (intent.getBooleanExtra(Constants.IS_PASSWORD_CHANGE, false)) {
+        if (intent.getBooleanExtra(Constants.CHANGE_PASSWORD, false)) {
             changeCurrentFragment(ChangePasswordFragment())
         } else {
             changeCurrentFragment(SignInFragment(this))

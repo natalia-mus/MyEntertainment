@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MyEntertainment</string>
     <string name="artist">artist</string>
+    <string name="authentication_failed">"Authentication failed"</string>
     <string name="author">author</string>
     <string name="birth_date">birth date:</string>
     <string name="books">Books</string>
@@ -58,6 +59,7 @@
     <string name="none">-</string>
     <string name="password">password</string>
     <string name="password_too_short">Your password should be at least 6 characters long</string>
+    <string name="password_updated">Password has been updated</string>
     <string name="rating">your rate:</string>
     <string name="release_year">release year</string>
     <string name="release_year_label">release year:</string>
