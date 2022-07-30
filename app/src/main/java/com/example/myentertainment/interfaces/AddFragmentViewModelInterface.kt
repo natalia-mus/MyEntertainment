@@ -14,24 +14,6 @@ interface AddFragmentViewModelInterface {
     fun initView()
     fun setObservers()
 
-    fun updateView(loading: Boolean, loadingSection: ConstraintLayout) {
-        if (loading) {
-            loadingSection.visibility = View.VISIBLE
-        } else {
-            loadingSection.visibility = View.INVISIBLE
-        }
-    }
-
-    fun validationResult(validationResult: Int, context: Context, message: String) {
-        when (validationResult) {
-            ValidationObject.EMPTY_VALUES -> Toast.makeText(
-                context,
-                message,
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
     fun addingToDatabaseResult(
         addingToDatabaseResult: Boolean,
         context: Context,
@@ -50,4 +32,23 @@ interface AddFragmentViewModelInterface {
             Toast.makeText(context, "An error occurred", Toast.LENGTH_LONG).show()
         }
     }
+
+    fun updateView(loading: Boolean, loadingSection: ConstraintLayout) {
+        if (loading) {
+            loadingSection.visibility = View.VISIBLE
+        } else {
+            loadingSection.visibility = View.INVISIBLE
+        }
+    }
+
+    fun validationResult(validationResult: Int, context: Context, message: String) {
+        when (validationResult) {
+            ValidationObject.EMPTY_VALUES -> Toast.makeText(
+                context,
+                message,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
 }

@@ -69,13 +69,12 @@ class AddBookFragment : Fragment(), AddFragmentViewModelInterface {
         viewModel.loading.observe(this, { updateView(it, loadingSection) })
         viewModel.book.observe(this, { prepareViewForEditContext(it) })
         viewModel.validationResult.observe(this, { validationResult(it, requireContext(), noTitleMessage) })
-        viewModel.addingToDatabaseResult.observe(this, {
-            addingToDatabaseResult(
-                it,
-                requireContext(),
-                bookAddedMessage,
-                CategoryObject.BOOKS
-            )
+        viewModel.addingToDatabaseResult.observe(this, { addingToDatabaseResult(
+            it,
+            requireContext(),
+            bookAddedMessage,
+            CategoryObject.BOOKS
+        )
         })
     }
 
@@ -125,4 +124,5 @@ class AddBookFragment : Fragment(), AddFragmentViewModelInterface {
         genreEditText.setText(item.genre)
         if (item.rating != null) ratingBar.rating = item.rating
     }
+
 }

@@ -81,4 +81,5 @@ class SignUpFragmentViewModel : ViewModel() {
             return true
         }
     }
+
 }

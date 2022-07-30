@@ -63,10 +63,10 @@ class GamesAdapter(
 }
 
 class GamesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val item = view.findViewById<ConstraintLayout>(R.id.game_item)
+    val item: ConstraintLayout = view.findViewById(R.id.game_item)
 
-    val title = view.findViewById<TextView>(R.id.game_title)
-    val releaseYear = view.findViewById<TextView>(R.id.game_releaseYear)
-    val rate = view.findViewById<RatingBar>(R.id.game_rate)
-    val genre = view.findViewById<TextView>(R.id.game_genre)
+    val title: TextView = view.findViewById(R.id.game_title)
+    val releaseYear: TextView = view.findViewById(R.id.game_releaseYear)
+    val rate: RatingBar = view.findViewById(R.id.game_rate)
+    val genre: TextView = view.findViewById(R.id.game_genre)
 }

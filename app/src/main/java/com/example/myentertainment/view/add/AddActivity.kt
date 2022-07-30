@@ -21,15 +21,6 @@ class AddActivity : AppCompatActivity() {
         showFragment(fragment)
     }
 
-    private fun setFragment(category: String) {
-        when (category) {
-            CategoryObject.MOVIES -> fragment = AddMovieFragment()
-            CategoryObject.BOOKS -> fragment = AddBookFragment()
-            CategoryObject.GAMES -> fragment = AddGameFragment()
-            CategoryObject.MUSIC -> fragment = AddMusicFragment()
-        }
-    }
-
     private fun establishOpeningContext() {
         if (intent.hasExtra(Constants.ID)) {
             val id = intent.getStringExtra(Constants.ID)
@@ -39,10 +30,20 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
+    private fun setFragment(category: String) {
+        when (category) {
+            CategoryObject.MOVIES -> fragment = AddMovieFragment()
+            CategoryObject.BOOKS -> fragment = AddBookFragment()
+            CategoryObject.GAMES -> fragment = AddGameFragment()
+            CategoryObject.MUSIC -> fragment = AddMusicFragment()
+        }
+    }
+
     private fun showFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.addActivity_fragment, fragment)
             commit()
         }
     }
+
 }

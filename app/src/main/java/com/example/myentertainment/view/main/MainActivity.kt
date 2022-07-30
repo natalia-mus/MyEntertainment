@@ -58,42 +58,8 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun initView() {
-        bottomNavigation = findViewById(R.id.bottomNavigation_bar)
-        addButton = findViewById(R.id.mainActivity_add)
-
-        bottomNavigation.setOnNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.item_movies -> changeCurrentFragment(moviesFragment)
-                R.id.item_books -> changeCurrentFragment(booksFragment)
-                R.id.item_games -> changeCurrentFragment(gamesFragment)
-                R.id.item_music -> changeCurrentFragment(musicFragment)
-            }
-            true
-        }
-
-        addButton.setOnClickListener() {
-            val intent = Intent(this, AddActivity::class.java)
-            intent.putExtra(Constants.CATEGORY, currentFragment)
-            startActivity(intent)
-        }
-    }
-
-    private fun checkCategory() {
-        if (intent.hasExtra(Constants.CATEGORY)) {
-            currentFragment = intent.getStringExtra(Constants.CATEGORY).toString()
-            when (currentFragment) {
-                CategoryObject.MOVIES -> changeCurrentFragment(moviesFragment)
-                CategoryObject.BOOKS -> changeCurrentFragment(booksFragment)
-                CategoryObject.GAMES -> changeCurrentFragment(gamesFragment)
-                CategoryObject.MUSIC -> changeCurrentFragment(musicFragment)
-            }
-        } else {
-            changeCurrentFragment(moviesFragment)
-        }
     }
 
     private fun changeCurrentFragment(fragment: Fragment) {
@@ -119,6 +85,41 @@ class MainActivity : AppCompatActivity() {
                 currentFragment = CategoryObject.MUSIC
                 bottomNavigation.menu.getItem(3).setChecked(true)
             }
+        }
+    }
+
+    private fun checkCategory() {
+        if (intent.hasExtra(Constants.CATEGORY)) {
+            currentFragment = intent.getStringExtra(Constants.CATEGORY).toString()
+            when (currentFragment) {
+                CategoryObject.MOVIES -> changeCurrentFragment(moviesFragment)
+                CategoryObject.BOOKS -> changeCurrentFragment(booksFragment)
+                CategoryObject.GAMES -> changeCurrentFragment(gamesFragment)
+                CategoryObject.MUSIC -> changeCurrentFragment(musicFragment)
+            }
+        } else {
+            changeCurrentFragment(moviesFragment)
+        }
+    }
+
+    private fun initView() {
+        bottomNavigation = findViewById(R.id.bottomNavigation_bar)
+        addButton = findViewById(R.id.mainActivity_add)
+
+        bottomNavigation.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.item_movies -> changeCurrentFragment(moviesFragment)
+                R.id.item_books -> changeCurrentFragment(booksFragment)
+                R.id.item_games -> changeCurrentFragment(gamesFragment)
+                R.id.item_music -> changeCurrentFragment(musicFragment)
+            }
+            true
+        }
+
+        addButton.setOnClickListener() {
+            val intent = Intent(this, AddActivity::class.java)
+            intent.putExtra(Constants.CATEGORY, currentFragment)
+            startActivity(intent)
         }
     }
 

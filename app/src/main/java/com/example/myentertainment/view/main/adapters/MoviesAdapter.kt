@@ -69,11 +69,11 @@ class MoviesAdapter(
 }
 
 class MoviesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val item = view.findViewById<ConstraintLayout>(R.id.movie_item)
+    val item: ConstraintLayout = view.findViewById(R.id.movie_item)
 
-    val title = view.findViewById<TextView>(R.id.movie_title)
-    val releaseYear = view.findViewById<TextView>(R.id.movie_releaseYear)
-    val rate = view.findViewById<RatingBar>(R.id.movie_rate)
-    val genre = view.findViewById<TextView>(R.id.movie_genre)
-    val director = view.findViewById<TextView>(R.id.movie_director)
+    val title: TextView = view.findViewById(R.id.movie_title)
+    val releaseYear: TextView = view.findViewById(R.id.movie_releaseYear)
+    val rate: RatingBar = view.findViewById(R.id.movie_rate)
+    val genre: TextView = view.findViewById(R.id.movie_genre)
+    val director: TextView = view.findViewById(R.id.movie_director)
 }

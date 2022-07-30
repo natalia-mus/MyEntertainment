@@ -69,11 +69,11 @@ class BooksAdapter(
 }
 
 class BooksViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val item = view.findViewById<ConstraintLayout>(R.id.book_item)
+    val item: ConstraintLayout = view.findViewById(R.id.book_item)
 
-    val title = view.findViewById<TextView>(R.id.book_title)
-    val author = view.findViewById<TextView>(R.id.book_author)
-    val rate = view.findViewById<RatingBar>(R.id.book_rate)
-    val genre = view.findViewById<TextView>(R.id.book_genre)
-    val releaseYear = view.findViewById<TextView>(R.id.book_releaseYear)
+    val title: TextView = view.findViewById(R.id.book_title)
+    val author: TextView = view.findViewById(R.id.book_author)
+    val rate: RatingBar = view.findViewById(R.id.book_rate)
+    val genre: TextView = view.findViewById(R.id.book_genre)
+    val releaseYear: TextView = view.findViewById(R.id.book_releaseYear)
 }

@@ -27,6 +27,21 @@ class MoviesFragmentViewModel : ViewModel() {
     val movies = MutableLiveData<List<Movie>>()
     val itemDeleted = MutableLiveData<Boolean>(false)
 
+
+    fun deleteMovie(id: String?) {
+        itemDeleted.value = false
+        databaseReference.child(user).child(CategoryObject.MOVIES).child(id.toString())
+            .removeValue()
+            .addOnCompleteListener() { task ->
+                if (task.isSuccessful) {
+                    fetchMovies()
+                    itemDeleted.value = true
+                } else {
+                    Log.e("error", "error")
+                }
+            }
+    }
+
     fun fetchMovies() {
         databaseReference.child(user).child(CategoryObject.MOVIES).get().addOnSuccessListener {
             val moviesList: MutableList<Movie> = mutableListOf()
@@ -49,18 +64,4 @@ class MoviesFragmentViewModel : ViewModel() {
         }
     }
 
-
-    fun deleteMovie(id: String?) {
-        itemDeleted.value = false
-        databaseReference.child(user).child(CategoryObject.MOVIES).child(id.toString())
-            .removeValue()
-            .addOnCompleteListener() { task ->
-                if (task.isSuccessful) {
-                    fetchMovies()
-                    itemDeleted.value = true
-                } else {
-                    Log.e("error", "error")
-                }
-            }
-    }
 }

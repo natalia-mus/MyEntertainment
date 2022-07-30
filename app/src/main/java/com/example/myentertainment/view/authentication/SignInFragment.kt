@@ -42,6 +42,13 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
         return fragmentView
     }
 
+    private fun goToMainActivity() {
+        val intent = Intent(activity, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+    }
+
     private fun initView() {
         loadingSection = fragmentView.findViewById(R.id.signIn_loadingSection)
         signInSection = fragmentView.findViewById(R.id.signIn_section)
@@ -67,6 +74,27 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
         viewModel.loading.observe(this, { updateView(it) })
         viewModel.validationResult.observe(this, { validationResult(it) })
         viewModel.signingInStatus.observe(this, { signingInResult(it) })
+    }
+
+    // method to improve logging in as one of the test users with the same domain and password
+    private fun signInAsTestUser() {
+        val domain = "@example.com"
+        val password = ""
+
+        emailEditText.text = emailEditText.text.append(domain)
+        passwordEditText.setText(password)
+    }
+
+    private fun signingInResult(signingUpResult: Boolean) {
+        if (signingUpResult) goToMainActivity()
+        else {
+            val message = getString(R.string.failed_to_sign_in)
+            toast(message)
+        }
+    }
+
+    private fun toast(message: String) {
+        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
     private fun updateActivity(userId: String?) {
@@ -98,33 +126,6 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
         toast(message)
     }
 
-    private fun signingInResult(signingUpResult: Boolean) {
-        if (signingUpResult) goToMainActivity()
-        else {
-            val message = getString(R.string.failed_to_sign_in)
-            toast(message)
-        }
-    }
-
-    private fun goToMainActivity() {
-        val intent = Intent(activity, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-    }
-
-    private fun toast(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
-    }
-
-    // method to improve logging in as one of the test users with the same domain and password
-    private fun signInAsTestUser() {
-        val domain = "@example.com"
-        val password = ""
-
-        emailEditText.text = emailEditText.text.append(domain)
-        passwordEditText.setText(password)
-    }
 }
 
 

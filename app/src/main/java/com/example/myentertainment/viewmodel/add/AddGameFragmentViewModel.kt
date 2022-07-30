@@ -39,12 +39,6 @@ class AddGameFragmentViewModel : ViewModel() {
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
 
-    fun getGame(id: String) {
-        databaseReference.child(user).child(CategoryObject.GAMES).get().addOnSuccessListener {
-            game.value = it.child(id).getValue(Game::class.java)
-        }
-    }
-
     fun addToDatabase(item: Game) {
         loading.value = true
 
@@ -66,6 +60,12 @@ class AddGameFragmentViewModel : ViewModel() {
                         addingToDatabaseResult.value = false
                     }
                 }
+        }
+    }
+
+    fun getGame(id: String) {
+        databaseReference.child(user).child(CategoryObject.GAMES).get().addOnSuccessListener {
+            game.value = it.child(id).getValue(Game::class.java)
         }
     }
 
@@ -110,6 +110,8 @@ class AddGameFragmentViewModel : ViewModel() {
             loading.value = false
             validationResult.value = ValidationObject.EMPTY_VALUES
             false
+
         } else true
     }
+
 }

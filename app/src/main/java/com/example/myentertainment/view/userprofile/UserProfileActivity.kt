@@ -72,13 +72,109 @@ class UserProfileActivity : AppCompatActivity() {
         initView()
     }
 
-    private fun setObservers() {
-        viewModel.loading.observe(this, { loadingStatusChanged(it) })
-        viewModel.userProfile.observe(this, { updateView(it) })
-        viewModel.profilePicture.observe(this, {refreshProfilePicture(it)})
-        viewModel.validationResult.observe(this, { validationResult(it) })
-        viewModel.updatingUserProfileDataSuccessful.observe(this, {updatingUserProfileDataResult(it)})
-        viewModel.databaseTaskExecutionSuccessful.observe(this, { databaseTaskExecutionResult(it) })
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                Constants.REQUEST_CODE_CAPTURE_CAMERA_IMAGE -> {
+                    val file = data?.getParcelableExtra<Bitmap>("data")
+                    if (file != null) {
+                        val outputStream = ByteArrayOutputStream()
+                        file.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                        viewModel.changeProfilePicture(outputStream.toByteArray())
+                    }
+                }
+                Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE -> {
+                    if (data != null && data.data != null) {
+                        val file = data.data!!
+                        viewModel.changeProfilePicture(file)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == Constants.REQUEST_CODE_PERMISSION_CAMERA && grantResults[0] == PackageManager.PERMISSION_GRANTED) openCamera()
+    }
+
+    private fun areValuesDifferent(originalValue: String, newValue: String): Boolean {
+        return if (originalValue == "-" && newValue.isEmpty()) false
+        else originalValue != newValue
+    }
+
+    private fun changePassword() {
+        val intent = Intent(this, AuthenticationActivity::class.java)
+        intent.putExtra(Constants.CHANGE_PASSWORD, true)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun changeProfilePicture() {
+        val photoSourcePanel = BottomSheetDialog(this)
+        val photoSourcePanelView = LayoutInflater.from(this)
+            .inflate(R.layout.panel_photo_source, findViewById(R.id.panelPhotoSource_container))
+
+        photoSourcePanelView.findViewById<LinearLayout>(R.id.photoSource_camera)
+            .setOnClickListener() {
+                tryToOpenCamera()
+                photoSourcePanel.dismiss()
+            }
+
+        photoSourcePanelView.findViewById<LinearLayout>(R.id.photoSource_gallery)
+            .setOnClickListener() {
+                openGallery()
+                photoSourcePanel.dismiss()
+            }
+
+        if (viewModel.profilePicture.value == null) {
+            photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove).visibility =
+                View.GONE
+
+        } else {
+            photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove)
+                .setOnClickListener() {
+                    removeProfilePicture()
+                    photoSourcePanel.dismiss()
+                }
+        }
+
+        photoSourcePanel.setContentView(photoSourcePanelView)
+        photoSourcePanel.show()
+    }
+
+    private fun changesToSave(): Boolean {
+        if (changesToSave) return true
+
+        val username = usernameEditable.text.toString()
+        val realName = realNameEditable.text.toString()
+        val city = cityEditable.text.toString()
+        val country = countryEditable.text.toString()
+
+        return this.username.text.toString() != username ||
+                this.realName.text.toString() != realName ||
+                areValuesDifferent(this.city.text.toString(), city) ||
+                areValuesDifferent(this.country.text.toString(), country)
+    }
+
+    private fun databaseTaskExecutionResult(successful: Boolean) {
+        if (!successful) {
+            Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
+    private fun hideKeyboard() {
+        val inputMethodManager =
+            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val view = findViewById<View>(android.R.id.content).rootView
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     private fun initView() {
@@ -126,20 +222,85 @@ class UserProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateView(userProfileData: UserProfile?) {
-        if (userProfileData != null) {
-            username.text = userProfileData.username
-            realName.text = userProfileData.realName
-            city.text = if (userProfileData.city?.isNotEmpty() == true) userProfileData.city else getString(R.string.none)
-            country.text = if (userProfileData.country?.isNotEmpty() == true) userProfileData.country else getString(R.string.none)
-            email.text = userProfileData.email
-
-            switchViewMode(false)
-
-        } else {
-            onBackPressed()
-            Toast.makeText(applicationContext, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
+    private fun loadingStatusChanged(loading: Boolean) {
+        if (!this::loadingSection.isInitialized) {
+            loadingSection = findViewById(R.id.userProfile_loadingSection)
         }
+        if (loading) {
+            loadingSection.visibility = View.VISIBLE
+        } else {
+            loadingSection.visibility = View.GONE
+        }
+    }
+
+    private fun openCamera() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_CAMERA_IMAGE)
+    }
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = Constants.INTENT_TYPE_IMAGE
+        startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE)
+    }
+
+    private fun removeProfilePicture() {
+        val removePanel = BottomSheetDialog(this)
+        val removePanelView = LayoutInflater.from(this).inflate(R.layout.panel_remove, findViewById(R.id.panelRemove))
+
+        removePanelView.findViewById<TextView>(R.id.panelRemove_message).text = resources.getString(R.string.remove_profile_picture_message)
+
+        removePanelView.findViewById<LinearLayout>(R.id.panelRemove_confirmationButton).setOnClickListener() {
+            removePanel.dismiss()
+            viewModel.removeProfilePicture()
+        }
+
+        removePanelView.findViewById<LinearLayout>(R.id.panelRemove_dismissButton).setOnClickListener() {
+            removePanel.dismiss()
+            changeProfilePicture()
+        }
+
+        removePanel.setContentView(removePanelView)
+        removePanel.show()
+    }
+
+    private fun setObservers() {
+        viewModel.loading.observe(this, { loadingStatusChanged(it) })
+        viewModel.userProfile.observe(this, { updateView(it) })
+        viewModel.profilePicture.observe(this, {refreshProfilePicture(it)})
+        viewModel.validationResult.observe(this, { validationResult(it) })
+        viewModel.updatingUserProfileDataSuccessful.observe(this, { updatingUserProfileDataResult(it) })
+        viewModel.databaseTaskExecutionSuccessful.observe(this, { databaseTaskExecutionResult(it) })
+    }
+
+    private fun showDatePickerDialog() {
+        val datePickerDialog = Dialog(this)
+
+        if (currentBirthDate != null) datePicker.updateDate(currentBirthDate!!.year!!, currentBirthDate!!.month!!, currentBirthDate!!.day!!)
+
+        datePickerDialogView.findViewById<Button>(R.id.datePicker_buttonSave).setOnClickListener() {
+            val month = datePicker.month
+            val day = datePicker.dayOfMonth
+            val year = datePicker.year
+
+            newBirthDate = Date(year, month, day)
+            prepareBirthDate(newBirthDate!!)
+
+            datePickerDialog.dismiss()
+            removeBirthDate.visibility = View.VISIBLE
+            changesToSave = true
+        }
+
+        datePickerDialogView.findViewById<Button>(R.id.datePicker_buttonCancel).setOnClickListener() {
+            datePickerDialog.dismiss()
+        }
+
+        if (datePickerDialogView.parent != null) {
+            val parent = datePickerDialogView.parent as ViewGroup
+            parent.removeView(datePickerDialogView)
+        }
+        datePickerDialog.setContentView(datePickerDialogView)
+        datePickerDialog.show()
     }
 
     private fun switchViewMode(switchToEditMode: Boolean) {
@@ -199,36 +360,6 @@ class UserProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun showDatePickerDialog() {
-        val datePickerDialog = Dialog(this)
-
-        if (currentBirthDate != null) datePicker.updateDate(currentBirthDate!!.year!!, currentBirthDate!!.month!!, currentBirthDate!!.day!!)
-
-        datePickerDialogView.findViewById<Button>(R.id.datePicker_buttonSave).setOnClickListener() {
-            val month = datePicker.month
-            val day = datePicker.dayOfMonth
-            val year = datePicker.year
-
-            newBirthDate = Date(year, month, day)
-            prepareBirthDate(newBirthDate!!)
-
-            datePickerDialog.dismiss()
-            removeBirthDate.visibility = View.VISIBLE
-            changesToSave = true
-        }
-
-        datePickerDialogView.findViewById<Button>(R.id.datePicker_buttonCancel).setOnClickListener() {
-            datePickerDialog.dismiss()
-        }
-
-        if (datePickerDialogView.parent != null) {
-            val parent = datePickerDialogView.parent as ViewGroup
-            parent.removeView(datePickerDialogView)
-        }
-        datePickerDialog.setContentView(datePickerDialogView)
-        datePickerDialog.show()
-    }
-
     private fun prepareBirthDate(date: Date?) {
         if (date != null) {
             val monthName = date.getMonthShortName()
@@ -242,6 +373,15 @@ class UserProfileActivity : AppCompatActivity() {
             age.visibility = View.GONE
             removeBirthDate.visibility = View.GONE
         }
+    }
+
+    private fun refreshProfilePicture(uri: Uri?) {
+        val placeholder = ResourcesCompat.getDrawable(resources, R.drawable.placeholder_user, null)
+        Glide.with(this)
+            .load(uri)
+            .placeholder(placeholder)
+            .circleCrop()
+            .into(photo)
     }
 
     private fun removeBirthDate() {
@@ -265,23 +405,20 @@ class UserProfileActivity : AppCompatActivity() {
         removePanel.show()
     }
 
-    private fun changesToSave(): Boolean {
-        if (changesToSave) return true
-
-        val username = usernameEditable.text.toString()
-        val realName = realNameEditable.text.toString()
-        val city = cityEditable.text.toString()
-        val country = countryEditable.text.toString()
-
-        return this.username.text.toString() != username ||
-                this.realName.text.toString() != realName ||
-                areValuesDifferent(this.city.text.toString(), city) ||
-                areValuesDifferent(this.country.text.toString(), country)
-    }
-
-    private fun areValuesDifferent(originalValue: String, newValue: String): Boolean {
-        return if (originalValue == "-" && newValue.isEmpty()) false
-        else originalValue != newValue
+    private fun tryToOpenCamera() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            openCamera()
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.CAMERA),
+                Constants.REQUEST_CODE_PERMISSION_CAMERA
+            )
+        }
     }
 
     private fun updateUserProfileData() {
@@ -300,14 +437,19 @@ class UserProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadingStatusChanged(loading: Boolean) {
-        if (!this::loadingSection.isInitialized) {
-            loadingSection = findViewById(R.id.userProfile_loadingSection)
-        }
-        if (loading) {
-            loadingSection.visibility = View.VISIBLE
+    private fun updateView(userProfileData: UserProfile?) {
+        if (userProfileData != null) {
+            username.text = userProfileData.username
+            realName.text = userProfileData.realName
+            city.text = if (userProfileData.city?.isNotEmpty() == true) userProfileData.city else getString(R.string.none)
+            country.text = if (userProfileData.country?.isNotEmpty() == true) userProfileData.country else getString(R.string.none)
+            email.text = userProfileData.email
+
+            switchViewMode(false)
+
         } else {
-            loadingSection.visibility = View.GONE
+            onBackPressed()
+            Toast.makeText(applicationContext, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -320,141 +462,6 @@ class UserProfileActivity : AppCompatActivity() {
         } else databaseTaskExecutionResult(false)
     }
 
-    private fun databaseTaskExecutionResult(successful: Boolean) {
-        if (!successful) {
-            Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG)
-                .show()
-        }
-    }
-
-    private fun changeProfilePicture() {
-        val photoSourcePanel = BottomSheetDialog(this)
-        val photoSourcePanelView = LayoutInflater.from(this)
-            .inflate(R.layout.panel_photo_source, findViewById(R.id.panelPhotoSource_container))
-
-        photoSourcePanelView.findViewById<LinearLayout>(R.id.photoSource_camera)
-            .setOnClickListener() {
-                tryToOpenCamera()
-                photoSourcePanel.dismiss()
-            }
-
-        photoSourcePanelView.findViewById<LinearLayout>(R.id.photoSource_gallery)
-            .setOnClickListener() {
-                openGallery()
-                photoSourcePanel.dismiss()
-            }
-
-        if (viewModel.profilePicture.value == null) {
-            photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove).visibility =
-                View.GONE
-
-        } else {
-            photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove)
-                .setOnClickListener() {
-                    removeProfilePicture()
-                    photoSourcePanel.dismiss()
-                }
-        }
-
-        photoSourcePanel.setContentView(photoSourcePanelView)
-        photoSourcePanel.show()
-    }
-
-    private fun changePassword() {
-        val intent = Intent(this, AuthenticationActivity::class.java)
-        intent.putExtra(Constants.CHANGE_PASSWORD, true)
-        startActivity(intent)
-        finish()
-    }
-
-    private fun removeProfilePicture() {
-        val removePanel = BottomSheetDialog(this)
-        val removePanelView = LayoutInflater.from(this).inflate(R.layout.panel_remove, findViewById(R.id.panelRemove))
-
-        removePanelView.findViewById<TextView>(R.id.panelRemove_message).text = resources.getString(R.string.remove_profile_picture_message)
-
-        removePanelView.findViewById<LinearLayout>(R.id.panelRemove_confirmationButton).setOnClickListener() {
-            removePanel.dismiss()
-            viewModel.removeProfilePicture()
-        }
-
-        removePanelView.findViewById<LinearLayout>(R.id.panelRemove_dismissButton).setOnClickListener() {
-            removePanel.dismiss()
-            changeProfilePicture()
-        }
-
-        removePanel.setContentView(removePanelView)
-        removePanel.show()
-    }
-
-    private fun refreshProfilePicture(uri: Uri?) {
-        val placeholder = ResourcesCompat.getDrawable(resources, R.drawable.placeholder_user, null)
-        Glide.with(this)
-            .load(uri)
-            .placeholder(placeholder)
-            .circleCrop()
-            .into(photo)
-    }
-
-    private fun tryToOpenCamera() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            openCamera()
-        } else {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.CAMERA),
-                Constants.REQUEST_CODE_PERMISSION_CAMERA
-            )
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == Constants.REQUEST_CODE_PERMISSION_CAMERA && grantResults[0] == PackageManager.PERMISSION_GRANTED) openCamera()
-    }
-
-    private fun openCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_CAMERA_IMAGE)
-    }
-
-    private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = Constants.INTENT_TYPE_IMAGE
-        startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == RESULT_OK) {
-            when (requestCode) {
-                Constants.REQUEST_CODE_CAPTURE_CAMERA_IMAGE -> {
-                    val file = data?.getParcelableExtra<Bitmap>("data")
-                    if (file != null) {
-                        val outputStream = ByteArrayOutputStream()
-                        file.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-                        viewModel.changeProfilePicture(outputStream.toByteArray())
-                    }
-                }
-                Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE -> {
-                    if (data != null && data.data != null) {
-                        val file = data.data!!
-                        viewModel.changeProfilePicture(file)
-                    }
-                }
-            }
-        }
-    }
-
     private fun validationResult(validationResult: Int) {
         if (validationResult == ValidationObject.EMPTY_VALUES) {
             Toast.makeText(this, getString(R.string.username_can_not_be_empty), Toast.LENGTH_LONG)
@@ -462,10 +469,4 @@ class UserProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun hideKeyboard() {
-        val inputMethodManager =
-            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        val view = findViewById<View>(android.R.id.content).rootView
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-    }
 }

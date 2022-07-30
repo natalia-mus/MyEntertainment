@@ -39,12 +39,6 @@ class AddMusicFragmentViewModel : ViewModel() {
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
 
-    fun getSong(id: String) {
-        databaseReference.child(user).child(CategoryObject.MUSIC).get().addOnSuccessListener {
-            song.value = it.child(id).getValue(Music::class.java)
-        }
-    }
-
     fun addToDatabase(item: Music) {
         loading.value = true
 
@@ -69,6 +63,12 @@ class AddMusicFragmentViewModel : ViewModel() {
                         }
                     }
                 }
+        }
+    }
+
+    fun getSong(id: String) {
+        databaseReference.child(user).child(CategoryObject.MUSIC).get().addOnSuccessListener {
+            song.value = it.child(id).getValue(Music::class.java)
         }
     }
 
@@ -113,6 +113,8 @@ class AddMusicFragmentViewModel : ViewModel() {
             loading.value = false
             validationResult.value = ValidationObject.EMPTY_VALUES
             false
+
         } else true
     }
+
 }

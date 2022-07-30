@@ -28,6 +28,19 @@ class BooksFragmentViewModel : ViewModel() {
     val itemDeleted = MutableLiveData<Boolean>(false)
 
 
+    fun deleteBook(id: String?) {
+        itemDeleted.value = false
+        databaseReference.child(user).child(CategoryObject.BOOKS).child(id.toString()).removeValue()
+            .addOnCompleteListener() { task ->
+                if (task.isSuccessful) {
+                    fetchBooks()
+                    itemDeleted.value = true
+                } else {
+                    Log.e("error", "error")
+                }
+            }
+    }
+
     fun fetchBooks() {
         databaseReference.child(user).child(CategoryObject.BOOKS).get().addOnSuccessListener {
             val booksList: MutableList<Book> = mutableListOf()
@@ -48,20 +61,6 @@ class BooksFragmentViewModel : ViewModel() {
 
             books.value = booksList
         }
-    }
-
-
-    fun deleteBook(id: String?) {
-        itemDeleted.value = false
-        databaseReference.child(user).child(CategoryObject.BOOKS).child(id.toString()).removeValue()
-            .addOnCompleteListener() { task ->
-                if (task.isSuccessful) {
-                    fetchBooks()
-                    itemDeleted.value = true
-                } else {
-                    Log.e("error", "error")
-                }
-            }
     }
 
 }

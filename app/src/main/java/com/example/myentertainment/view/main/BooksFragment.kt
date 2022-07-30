@@ -43,6 +43,21 @@ class BooksFragment : Fragment(), OnItemClickAction {
         return fragmentView
     }
 
+    override fun onItemClicked(id: String?) {
+        editBook(id)
+    }
+
+    override fun onItemLongClicked(id: String?) {
+        viewModel.deleteBook(id)
+    }
+
+    private fun editBook(id: String?) {
+        val intent = Intent(activity, AddActivity::class.java)
+        intent.putExtra(Constants.CATEGORY, CategoryObject.BOOKS)
+        intent.putExtra(Constants.ID, id!!)
+        startActivity(intent)
+    }
+
     private fun initView() {
         booksList = fragmentView.findViewById(R.id.books_list)
         loadingSection = fragmentView.findViewById(R.id.books_loadingSection)
@@ -70,18 +85,4 @@ class BooksFragment : Fragment(), OnItemClickAction {
         }
     }
 
-    private fun editBook(id: String?) {
-        val intent = Intent(activity, AddActivity::class.java)
-        intent.putExtra(Constants.CATEGORY, CategoryObject.BOOKS)
-        intent.putExtra(Constants.ID, id!!)
-        startActivity(intent)
-    }
-
-    override fun onItemClicked(id: String?) {
-        editBook(id)
-    }
-
-    override fun onItemLongClicked(id: String?) {
-        viewModel.deleteBook(id)
-    }
 }

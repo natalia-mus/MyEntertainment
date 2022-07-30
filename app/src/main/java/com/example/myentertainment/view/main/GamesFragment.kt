@@ -43,6 +43,21 @@ class GamesFragment : Fragment(), OnItemClickAction {
         return fragmentView
     }
 
+    override fun onItemClicked(id: String?) {
+        editGame(id)
+    }
+
+    override fun onItemLongClicked(id: String?) {
+        viewModel.deleteGame(id)
+    }
+
+    private fun editGame(id: String?) {
+        val intent = Intent(activity, AddActivity::class.java)
+        intent.putExtra(Constants.CATEGORY, CategoryObject.GAMES)
+        intent.putExtra(Constants.ID, id!!)
+        startActivity(intent)
+    }
+
     private fun initView() {
         gamesList = fragmentView.findViewById(R.id.games_list)
         loadingSection = fragmentView.findViewById(R.id.games_loadingSection)
@@ -70,18 +85,4 @@ class GamesFragment : Fragment(), OnItemClickAction {
         }
     }
 
-    private fun editGame(id: String?) {
-        val intent = Intent(activity, AddActivity::class.java)
-        intent.putExtra(Constants.CATEGORY, CategoryObject.GAMES)
-        intent.putExtra(Constants.ID, id!!)
-        startActivity(intent)
-    }
-
-    override fun onItemClicked(id: String?) {
-        editGame(id)
-    }
-
-    override fun onItemLongClicked(id: String?) {
-        viewModel.deleteGame(id)
-    }
 }

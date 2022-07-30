@@ -15,4 +15,5 @@ class BaseApplication : Application() {
 
         baseApplicationComponent = DaggerBaseApplicationComponent.create()
     }
+
 }

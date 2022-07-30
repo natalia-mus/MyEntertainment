@@ -58,6 +58,19 @@ class ChangePasswordFragment : Fragment() {
         }
     }
 
+    private fun passwordChangeResult(result: Boolean) {
+        var message = ""
+
+        if (result) {
+            message = getString(R.string.password_updated)
+            activity!!.finish()
+        } else {
+            message = getString(R.string.something_went_wrong)
+        }
+
+        Toast.makeText(activity!!.applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
     private fun setObservers() {
         viewModel.loading.observe(this, { updateView(it) })
         viewModel.validationResult.observe(this, { validationResult(it) })
@@ -83,19 +96,6 @@ class ChangePasswordFragment : Fragment() {
         }
 
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
-    }
-
-    private fun passwordChangeResult(result: Boolean) {
-        var message = ""
-
-        if (result) {
-            message = getString(R.string.password_updated)
-            activity!!.finish()
-        } else {
-            message = getString(R.string.something_went_wrong)
-        }
-
-        Toast.makeText(activity!!.applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
 }

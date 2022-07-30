@@ -38,11 +38,6 @@ class AddBookFragmentViewModel : ViewModel() {
     val validationResult = MutableLiveData<Int>()
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
-    fun getBook(id: String) {
-        databaseReference.child(user).child(CategoryObject.BOOKS).get().addOnSuccessListener {
-            book.value = it.child(id).getValue(Book::class.java)
-        }
-    }
 
     fun addToDatabase(item: Book) {
         loading.value = true
@@ -66,6 +61,12 @@ class AddBookFragmentViewModel : ViewModel() {
                         addingToDatabaseResult.value = false
                     }
                 }
+        }
+    }
+
+    fun getBook(id: String) {
+        databaseReference.child(user).child(CategoryObject.BOOKS).get().addOnSuccessListener {
+            book.value = it.child(id).getValue(Book::class.java)
         }
     }
 
@@ -110,6 +111,8 @@ class AddBookFragmentViewModel : ViewModel() {
             loading.value = false
             validationResult.value = ValidationObject.EMPTY_VALUES
             false
+
         } else true
     }
+
 }

@@ -43,6 +43,21 @@ class MoviesFragment : Fragment(), OnItemClickAction {
         return fragmentView
     }
 
+    override fun onItemClicked(id: String?) {
+        editMovie(id)
+    }
+
+    override fun onItemLongClicked(id: String?) {
+        viewModel.deleteMovie(id)
+    }
+
+    private fun editMovie(id: String?) {
+        val intent = Intent(activity, AddActivity::class.java)
+        intent.putExtra(Constants.CATEGORY, CategoryObject.MOVIES)
+        intent.putExtra(Constants.ID, id!!)
+        startActivity(intent)
+    }
+
     private fun initView() {
         moviesList = fragmentView.findViewById(R.id.movies_list)
         loadingSection = fragmentView.findViewById(R.id.movies_loadingSection)
@@ -70,18 +85,4 @@ class MoviesFragment : Fragment(), OnItemClickAction {
         }
     }
 
-    private fun editMovie(id: String?) {
-        val intent = Intent(activity, AddActivity::class.java)
-        intent.putExtra(Constants.CATEGORY, CategoryObject.MOVIES)
-        intent.putExtra(Constants.ID, id!!)
-        startActivity(intent)
-    }
-
-    override fun onItemClicked(id: String?) {
-        editMovie(id)
-    }
-
-    override fun onItemLongClicked(id: String?) {
-        viewModel.deleteMovie(id)
-    }
 }

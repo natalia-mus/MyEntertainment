@@ -68,19 +68,14 @@ class AddMusicFragment : Fragment(), AddFragmentViewModelInterface {
     override fun setObservers() {
         viewModel.loading.observe(this, { updateView(it, loadingSection) })
         viewModel.song.observe(this, { prepareViewForEditContext(it) })
-        viewModel.validationResult.observe(
-            this,
-            { validationResult(it, requireContext(), noTitleMessage) })
-        viewModel.addingToDatabaseResult.observe(
-            this,
-            {
-                addingToDatabaseResult(
-                    it,
-                    requireContext(),
-                    songAddedMessage,
-                    CategoryObject.MUSIC
-                )
-            })
+        viewModel.validationResult.observe(this, { validationResult(it, requireContext(), noTitleMessage) })
+        viewModel.addingToDatabaseResult.observe(this, { addingToDatabaseResult(
+            it,
+            requireContext(),
+            songAddedMessage,
+            CategoryObject.MUSIC
+        )
+        })
     }
 
     private fun establishOpeningContext() {
@@ -129,4 +124,5 @@ class AddMusicFragment : Fragment(), AddFragmentViewModelInterface {
         genreEditText.setText(item.genre)
         if (item.rating != null) ratingBar.rating = item.rating
     }
+
 }

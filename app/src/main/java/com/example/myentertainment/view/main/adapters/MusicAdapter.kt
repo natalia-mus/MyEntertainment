@@ -71,11 +71,11 @@ class MusicAdapter(
 
 
 class MusicViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val item = view.findViewById<ConstraintLayout>(R.id.music_item)
+    val item: ConstraintLayout = view.findViewById(R.id.music_item)
 
-    val title = view.findViewById<TextView>(R.id.music_title)
-    val artist = view.findViewById<TextView>(R.id.music_artist)
-    val rate = view.findViewById<RatingBar>(R.id.music_rate)
-    val genre = view.findViewById<TextView>(R.id.music_genre)
-    val releaseYear = view.findViewById<TextView>(R.id.music_releaseYear)
+    val title: TextView = view.findViewById(R.id.music_title)
+    val artist: TextView = view.findViewById(R.id.music_artist)
+    val rate: RatingBar = view.findViewById(R.id.music_rate)
+    val genre: TextView = view.findViewById(R.id.music_genre)
+    val releaseYear: TextView = view.findViewById(R.id.music_releaseYear)
 }

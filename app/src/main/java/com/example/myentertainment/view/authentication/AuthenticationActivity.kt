@@ -19,6 +19,10 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
         }
     }
 
+    override fun signUpClicked() {
+        changeCurrentFragment(SignUpFragment())
+    }
+
     private fun changeCurrentFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.authenticationActivity_fragment, fragment)
@@ -26,7 +30,4 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
         }
     }
 
-    override fun signUpClicked() {
-        changeCurrentFragment(SignUpFragment())
-    }
 }

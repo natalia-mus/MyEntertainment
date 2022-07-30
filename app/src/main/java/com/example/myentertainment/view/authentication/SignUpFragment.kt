@@ -69,6 +69,34 @@ class SignUpFragment : Fragment() {
         viewModel.signingUpStatus.observe(this, { signingUpResult(it) })
     }
 
+    private fun signingUpResult(signingUpStatus: Boolean) {
+        if (signingUpStatus) {
+            val intent = Intent(activity, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        } else {
+            val message = getString(R.string.user_can_not_be_created)
+            toast(message)
+        }
+    }
+
+    // method to improve signing up as one of the test users with the same domain and password
+    private fun signUpAsTestUser() {
+        val username = usernameEditText.text.toString()
+        val email = "$username@example.com"
+        val password = ""
+
+        usernameEditText.setText(username)
+        emailEditText.setText(email)
+        passwordEditText.setText(password)
+        confirmPasswordEditText.setText(password)
+    }
+
+    private fun toast(message: String) {
+        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
     private fun updateView(loading: Boolean) {
         if (loading) {
             loadingSection.visibility = View.VISIBLE
@@ -97,31 +125,4 @@ class SignUpFragment : Fragment() {
         toast(message)
     }
 
-    private fun signingUpResult(signingUpStatus: Boolean) {
-        if (signingUpStatus) {
-            val intent = Intent(activity, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        } else {
-            val message = getString(R.string.user_can_not_be_created)
-            toast(message)
-        }
-    }
-
-    private fun toast(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
-    }
-
-    // method to improve signing up as one of the test users with the same domain and password
-    private fun signUpAsTestUser() {
-        val username = usernameEditText.text.toString()
-        val email = "$username@example.com"
-        val password = ""
-
-        usernameEditText.setText(username)
-        emailEditText.setText(email)
-        passwordEditText.setText(password)
-        confirmPasswordEditText.setText(password)
-    }
 }

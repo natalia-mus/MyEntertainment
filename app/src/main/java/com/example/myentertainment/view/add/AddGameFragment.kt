@@ -66,19 +66,14 @@ class AddGameFragment : Fragment(), AddFragmentViewModelInterface {
     override fun setObservers() {
         viewModel.loading.observe(this, { updateView(it, loadingSection) })
         viewModel.game.observe(this, { prepareViewForEditContext(it) })
-        viewModel.validationResult.observe(
-            this,
-            { validationResult(it, requireContext(), noTitleMessage) })
-        viewModel.addingToDatabaseResult.observe(
-            this,
-            {
-                addingToDatabaseResult(
-                    it,
-                    requireContext(),
-                    gameAddedMessage,
-                    CategoryObject.GAMES
-                )
-            })
+        viewModel.validationResult.observe(this, { validationResult(it, requireContext(), noTitleMessage) })
+        viewModel.addingToDatabaseResult.observe(this, { addingToDatabaseResult(
+            it,
+            requireContext(),
+            gameAddedMessage,
+            CategoryObject.GAMES
+        )
+        })
     }
 
     private fun establishOpeningContext() {
@@ -124,4 +119,5 @@ class AddGameFragment : Fragment(), AddFragmentViewModelInterface {
         genreEditText.setText(item.genre)
         if (item.rating != null) ratingBar.rating = item.rating
     }
+
 }

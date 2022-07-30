@@ -43,6 +43,21 @@ class MusicFragment : Fragment(), OnItemClickAction {
         return fragmentView
     }
 
+    override fun onItemClicked(id: String?) {
+        editSong(id)
+    }
+
+    override fun onItemLongClicked(id: String?) {
+        viewModel.deleteMusic(id)
+    }
+
+    private fun editSong(id: String?) {
+        val intent = Intent(activity, AddActivity::class.java)
+        intent.putExtra(Constants.CATEGORY, CategoryObject.MUSIC)
+        intent.putExtra(Constants.ID, id!!)
+        startActivity(intent)
+    }
+
     private fun initView() {
         musicList = fragmentView.findViewById(R.id.music_list)
         loadingSection = fragmentView.findViewById(R.id.music_loadingSection)
@@ -70,18 +85,4 @@ class MusicFragment : Fragment(), OnItemClickAction {
         }
     }
 
-    private fun editSong(id: String?) {
-        val intent = Intent(activity, AddActivity::class.java)
-        intent.putExtra(Constants.CATEGORY, CategoryObject.MUSIC)
-        intent.putExtra(Constants.ID, id!!)
-        startActivity(intent)
-    }
-
-    override fun onItemClicked(id: String?) {
-        editSong(id)
-    }
-
-    override fun onItemLongClicked(id: String?) {
-        viewModel.deleteMusic(id)
-    }
 }

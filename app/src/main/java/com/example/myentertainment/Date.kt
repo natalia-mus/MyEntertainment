@@ -4,24 +4,6 @@ import java.util.*
 
 class Date(var year: Int? = null, var month: Int? = null, var day: Int? = null) {
 
-    fun getMonthShortName(): String? {
-        return when (month) {
-            0 -> "Jan"
-            1 -> "Feb"
-            2 -> "Mar"
-            3 -> "Apr"
-            4 -> "May"
-            5 -> "Jun"
-            6 -> "Jul"
-            7 -> "Aug"
-            8 -> "Sep"
-            9 -> "Oct"
-            10 -> "Nov"
-            11 -> "Dec"
-            else -> null
-        }
-    }
-
     fun getMonthFullName(): String? {
         return when (month) {
             0 -> "January"
@@ -36,6 +18,24 @@ class Date(var year: Int? = null, var month: Int? = null, var day: Int? = null) 
             9 -> "October"
             10 -> "November"
             11 -> "December"
+            else -> null
+        }
+    }
+
+    fun getMonthShortName(): String? {
+        return when (month) {
+            0 -> "Jan"
+            1 -> "Feb"
+            2 -> "Mar"
+            3 -> "Apr"
+            4 -> "May"
+            5 -> "Jun"
+            6 -> "Jul"
+            7 -> "Aug"
+            8 -> "Sep"
+            9 -> "Oct"
+            10 -> "Nov"
+            11 -> "Dec"
             else -> null
         }
     }
@@ -61,6 +61,7 @@ class Date(var year: Int? = null, var month: Int? = null, var day: Int? = null) 
             else today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR) - 1
 
             return age
+
         } else return null
     }
 

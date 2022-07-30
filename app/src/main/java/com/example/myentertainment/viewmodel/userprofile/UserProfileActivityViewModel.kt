@@ -40,9 +40,16 @@ class UserProfileActivityViewModel : ViewModel() {
     val profilePicture = MutableLiveData<Uri?>()
 
 
-    private fun profilePictureReference() : StorageReference {
-        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + user
-        return storageReference.child(path)
+    fun changeProfilePicture(file: ByteArray) {
+        loading.value = true
+        val uploadTask = profilePictureReference().putBytes(file)
+        changeProfilePicture(uploadTask)
+    }
+
+    fun changeProfilePicture(file: Uri) {
+        loading.value = true
+        val uploadTask = profilePictureReference().putFile(file)
+        changeProfilePicture(uploadTask)
     }
 
     fun getUserProfileData() {
@@ -57,6 +64,18 @@ class UserProfileActivityViewModel : ViewModel() {
                     userProfile.value = null
                 }
             }
+    }
+
+    fun removeProfilePicture() {
+        loading.value = true
+        profilePictureReference().delete().addOnCompleteListener() { task ->
+            if (task.isSuccessful) {
+                getProfilePictureUrl()
+            } else {
+                loading.value = false
+                databaseTaskExecutionSuccessful.value = false
+            }
+        }
     }
 
     fun updateUserProfileData(userProfileData: UserProfile) {
@@ -74,30 +93,6 @@ class UserProfileActivityViewModel : ViewModel() {
                 }
             }
         }
-    }
-
-    fun removeProfilePicture() {
-        loading.value = true
-        profilePictureReference().delete().addOnCompleteListener() { task ->
-            if (task.isSuccessful) {
-                getProfilePictureUrl()
-            } else {
-                loading.value = false
-                databaseTaskExecutionSuccessful.value = false
-            }
-        }
-    }
-
-    fun changeProfilePicture(file: ByteArray) {
-        loading.value = true
-        val uploadTask = profilePictureReference().putBytes(file)
-        changeProfilePicture(uploadTask)
-    }
-
-    fun changeProfilePicture(file: Uri) {
-        loading.value = true
-        val uploadTask = profilePictureReference().putFile(file)
-        changeProfilePicture(uploadTask)
     }
 
     private fun changeProfilePicture(uploadTask: UploadTask) {
@@ -129,6 +124,11 @@ class UserProfileActivityViewModel : ViewModel() {
             }
     }
 
+    private fun profilePictureReference() : StorageReference {
+        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + user
+        return storageReference.child(path)
+    }
+
     private fun validation(userProfileData: UserProfile): Boolean {
         return if (userProfileData.username.isNullOrEmpty()) {
             loading.value = false
@@ -136,4 +136,5 @@ class UserProfileActivityViewModel : ViewModel() {
             false
         } else true
     }
+
 }

@@ -28,6 +28,19 @@ class GamesFragmentViewModel : ViewModel() {
     val itemDeleted = MutableLiveData<Boolean>(false)
 
 
+    fun deleteGame(id: String?) {
+        itemDeleted.value = false
+        databaseReference.child(user).child(CategoryObject.GAMES).child(id.toString()).removeValue()
+            .addOnCompleteListener() { task ->
+                if (task.isSuccessful) {
+                    fetchGames()
+                    itemDeleted.value = true
+                } else {
+                    Log.e("error", "error")
+                }
+            }
+    }
+
     fun fetchGames() {
         databaseReference.child(user).child(CategoryObject.GAMES).get().addOnSuccessListener {
             val gamesList: MutableList<Game> = mutableListOf()
@@ -50,17 +63,4 @@ class GamesFragmentViewModel : ViewModel() {
         }
     }
 
-
-    fun deleteGame(id: String?) {
-        itemDeleted.value = false
-        databaseReference.child(user).child(CategoryObject.GAMES).child(id.toString()).removeValue()
-            .addOnCompleteListener() { task ->
-                if (task.isSuccessful) {
-                    fetchGames()
-                    itemDeleted.value = true
-                } else {
-                    Log.e("error", "error")
-                }
-            }
-    }
 }
