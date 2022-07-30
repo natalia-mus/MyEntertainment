@@ -21,6 +21,7 @@ class SignInFragmentViewModel : ViewModel() {
     val loading = MutableLiveData<Boolean>()
     val signingInStatus = MutableLiveData<Boolean>()
 
+
     fun checkUserId() {
         userId.value = databaseAuth.uid.toString()
     }

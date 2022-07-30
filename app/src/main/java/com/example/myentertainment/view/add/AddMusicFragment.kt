@@ -84,6 +84,7 @@ class AddMusicFragment : Fragment(), AddFragmentViewModelInterface {
         if (itemId != null) {
             openingContext = OpeningContext.EDIT
             viewModel.getSong(itemId!!)
+
         } else openingContext = OpeningContext.ADD
     }
 

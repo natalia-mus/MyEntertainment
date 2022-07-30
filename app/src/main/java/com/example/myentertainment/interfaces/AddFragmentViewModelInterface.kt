@@ -21,13 +21,13 @@ interface AddFragmentViewModelInterface {
         category: String
     ) {
         if (addingToDatabaseResult) {
-            Toast.makeText(context, message, Toast.LENGTH_LONG)
-                .show()
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             val intent = Intent(context, MainActivity::class.java)
             intent.putExtra(Constants.CATEGORY, category)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
+
         } else {
             Toast.makeText(context, "An error occurred", Toast.LENGTH_LONG).show()
         }

@@ -84,6 +84,7 @@ class AddBookFragment : Fragment(), AddFragmentViewModelInterface {
         if (itemId != null) {
             openingContext = OpeningContext.EDIT
             viewModel.getBook(itemId!!)
+
         } else openingContext = OpeningContext.ADD
     }
 

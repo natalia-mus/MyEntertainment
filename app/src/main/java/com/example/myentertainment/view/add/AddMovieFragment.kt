@@ -84,6 +84,7 @@ class AddMovieFragment : Fragment(), AddFragmentViewModelInterface {
         if (itemId != null) {
             openingContext = OpeningContext.EDIT
             viewModel.getMovie(itemId!!)
+
         } else openingContext = OpeningContext.ADD
     }
 

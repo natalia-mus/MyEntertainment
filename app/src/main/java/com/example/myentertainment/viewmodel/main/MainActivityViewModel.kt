@@ -14,6 +14,7 @@ class MainActivityViewModel : ViewModel() {
     @Inject
     lateinit var databaseAuth: FirebaseAuth
 
+
     fun signOut() {
         databaseAuth.signOut()
     }

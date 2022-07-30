@@ -82,6 +82,7 @@ class AddGameFragment : Fragment(), AddFragmentViewModelInterface {
         if (itemId != null) {
             openingContext = OpeningContext.EDIT
             viewModel.getGame(itemId!!)
+
         } else openingContext = OpeningContext.ADD
     }
 

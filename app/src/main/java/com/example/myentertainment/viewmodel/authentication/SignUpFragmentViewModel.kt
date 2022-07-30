@@ -16,15 +16,16 @@ class SignUpFragmentViewModel : ViewModel() {
         BaseApplication.baseApplicationComponent.inject(this)
     }
 
-    val validationResult = MutableLiveData<Int>()
-    val loading = MutableLiveData<Boolean>()
-    val signingUpStatus = MutableLiveData<Boolean>()
-
     @Inject
     lateinit var databaseAuth: FirebaseAuth
 
     @Inject
     lateinit var databaseReference: DatabaseReference
+
+    val validationResult = MutableLiveData<Int>()
+    val loading = MutableLiveData<Boolean>()
+    val signingUpStatus = MutableLiveData<Boolean>()
+
 
     fun signUp(username: String, email: String, password: String, confirmPassword: String) {
         loading.value = true

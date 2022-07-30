@@ -86,15 +86,12 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
     }
 
     private fun signingInResult(signingUpResult: Boolean) {
-        if (signingUpResult) goToMainActivity()
-        else {
+        if (signingUpResult) {
+            goToMainActivity()
+        } else {
             val message = getString(R.string.failed_to_sign_in)
-            toast(message)
+            Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
         }
-    }
-
-    private fun toast(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
     private fun updateActivity(userId: String?) {
@@ -123,7 +120,7 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
             ValidationObject.INVALID_EMAIL -> message =
                 getString(R.string.your_email_address_is_invalid)
         }
-        toast(message)
+        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
 }
