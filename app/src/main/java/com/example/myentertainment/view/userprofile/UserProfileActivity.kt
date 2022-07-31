@@ -23,7 +23,7 @@ import com.bumptech.glide.Glide
 import com.example.myentertainment.Constants
 import com.example.myentertainment.Date
 import com.example.myentertainment.R
-import com.example.myentertainment.`object`.ValidationObject
+import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.view.authentication.AuthenticationActivity
 import com.example.myentertainment.viewmodel.userprofile.UserProfileActivityViewModel
@@ -462,8 +462,8 @@ class UserProfileActivity : AppCompatActivity() {
         } else databaseTaskExecutionResult(false)
     }
 
-    private fun validationResult(validationResult: Int) {
-        if (validationResult == ValidationObject.EMPTY_VALUES) {
+    private fun validationResult(validationResult: ValidationResult) {
+        if (validationResult == ValidationResult.EMPTY_VALUES) {
             Toast.makeText(this, getString(R.string.username_can_not_be_empty), Toast.LENGTH_LONG)
                 .show()
         }

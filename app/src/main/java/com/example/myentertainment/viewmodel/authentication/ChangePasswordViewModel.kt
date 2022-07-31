@@ -1,10 +1,9 @@
 package com.example.myentertainment.viewmodel.authentication
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
-import com.example.myentertainment.`object`.ValidationObject
+import com.example.myentertainment.`object`.ValidationResult
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -22,7 +21,7 @@ class ChangePasswordViewModel : ViewModel() {
     @Inject
     lateinit var databaseReference: DatabaseReference
 
-    val validationResult = MutableLiveData<Int>()
+    val validationResult = MutableLiveData<ValidationResult>()
     val loading = MutableLiveData<Boolean>()
     val changePasswordStatus = MutableLiveData<Boolean>()
 
@@ -42,7 +41,7 @@ class ChangePasswordViewModel : ViewModel() {
                 }
                 .addOnFailureListener {
                     loading.value = false
-                    validationResult.value = ValidationObject.AUTHENTICATION_FAILED
+                    validationResult.value = ValidationResult.AUTHENTICATION_FAILED
                 }
         }
     }
@@ -62,17 +61,17 @@ class ChangePasswordViewModel : ViewModel() {
     private fun validation(currentPassword: String, newPassword: String, confirmPassword: String): Boolean {
         if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
             loading.value = false
-            validationResult.value = ValidationObject.EMPTY_VALUES
+            validationResult.value = ValidationResult.EMPTY_VALUES
             return false
 
         } else if (newPassword.length < 6) {
             loading.value = false
-            validationResult.value = ValidationObject.PASSWORD_TOO_SHORT
+            validationResult.value = ValidationResult.PASSWORD_TOO_SHORT
             return false
 
         } else if (newPassword != confirmPassword) {
             loading.value = false
-            validationResult.value = ValidationObject.INCOMPATIBLE_PASSWORDS
+            validationResult.value = ValidationResult.INCOMPATIBLE_PASSWORDS
             return false
 
         } else {

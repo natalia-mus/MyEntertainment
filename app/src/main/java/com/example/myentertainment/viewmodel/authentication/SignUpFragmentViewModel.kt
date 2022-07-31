@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.Constants
-import com.example.myentertainment.`object`.ValidationObject
+import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.data.UserProfile
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -22,7 +22,7 @@ class SignUpFragmentViewModel : ViewModel() {
     @Inject
     lateinit var databaseReference: DatabaseReference
 
-    val validationResult = MutableLiveData<Int>()
+    val validationResult = MutableLiveData<ValidationResult>()
     val loading = MutableLiveData<Boolean>()
     val signingUpStatus = MutableLiveData<Boolean>()
 
@@ -64,20 +64,24 @@ class SignUpFragmentViewModel : ViewModel() {
 
         if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
             loading.value = false
-            validationResult.value = ValidationObject.EMPTY_VALUES
+            validationResult.value = ValidationResult.EMPTY_VALUES
             return false
+
         } else if (password.length < 6) {
             loading.value = false
-            validationResult.value = ValidationObject.PASSWORD_TOO_SHORT
+            validationResult.value = ValidationResult.PASSWORD_TOO_SHORT
             return false
+
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             loading.value = false
-            validationResult.value = ValidationObject.INVALID_EMAIL
+            validationResult.value = ValidationResult.INVALID_EMAIL
             return false
+
         } else if (password != confirmPassword) {
             loading.value = false
-            validationResult.value = ValidationObject.INCOMPATIBLE_PASSWORDS
+            validationResult.value = ValidationResult.INCOMPATIBLE_PASSWORDS
             return false
+
         } else {
             return true
         }

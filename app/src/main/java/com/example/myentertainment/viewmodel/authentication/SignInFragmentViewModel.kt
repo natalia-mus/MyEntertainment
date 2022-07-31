@@ -3,7 +3,7 @@ package com.example.myentertainment.viewmodel.authentication
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
-import com.example.myentertainment.`object`.ValidationObject
+import com.example.myentertainment.`object`.ValidationResult
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
@@ -17,7 +17,7 @@ class SignInFragmentViewModel : ViewModel() {
     lateinit var databaseAuth: FirebaseAuth
 
     val userId = MutableLiveData<String>()
-    val validationResult = MutableLiveData<Int>()
+    val validationResult = MutableLiveData<ValidationResult>()
     val loading = MutableLiveData<Boolean>()
     val signingInStatus = MutableLiveData<Boolean>()
 
@@ -47,12 +47,14 @@ class SignInFragmentViewModel : ViewModel() {
     private fun validation(email: String, password: String): Boolean {
         if (email.isEmpty() || password.isEmpty()) {
             loading.value = false
-            validationResult.value = ValidationObject.EMPTY_VALUES
+            validationResult.value = ValidationResult.EMPTY_VALUES
             return false
+
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             loading.value = false
-            validationResult.value = ValidationObject.INVALID_EMAIL
+            validationResult.value = ValidationResult.INVALID_EMAIL
             return false
+
         } else {
             return true
         }

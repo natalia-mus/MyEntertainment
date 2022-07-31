@@ -11,7 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
-import com.example.myentertainment.`object`.ValidationObject
+import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.viewmodel.authentication.ChangePasswordViewModel
 
 class ChangePasswordFragment : Fragment() {
@@ -85,14 +85,14 @@ class ChangePasswordFragment : Fragment() {
         }
     }
 
-    private fun validationResult(validationResult: Int) {
+    private fun validationResult(validationResult: ValidationResult) {
         var message = ""
 
         when (validationResult) {
-            ValidationObject.EMPTY_VALUES -> message = getString(R.string.enter_all_required_values)
-            ValidationObject.PASSWORD_TOO_SHORT -> message = getString(R.string.password_too_short)
-            ValidationObject.INCOMPATIBLE_PASSWORDS -> message = getString(R.string.incompatible_passwords)
-            ValidationObject.AUTHENTICATION_FAILED -> message = getString(R.string.authentication_failed)
+            ValidationResult.EMPTY_VALUES -> message = getString(R.string.enter_all_required_values)
+            ValidationResult.PASSWORD_TOO_SHORT -> message = getString(R.string.password_too_short)
+            ValidationResult.INCOMPATIBLE_PASSWORDS -> message = getString(R.string.incompatible_passwords)
+            ValidationResult.AUTHENTICATION_FAILED -> message = getString(R.string.authentication_failed)
         }
 
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()

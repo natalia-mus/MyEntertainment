@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.myentertainment.Constants
-import com.example.myentertainment.`object`.ValidationObject
+import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.view.main.MainActivity
 
 interface AddFragmentViewModelInterface {
@@ -41,9 +41,9 @@ interface AddFragmentViewModelInterface {
         }
     }
 
-    fun validationResult(validationResult: Int, context: Context, message: String) {
+    fun validationResult(validationResult: ValidationResult, context: Context, message: String) {
         when (validationResult) {
-            ValidationObject.EMPTY_VALUES -> Toast.makeText(
+            ValidationResult.EMPTY_VALUES -> Toast.makeText(
                 context,
                 message,
                 Toast.LENGTH_SHORT

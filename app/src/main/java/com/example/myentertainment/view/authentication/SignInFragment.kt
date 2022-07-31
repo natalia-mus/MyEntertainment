@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
-import com.example.myentertainment.`object`.ValidationObject
+import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.view.main.MainActivity
 import com.example.myentertainment.viewmodel.authentication.SignInFragmentViewModel
 
@@ -111,13 +111,13 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
         }
     }
 
-    private fun validationResult(validationResult: Int) {
+    private fun validationResult(validationResult: ValidationResult) {
         var message = ""
 
         when (validationResult) {
-            ValidationObject.EMPTY_VALUES -> message =
+            ValidationResult.EMPTY_VALUES -> message =
                 getString(R.string.enter_all_required_values)
-            ValidationObject.INVALID_EMAIL -> message =
+            ValidationResult.INVALID_EMAIL -> message =
                 getString(R.string.your_email_address_is_invalid)
         }
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()

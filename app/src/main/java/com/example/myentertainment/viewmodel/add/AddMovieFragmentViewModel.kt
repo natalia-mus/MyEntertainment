@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.Constants
 import com.example.myentertainment.`object`.CategoryObject
-import com.example.myentertainment.`object`.ValidationObject
+import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.data.Movie
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -35,7 +35,7 @@ class AddMovieFragmentViewModel : ViewModel() {
 
     val loading = MutableLiveData<Boolean>()
     val movie = MutableLiveData<Movie>()
-    val validationResult = MutableLiveData<Int>()
+    val validationResult = MutableLiveData<ValidationResult>()
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
 
@@ -111,7 +111,7 @@ class AddMovieFragmentViewModel : ViewModel() {
     private fun validation(movie: Movie): Boolean {
         return if (movie.title.isNullOrEmpty()) {
             loading.value = false
-            validationResult.value = ValidationObject.EMPTY_VALUES
+            validationResult.value = ValidationResult.EMPTY_VALUES
             false
 
         } else true
