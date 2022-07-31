@@ -66,16 +66,10 @@ class AddBookFragment : Fragment(), AddFragmentViewModelInterface {
     }
 
     override fun setObservers() {
-        viewModel.loading.observe(this, { updateView(it, loadingSection) })
-        viewModel.book.observe(this, { prepareViewForEditContext(it) })
-        viewModel.validationResult.observe(this, { validationResult(it, requireContext(), noTitleMessage) })
-        viewModel.addingToDatabaseResult.observe(this, { addingToDatabaseResult(
-            it,
-            requireContext(),
-            bookAddedMessage,
-            CategoryObject.BOOKS
-        )
-        })
+        viewModel.loading.observe(this) { updateView(it, loadingSection) }
+        viewModel.book.observe(this) { prepareViewForEditContext(it) }
+        viewModel.validationResult.observe(this) { handleValidationResult(it, requireContext(), noTitleMessage) }
+        viewModel.addingToDatabaseResult.observe(this) { handleAddingToDatabaseResult(it, requireContext(), bookAddedMessage, CategoryObject.BOOKS) }
     }
 
     private fun establishOpeningContext() {

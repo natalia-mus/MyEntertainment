@@ -19,7 +19,7 @@ class SignInFragmentViewModel : ViewModel() {
     val userId = MutableLiveData<String>()
     val validationResult = MutableLiveData<ValidationResult>()
     val loading = MutableLiveData<Boolean>()
-    val signingInStatus = MutableLiveData<Boolean>()
+    val signInResult = MutableLiveData<Boolean>()
 
 
     fun checkUserId() {
@@ -34,10 +34,10 @@ class SignInFragmentViewModel : ViewModel() {
                 .addOnCompleteListener() { task ->
                     if (task.isComplete) {
                         loading.value = false
-                        signingInStatus.value = task.isSuccessful
+                        signInResult.value = task.isSuccessful
                     } else {
                         loading.value = false
-                        signingInStatus.value = false
+                        signInResult.value = false
                     }
                 }
         }

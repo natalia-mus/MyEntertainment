@@ -71,19 +71,19 @@ class MainActivity : AppCompatActivity() {
         when (fragment) {
             is MoviesFragment -> {
                 currentFragment = CategoryObject.MOVIES
-                bottomNavigation.menu.getItem(0).setChecked(true)
+                bottomNavigation.menu.getItem(0).isChecked = true
             }
             is BooksFragment -> {
                 currentFragment = CategoryObject.BOOKS
-                bottomNavigation.menu.getItem(1).setChecked(true)
+                bottomNavigation.menu.getItem(1).isChecked = true
             }
             is GamesFragment -> {
                 currentFragment = CategoryObject.GAMES
-                bottomNavigation.menu.getItem(2).setChecked(true)
+                bottomNavigation.menu.getItem(2).isChecked = true
             }
             is MusicFragment -> {
                 currentFragment = CategoryObject.MUSIC
-                bottomNavigation.menu.getItem(3).setChecked(true)
+                bottomNavigation.menu.getItem(3).isChecked = true
             }
         }
     }

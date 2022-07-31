@@ -49,6 +49,27 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
         startActivity(intent)
     }
 
+    private fun handleSignInResult(signInResult: Boolean) {
+        if (signInResult) {
+            goToMainActivity()
+        } else {
+            val message = getString(R.string.failed_to_sign_in)
+            Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun handleValidationResult(validationResult: ValidationResult) {
+        var message = ""
+
+        when (validationResult) {
+            ValidationResult.EMPTY_VALUES -> message =
+                getString(R.string.enter_all_required_values)
+            ValidationResult.INVALID_EMAIL -> message =
+                getString(R.string.your_email_address_is_invalid)
+        }
+        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
     private fun initView() {
         loadingSection = fragmentView.findViewById(R.id.signIn_loadingSection)
         signInSection = fragmentView.findViewById(R.id.signIn_section)
@@ -70,10 +91,10 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
     }
 
     private fun setObservers() {
-        viewModel.userId.observe(this, { updateActivity(it) })
-        viewModel.loading.observe(this, { updateView(it) })
-        viewModel.validationResult.observe(this, { validationResult(it) })
-        viewModel.signingInStatus.observe(this, { signingInResult(it) })
+        viewModel.userId.observe(this) { updateActivity(it) }
+        viewModel.loading.observe(this) { updateView(it) }
+        viewModel.validationResult.observe(this) { handleValidationResult(it) }
+        viewModel.signInResult.observe(this) { handleSignInResult(it) }
     }
 
     // method to improve logging in as one of the test users with the same domain and password
@@ -83,15 +104,6 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
 
         emailEditText.text = emailEditText.text.append(domain)
         passwordEditText.setText(password)
-    }
-
-    private fun signingInResult(signingUpResult: Boolean) {
-        if (signingUpResult) {
-            goToMainActivity()
-        } else {
-            val message = getString(R.string.failed_to_sign_in)
-            Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
-        }
     }
 
     private fun updateActivity(userId: String?) {
@@ -109,18 +121,6 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
         } else {
             loadingSection.visibility = View.INVISIBLE
         }
-    }
-
-    private fun validationResult(validationResult: ValidationResult) {
-        var message = ""
-
-        when (validationResult) {
-            ValidationResult.EMPTY_VALUES -> message =
-                getString(R.string.enter_all_required_values)
-            ValidationResult.INVALID_EMAIL -> message =
-                getString(R.string.your_email_address_is_invalid)
-        }
-        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
 }

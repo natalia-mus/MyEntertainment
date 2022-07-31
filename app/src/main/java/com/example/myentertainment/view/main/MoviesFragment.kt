@@ -65,7 +65,7 @@ class MoviesFragment : Fragment(), OnItemClickAction {
     }
 
     private fun setObservers() {
-        viewModel.movies.observe(this, { updateView(it) })
+        viewModel.movies.observe(this) { updateView(it) }
     }
 
     private fun updateView(movies: List<Movie>) {

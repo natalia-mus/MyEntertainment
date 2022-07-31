@@ -65,7 +65,7 @@ class GamesFragment : Fragment(), OnItemClickAction {
     }
 
     private fun setObservers() {
-        viewModel.games.observe(this, { updateView(it) })
+        viewModel.games.observe(this) { updateView(it) }
     }
 
     private fun updateView(games: List<Game>) {

@@ -23,7 +23,7 @@ class ChangePasswordViewModel : ViewModel() {
 
     val validationResult = MutableLiveData<ValidationResult>()
     val loading = MutableLiveData<Boolean>()
-    val changePasswordStatus = MutableLiveData<Boolean>()
+    val changePasswordResult = MutableLiveData<Boolean>()
 
     private val currentUser = databaseAuth.currentUser!!
 
@@ -50,11 +50,11 @@ class ChangePasswordViewModel : ViewModel() {
         currentUser.updatePassword(newPassword)
             .addOnSuccessListener {
                 loading.value = false
-                changePasswordStatus.value = true
+                changePasswordResult.value = true
             }
             .addOnFailureListener {
                 loading.value = false
-                changePasswordStatus.value = false
+                changePasswordResult.value = false
             }
     }
 

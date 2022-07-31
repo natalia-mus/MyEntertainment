@@ -163,9 +163,36 @@ class UserProfileActivity : AppCompatActivity() {
                 areValuesDifferent(this.country.text.toString(), country)
     }
 
-    private fun databaseTaskExecutionResult(successful: Boolean) {
+    private fun handleDatabaseTaskExecutionResult(successful: Boolean) {
         if (!successful) {
             Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
+    private fun handleLoadingStatus(loading: Boolean) {
+        if (!this::loadingSection.isInitialized) {
+            loadingSection = findViewById(R.id.userProfile_loadingSection)
+        }
+        if (loading) {
+            loadingSection.visibility = View.VISIBLE
+        } else {
+            loadingSection.visibility = View.GONE
+        }
+    }
+
+    private fun handleUpdatingUserProfileDataResult(successful: Boolean) {
+        if (successful) {
+            Toast.makeText(this, getString(R.string.user_profile_data_updated), Toast.LENGTH_LONG)
+                .show()
+            hideKeyboard()
+            viewModel.getUserProfileData()
+        } else handleDatabaseTaskExecutionResult(false)
+    }
+
+    private fun handleValidationResult(validationResult: ValidationResult) {
+        if (validationResult == ValidationResult.EMPTY_VALUES) {
+            Toast.makeText(this, getString(R.string.username_can_not_be_empty), Toast.LENGTH_LONG)
                 .show()
         }
     }
@@ -222,17 +249,6 @@ class UserProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadingStatusChanged(loading: Boolean) {
-        if (!this::loadingSection.isInitialized) {
-            loadingSection = findViewById(R.id.userProfile_loadingSection)
-        }
-        if (loading) {
-            loadingSection.visibility = View.VISIBLE
-        } else {
-            loadingSection.visibility = View.GONE
-        }
-    }
-
     private fun openCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_CAMERA_IMAGE)
@@ -265,12 +281,12 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun setObservers() {
-        viewModel.loading.observe(this, { loadingStatusChanged(it) })
-        viewModel.userProfile.observe(this, { updateView(it) })
-        viewModel.profilePicture.observe(this, {refreshProfilePicture(it)})
-        viewModel.validationResult.observe(this, { validationResult(it) })
-        viewModel.updatingUserProfileDataSuccessful.observe(this, { updatingUserProfileDataResult(it) })
-        viewModel.databaseTaskExecutionSuccessful.observe(this, { databaseTaskExecutionResult(it) })
+        viewModel.loading.observe(this) { handleLoadingStatus(it) }
+        viewModel.userProfile.observe(this) { updateView(it) }
+        viewModel.profilePicture.observe(this) { refreshProfilePicture(it) }
+        viewModel.validationResult.observe(this) { handleValidationResult(it) }
+        viewModel.updatingUserProfileDataSuccessful.observe(this) { handleUpdatingUserProfileDataResult(it) }
+        viewModel.databaseTaskExecutionSuccessful.observe(this) { handleDatabaseTaskExecutionResult(it) }
     }
 
     private fun showDatePickerDialog() {
@@ -450,22 +466,6 @@ class UserProfileActivity : AppCompatActivity() {
         } else {
             onBackPressed()
             Toast.makeText(applicationContext, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
-        }
-    }
-
-    private fun updatingUserProfileDataResult(successful: Boolean) {
-        if (successful) {
-            Toast.makeText(this, getString(R.string.user_profile_data_updated), Toast.LENGTH_LONG)
-                .show()
-            hideKeyboard()
-            viewModel.getUserProfileData()
-        } else databaseTaskExecutionResult(false)
-    }
-
-    private fun validationResult(validationResult: ValidationResult) {
-        if (validationResult == ValidationResult.EMPTY_VALUES) {
-            Toast.makeText(this, getString(R.string.username_can_not_be_empty), Toast.LENGTH_LONG)
-                .show()
         }
     }
 

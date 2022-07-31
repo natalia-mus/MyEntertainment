@@ -58,8 +58,8 @@ class ChangePasswordFragment : Fragment() {
         }
     }
 
-    private fun passwordChangeResult(result: Boolean) {
-        var message = ""
+    private fun handlePasswordChangeResult(result: Boolean) {
+        val message: String
 
         if (result) {
             message = getString(R.string.password_updated)
@@ -71,21 +71,7 @@ class ChangePasswordFragment : Fragment() {
         Toast.makeText(activity!!.applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
-    private fun setObservers() {
-        viewModel.loading.observe(this, { updateView(it) })
-        viewModel.validationResult.observe(this, { validationResult(it) })
-        viewModel.changePasswordStatus.observe(this, { passwordChangeResult(it) })
-    }
-
-    private fun updateView(loading: Boolean) {
-        if (loading) {
-            loadingSection.visibility = View.VISIBLE
-        } else {
-            loadingSection.visibility = View.GONE
-        }
-    }
-
-    private fun validationResult(validationResult: ValidationResult) {
+    private fun handleValidationResult(validationResult: ValidationResult) {
         var message = ""
 
         when (validationResult) {
@@ -96,6 +82,20 @@ class ChangePasswordFragment : Fragment() {
         }
 
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun setObservers() {
+        viewModel.loading.observe(this) { updateView(it) }
+        viewModel.validationResult.observe(this) { handleValidationResult(it) }
+        viewModel.changePasswordResult.observe(this) { handlePasswordChangeResult(it) }
+    }
+
+    private fun updateView(loading: Boolean) {
+        if (loading) {
+            loadingSection.visibility = View.VISIBLE
+        } else {
+            loadingSection.visibility = View.GONE
+        }
     }
 
 }

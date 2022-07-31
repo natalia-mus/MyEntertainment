@@ -24,7 +24,7 @@ class SignUpFragmentViewModel : ViewModel() {
 
     val validationResult = MutableLiveData<ValidationResult>()
     val loading = MutableLiveData<Boolean>()
-    val signingUpStatus = MutableLiveData<Boolean>()
+    val signUpResult = MutableLiveData<Boolean>()
 
 
     fun signUp(username: String, email: String, password: String, confirmPassword: String) {
@@ -37,7 +37,7 @@ class SignUpFragmentViewModel : ViewModel() {
                         createUserProfile(username, email)
                     } else {
                         loading.value = false
-                        signingUpStatus.value = false
+                        signUpResult.value = false
                     }
                 }
         }
@@ -52,10 +52,10 @@ class SignUpFragmentViewModel : ViewModel() {
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     loading.value = false
-                    signingUpStatus.value = true
+                    signUpResult.value = true
                 } else {
                     loading.value = false
-                    signingUpStatus.value = false
+                    signUpResult.value = false
                 }
             }
     }

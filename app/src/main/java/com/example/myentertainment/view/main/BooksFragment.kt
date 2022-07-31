@@ -65,7 +65,7 @@ class BooksFragment : Fragment(), OnItemClickAction {
     }
 
     private fun setObservers() {
-        viewModel.books.observe(this, { updateView(it) })
+        viewModel.books.observe(this) { updateView(it) }
     }
 
     private fun updateView(books: List<Book>) {

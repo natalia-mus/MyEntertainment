@@ -45,6 +45,38 @@ class SignUpFragment : Fragment() {
         return fragmentView
     }
 
+    private fun handleSignUpResult(signUpStatus: Boolean) {
+        if (signUpStatus) {
+            val intent = Intent(activity, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        } else {
+            val message = getString(R.string.user_can_not_be_created)
+            Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun handleValidationResult(validationResult: ValidationResult) {
+        var message = ""
+
+        when (validationResult) {
+            ValidationResult.EMPTY_VALUES -> {
+                message = getString(R.string.enter_all_required_values)
+            }
+            ValidationResult.PASSWORD_TOO_SHORT -> {
+                message = getString(R.string.password_too_short)
+            }
+            ValidationResult.INVALID_EMAIL -> {
+                message = getString(R.string.your_email_address_is_invalid)
+            }
+            ValidationResult.INCOMPATIBLE_PASSWORDS -> {
+                message = getString(R.string.incompatible_passwords)
+            }
+        }
+        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
     private fun initView() {
         usernameEditText = fragmentView.findViewById(R.id.signUp_username)
         emailEditText = fragmentView.findViewById(R.id.signUp_email)
@@ -64,21 +96,9 @@ class SignUpFragment : Fragment() {
     }
 
     private fun setObservers() {
-        viewModel.loading.observe(this, { updateView(it) })
-        viewModel.validationResult.observe(this, { validationResult(it) })
-        viewModel.signingUpStatus.observe(this, { signingUpResult(it) })
-    }
-
-    private fun signingUpResult(signingUpStatus: Boolean) {
-        if (signingUpStatus) {
-            val intent = Intent(activity, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        } else {
-            val message = getString(R.string.user_can_not_be_created)
-            Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
-        }
+        viewModel.loading.observe(this) { updateView(it) }
+        viewModel.validationResult.observe(this) { handleValidationResult(it) }
+        viewModel.signUpResult.observe(this) { handleSignUpResult(it) }
     }
 
     // method to improve signing up as one of the test users with the same domain and password
@@ -99,26 +119,6 @@ class SignUpFragment : Fragment() {
         } else {
             loadingSection.visibility = View.INVISIBLE
         }
-    }
-
-    private fun validationResult(validationResult: ValidationResult) {
-        var message = ""
-
-        when (validationResult) {
-            ValidationResult.EMPTY_VALUES -> {
-                message = getString(R.string.enter_all_required_values)
-            }
-            ValidationResult.PASSWORD_TOO_SHORT -> {
-                message = getString(R.string.password_too_short)
-            }
-            ValidationResult.INVALID_EMAIL -> {
-                message = getString(R.string.your_email_address_is_invalid)
-            }
-            ValidationResult.INCOMPATIBLE_PASSWORDS -> {
-                message = getString(R.string.incompatible_passwords)
-            }
-        }
-        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
 }

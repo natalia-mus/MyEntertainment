@@ -65,7 +65,7 @@ class MusicFragment : Fragment(), OnItemClickAction {
     }
 
     private fun setObservers() {
-        viewModel.music.observe(this, { updateView(it) })
+        viewModel.music.observe(this) { updateView(it) }
     }
 
     private fun updateView(music: List<Music>) {

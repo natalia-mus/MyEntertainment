@@ -64,16 +64,10 @@ class AddGameFragment : Fragment(), AddFragmentViewModelInterface {
     }
 
     override fun setObservers() {
-        viewModel.loading.observe(this, { updateView(it, loadingSection) })
-        viewModel.game.observe(this, { prepareViewForEditContext(it) })
-        viewModel.validationResult.observe(this, { validationResult(it, requireContext(), noTitleMessage) })
-        viewModel.addingToDatabaseResult.observe(this, { addingToDatabaseResult(
-            it,
-            requireContext(),
-            gameAddedMessage,
-            CategoryObject.GAMES
-        )
-        })
+        viewModel.loading.observe(this) { updateView(it, loadingSection) }
+        viewModel.game.observe(this) { prepareViewForEditContext(it) }
+        viewModel.validationResult.observe(this) { handleValidationResult(it, requireContext(), noTitleMessage) }
+        viewModel.addingToDatabaseResult.observe(this) { handleAddingToDatabaseResult(it, requireContext(), gameAddedMessage, CategoryObject.GAMES) }
     }
 
     private fun establishOpeningContext() {

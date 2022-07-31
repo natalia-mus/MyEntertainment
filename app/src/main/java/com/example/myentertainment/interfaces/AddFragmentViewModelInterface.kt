@@ -14,7 +14,7 @@ interface AddFragmentViewModelInterface {
     fun initView()
     fun setObservers()
 
-    fun addingToDatabaseResult(
+    fun handleAddingToDatabaseResult(
         addingToDatabaseResult: Boolean,
         context: Context,
         message: String,
@@ -33,21 +33,21 @@ interface AddFragmentViewModelInterface {
         }
     }
 
-    fun updateView(loading: Boolean, loadingSection: ConstraintLayout) {
-        if (loading) {
-            loadingSection.visibility = View.VISIBLE
-        } else {
-            loadingSection.visibility = View.INVISIBLE
-        }
-    }
-
-    fun validationResult(validationResult: ValidationResult, context: Context, message: String) {
+    fun handleValidationResult(validationResult: ValidationResult, context: Context, message: String) {
         when (validationResult) {
             ValidationResult.EMPTY_VALUES -> Toast.makeText(
                 context,
                 message,
                 Toast.LENGTH_SHORT
             ).show()
+        }
+    }
+
+    fun updateView(loading: Boolean, loadingSection: ConstraintLayout) {
+        if (loading) {
+            loadingSection.visibility = View.VISIBLE
+        } else {
+            loadingSection.visibility = View.INVISIBLE
         }
     }
 
