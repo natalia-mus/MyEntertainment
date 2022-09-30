@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, UserProfileActivity::class.java)
                 startActivity(intent)
             }
-            R.id.menuItem_sign_out -> {
+            R.id.menuItem_signOut -> {
                 viewModel.signOut()
                 val intent = Intent(this, AuthenticationActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
