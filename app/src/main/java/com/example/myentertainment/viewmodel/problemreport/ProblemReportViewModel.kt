@@ -6,6 +6,7 @@ import com.example.myentertainment.data.ProblemReport
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
+import javax.inject.Named
 
 class ProblemReportViewModel : ViewModel() {
 
@@ -19,6 +20,7 @@ class ProblemReportViewModel : ViewModel() {
     lateinit var databaseAuth: FirebaseAuth
 
     @Inject
+    @Named("problemsReference")
     lateinit var databaseReference: DatabaseReference
 
     fun addToDatabase(report: ProblemReport) {

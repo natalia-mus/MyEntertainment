@@ -9,6 +9,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import dagger.Module
 import dagger.Provides
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -22,8 +23,16 @@ class FirebaseModule {
 
     @Singleton
     @Provides
-    fun provideFirebaseReference(): DatabaseReference {
+    @Named("usersReference")
+    fun provideUsersReference(): DatabaseReference {
         return FirebaseDatabase.getInstance().getReference("users")
+    }
+
+    @Singleton
+    @Provides
+    @Named("problemsReference")
+    fun provideProblemsReference(): DatabaseReference {
+        return FirebaseDatabase.getInstance().getReference("problems")
     }
 
     @Singleton
