@@ -30,9 +30,9 @@ class FirebaseModule {
 
     @Singleton
     @Provides
-    @Named("problemsReference")
-    fun provideProblemsReference(): DatabaseReference {
-        return FirebaseDatabase.getInstance().getReference("problems")
+    @Named("reportsReference")
+    fun provideReportsReference(): DatabaseReference {
+        return FirebaseDatabase.getInstance().getReference("reports")
     }
 
     @Singleton

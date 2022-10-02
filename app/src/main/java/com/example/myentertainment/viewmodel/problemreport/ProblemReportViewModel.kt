@@ -20,7 +20,7 @@ class ProblemReportViewModel : ViewModel() {
     lateinit var databaseAuth: FirebaseAuth
 
     @Inject
-    @Named("problemsReference")
+    @Named("reportsReference")
     lateinit var databaseReference: DatabaseReference
 
     fun addToDatabase(report: ProblemReport) {
