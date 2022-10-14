@@ -30,16 +30,33 @@
             android:textSize="18sp"
             app:layout_constraintTop_toBottomOf="@+id/problemReportActivity_summaryLabel" />
 
-        <TextView
-            android:id="@+id/problemReportActivity_problemDescriptionLabel"
+        <LinearLayout
+            android:id="@id/problemReportActivity_problemDescriptionLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="60dp"
-            android:text="@string/describe_your_problem"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/problemReportActivity_summary" />
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/problemReportActivity_summary">
+
+            <TextView
+                android:id="@+id/problemReportActivity_problemDescriptionLabel_part1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/describe_your_problem"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/problemReportActivity_problemDescriptionLabel_part2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/do_not_give_us_your_credentials"
+                android:textColor="@color/red"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
         <EditText
             android:id="@+id/problemReportActivity_problemDescription"

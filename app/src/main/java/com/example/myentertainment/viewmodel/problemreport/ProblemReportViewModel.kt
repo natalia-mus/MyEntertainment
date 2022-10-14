@@ -16,12 +16,12 @@ import javax.inject.Named
 
 class ProblemReportViewModel : ViewModel() {
 
-    private val user: String
+    private var user: String = Constants.UNKNOWN_USER
     private var itemId: String = "0"
 
     init {
         BaseApplication.baseApplicationComponent.inject(this)
-        user = databaseAuth.uid.toString()
+        setUser()
         setItemId()
     }
 
@@ -73,6 +73,14 @@ class ProblemReportViewModel : ViewModel() {
                     }
                 }
             })
-
     }
+
+    private fun setUser() {
+        user = databaseAuth.uid.toString()
+
+        if (user == Constants.NULL) {
+            user = Constants.UNKNOWN_USER
+        }
+    }
+
 }

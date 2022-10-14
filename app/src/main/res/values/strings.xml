@@ -22,6 +22,7 @@
     <string name="describe_your_problem">Describe your problem with this application. Provide us as many details as you can.</string>
     <string name="director">director</string>
     <string name="director_label">director:</string>
+    <string name="do_not_give_us_your_credentials">Do not give us your credentials or any other sensitive data.</string>
     <string name="email">e-mail:</string>
     <string name="email_address">e-mail address</string>
     <string name="enter_all_required_values">Enter all required values</string>
