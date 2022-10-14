@@ -38,7 +38,6 @@ class ProblemReportActivity : AppCompatActivity() {
         val summary = summaryEditText.text.toString()
         val description = descriptionEditText.text.toString()
 
-        val report = ProblemReport(null, null, summary, description)
-        viewModel.addToDatabase(report)
+        viewModel.addToDatabase(summary, description)
     }
 }

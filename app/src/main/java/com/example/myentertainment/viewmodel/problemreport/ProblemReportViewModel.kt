@@ -1,5 +1,6 @@
 package com.example.myentertainment.viewmodel.problemreport
 
+import android.os.Build
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
@@ -31,8 +32,8 @@ class ProblemReportViewModel : ViewModel() {
     @Named("reportsReference")
     lateinit var databaseReference: DatabaseReference
 
-    fun addToDatabase(item: ProblemReport) {
-        val report = ProblemReport(itemId, user, item.summary, item.description)
+    fun addToDatabase(summary: String, description: String) {
+        val report = ProblemReport(itemId, user, getDeviceModel(), getDeviceManufacturer(), getAndroidVersion(), summary, description)
 
         databaseReference.child(itemId).setValue(report).addOnCompleteListener() { task ->
             if (task.isSuccessful) {
@@ -41,6 +42,18 @@ class ProblemReportViewModel : ViewModel() {
                 Log.e("ProblemReportViewModel", "failure")
             }
         }
+    }
+
+    private fun getAndroidVersion(): String {
+        return Build.VERSION.SDK_INT.toString()
+    }
+
+    private fun getDeviceManufacturer(): String {
+        return Build.MANUFACTURER
+    }
+
+    private fun getDeviceModel(): String {
+        return Build.MODEL
     }
 
     private fun setItemId() {
