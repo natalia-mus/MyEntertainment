@@ -1,90 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/problemReportActivity_summaryLabel"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="40dp"
-            android:text="@string/summarize_your_problem"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/problemReportActivity_summary"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="14dp"
-            android:background="@drawable/background_outlined_text_field"
-            android:paddingHorizontal="18dp"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@+id/problemReportActivity_summaryLabel" />
-
-        <LinearLayout
-            android:id="@id/problemReportActivity_problemDescriptionLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="60dp"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/problemReportActivity_summary">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/problemReportActivity_problemDescriptionLabel_part1"
+                android:id="@+id/problemReportActivity_summaryLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/describe_your_problem"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="40dp"
+                android:text="@string/summarize_your_problem"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/problemReportActivity_problemDescriptionLabel_part2"
+            <EditText
+                android:id="@+id/problemReportActivity_summary"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/background_outlined_text_field"
+                android:paddingHorizontal="18dp"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@+id/problemReportActivity_summaryLabel" />
+
+            <LinearLayout
+                android:id="@id/problemReportActivity_problemDescriptionLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/do_not_give_us_your_credentials"
-                android:textColor="@color/red"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="60dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/problemReportActivity_summary">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/problemReportActivity_problemDescriptionLabel_part1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/describe_your_problem"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/problemReportActivity_problemDescription"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="14dp"
-            android:background="@drawable/background_outlined_text_field"
-            android:gravity="top"
-            android:paddingHorizontal="18dp"
-            android:paddingVertical="10dp"
-            android:textSize="14sp"
-            app:layout_constraintTop_toBottomOf="@+id/problemReportActivity_problemDescriptionLabel" />
+                <TextView
+                    android:id="@+id/problemReportActivity_problemDescriptionLabel_part2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/do_not_give_us_your_credentials"
+                    android:textColor="@color/red"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/problemReportActivity_reportButton"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginHorizontal="80dp"
-            android:layout_marginTop="60dp"
-            android:layout_marginBottom="30dp"
-            android:text="@string/report"
-            android:textSize="20dp"
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/problemReportActivity_problemDescription"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/background_outlined_text_field"
+                android:gravity="top"
+                android:paddingHorizontal="18dp"
+                android:paddingVertical="10dp"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@+id/problemReportActivity_problemDescriptionLabel" />
+
+            <Button
+                android:id="@+id/problemReportActivity_reportButton"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginHorizontal="80dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginBottom="30dp"
+                android:text="@string/report"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/problemReportActivity_problemDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/problemReportActivity_loadingSection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_transparent"
+        android:elevation="100dp"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/problemReportActivity_progressBar"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/problemReportActivity_problemDescription" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

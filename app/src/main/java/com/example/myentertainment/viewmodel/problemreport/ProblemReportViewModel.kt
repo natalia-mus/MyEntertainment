@@ -2,6 +2,7 @@ package com.example.myentertainment.viewmodel.problemreport
 
 import android.os.Build
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.Constants
@@ -32,13 +33,19 @@ class ProblemReportViewModel : ViewModel() {
     @Named("reportsReference")
     lateinit var databaseReference: DatabaseReference
 
+    val loading = MutableLiveData<Boolean>()
+
+
     fun addToDatabase(summary: String, description: String) {
+        loading.value = true
         val report = ProblemReport(itemId, user, getDeviceModel(), getDeviceManufacturer(), getAndroidVersion(), summary, description)
 
         databaseReference.child(itemId).setValue(report).addOnCompleteListener() { task ->
             if (task.isSuccessful) {
+                loading.value = false
                 Log.e("ProblemReportViewModel", "success")
             } else {
+                loading.value = false
                 Log.e("ProblemReportViewModel", "failure")
             }
         }
