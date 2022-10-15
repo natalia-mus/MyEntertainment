@@ -62,6 +62,7 @@
     <string name="password">password</string>
     <string name="password_too_short">Your password should be at least 6 characters long</string>
     <string name="password_updated">Password has been updated</string>
+    <string name="problem_report_has_been_sent">Problem report has been sent</string>
     <string name="rating">your rate:</string>
     <string name="release_year">release year</string>
     <string name="release_year_label">release year:</string>

@@ -34,6 +34,7 @@ class ProblemReportViewModel : ViewModel() {
     lateinit var databaseReference: DatabaseReference
 
     val loading = MutableLiveData<Boolean>()
+    val addingToDatabaseResult = MutableLiveData<Boolean>()
 
 
     fun addToDatabase(summary: String, description: String) {
@@ -43,9 +44,11 @@ class ProblemReportViewModel : ViewModel() {
         databaseReference.child(itemId).setValue(report).addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 loading.value = false
+                addingToDatabaseResult.value = true
                 Log.e("ProblemReportViewModel", "success")
             } else {
                 loading.value = false
+                addingToDatabaseResult.value = false
                 Log.e("ProblemReportViewModel", "failure")
             }
         }

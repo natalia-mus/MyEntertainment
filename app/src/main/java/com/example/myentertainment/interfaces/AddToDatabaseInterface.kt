@@ -9,7 +9,7 @@ import com.example.myentertainment.Constants
 import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.view.main.MainActivity
 
-interface AddFragmentViewModelInterface {
+interface AddToDatabaseInterface {
 
     fun initView()
     fun setObservers()
