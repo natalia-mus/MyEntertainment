@@ -1,11 +1,11 @@
 package com.example.myentertainment.viewmodel.problemreport
 
 import android.os.Build
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.Constants
+import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.data.ProblemReport
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -34,22 +34,24 @@ class ProblemReportViewModel : ViewModel() {
     lateinit var databaseReference: DatabaseReference
 
     val loading = MutableLiveData<Boolean>()
+    val validationResult = MutableLiveData<ValidationResult>()
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
 
     fun addToDatabase(summary: String, description: String) {
         loading.value = true
-        val report = ProblemReport(itemId, user, getDeviceModel(), getDeviceManufacturer(), getAndroidVersion(), summary, description)
 
-        databaseReference.child(itemId).setValue(report).addOnCompleteListener() { task ->
-            if (task.isSuccessful) {
-                loading.value = false
-                addingToDatabaseResult.value = true
-                Log.e("ProblemReportViewModel", "success")
-            } else {
-                loading.value = false
-                addingToDatabaseResult.value = false
-                Log.e("ProblemReportViewModel", "failure")
+        if (validation(summary, description)) {
+            val report = ProblemReport(itemId, user, getDeviceModel(), getDeviceManufacturer(), getAndroidVersion(), summary, description)
+
+            databaseReference.child(itemId).setValue(report).addOnCompleteListener() { task ->
+                if (task.isSuccessful) {
+                    loading.value = false
+                    addingToDatabaseResult.value = true
+                } else {
+                    loading.value = false
+                    addingToDatabaseResult.value = false
+                }
             }
         }
     }
@@ -91,6 +93,15 @@ class ProblemReportViewModel : ViewModel() {
         if (user == Constants.NULL) {
             user = Constants.UNKNOWN_USER
         }
+    }
+
+    private fun validation(summary: String, description: String): Boolean {
+        return if (summary.isEmpty() || description.isEmpty()) {
+            loading.value = false
+            validationResult.value = ValidationResult.EMPTY_VALUES
+            false
+
+        } else true
     }
 
 }

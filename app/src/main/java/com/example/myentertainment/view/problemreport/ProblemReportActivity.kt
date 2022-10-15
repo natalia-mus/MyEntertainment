@@ -1,8 +1,6 @@
 package com.example.myentertainment.view.problemreport
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -11,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
+import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.viewmodel.problemreport.ProblemReportViewModel
 
 class ProblemReportActivity : AppCompatActivity() {
@@ -43,6 +42,7 @@ class ProblemReportActivity : AppCompatActivity() {
 
     private fun setObservers() {
         viewModel.loading.observe(this) { updateView(it) }
+        viewModel.validationResult.observe(this) { handleValidationResult(it) }
         viewModel.addingToDatabaseResult.observe(this) { handleAddingToDatabaseResult(it) }
     }
 
@@ -67,6 +67,12 @@ class ProblemReportActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, getString(R.string.problem_report_has_been_sent), Toast.LENGTH_LONG).show()
         } else {
             Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun handleValidationResult(validationResult: ValidationResult) {
+        when (validationResult) {
+            ValidationResult.EMPTY_VALUES -> Toast.makeText(this, R.string.report_empty_fields, Toast.LENGTH_SHORT).show()
         }
     }
 
