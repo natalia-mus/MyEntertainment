@@ -21,7 +21,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.myentertainment.Constants
-import com.example.myentertainment.Date
+import com.example.myentertainment.data.Date
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.data.UserProfile

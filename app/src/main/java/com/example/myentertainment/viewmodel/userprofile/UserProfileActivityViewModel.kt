@@ -14,6 +14,7 @@ import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import javax.inject.Inject
+import javax.inject.Named
 
 class UserProfileActivityViewModel : ViewModel() {
 
@@ -25,6 +26,7 @@ class UserProfileActivityViewModel : ViewModel() {
     lateinit var databaseAuth: FirebaseAuth
 
     @Inject
+    @Named("usersReference")
     lateinit var databaseReference: DatabaseReference
 
     @Inject

@@ -1,4 +1,4 @@
-package com.example.myentertainment
+package com.example.myentertainment.data
 
 import java.util.*
 

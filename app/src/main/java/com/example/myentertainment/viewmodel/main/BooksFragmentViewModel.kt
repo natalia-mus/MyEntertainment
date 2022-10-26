@@ -9,6 +9,7 @@ import com.example.myentertainment.data.Book
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
+import javax.inject.Named
 
 class BooksFragmentViewModel : ViewModel() {
 
@@ -20,6 +21,7 @@ class BooksFragmentViewModel : ViewModel() {
     lateinit var databaseAuth: FirebaseAuth
 
     @Inject
+    @Named("usersReference")
     lateinit var databaseReference: DatabaseReference
 
     private val user = databaseAuth.uid.toString()
