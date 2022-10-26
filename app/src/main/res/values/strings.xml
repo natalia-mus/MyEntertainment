@@ -1,4 +1,5 @@
 <resources>
+    <string name="about">About</string>
     <string name="app_name">MyEntertainment</string>
     <string name="artist">artist</string>
     <string name="authentication_failed">"Authentication failed"</string>

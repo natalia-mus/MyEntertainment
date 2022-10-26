@@ -15,4 +15,8 @@
         android:title="@string/sign_out"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/menuItem_about"
+        android:title="@string/about" />
+
 </menu>

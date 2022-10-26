@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
+import com.example.myentertainment.view.About
 import com.example.myentertainment.view.add.AddActivity
 import com.example.myentertainment.view.authentication.AuthenticationActivity
 import com.example.myentertainment.view.userprofile.UserProfileActivity
@@ -55,6 +56,10 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, AuthenticationActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+            R.id.menuItem_about -> {
+                val intent = Intent(this, About::class.java)
                 startActivity(intent)
             }
         }
