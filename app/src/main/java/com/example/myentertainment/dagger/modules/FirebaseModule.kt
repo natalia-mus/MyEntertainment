@@ -23,6 +23,13 @@ class FirebaseModule {
 
     @Singleton
     @Provides
+    @Named("rawReference")
+    fun provideRawReference(): DatabaseReference {
+        return FirebaseDatabase.getInstance().reference
+    }
+
+    @Singleton
+    @Provides
     @Named("usersReference")
     fun provideUsersReference(): DatabaseReference {
         return FirebaseDatabase.getInstance().getReference("users")
