@@ -9,7 +9,7 @@ import com.example.myentertainment.Constants
 import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.view.main.MainActivity
 
-interface AddFragmentViewModelInterface {
+interface AddToDatabaseInterface {
 
     fun initView()
     fun setObservers()
@@ -47,7 +47,7 @@ interface AddFragmentViewModelInterface {
         if (loading) {
             loadingSection.visibility = View.VISIBLE
         } else {
-            loadingSection.visibility = View.INVISIBLE
+            loadingSection.visibility = View.GONE
         }
     }
 

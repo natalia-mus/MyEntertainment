@@ -13,4 +13,6 @@ object Constants {
     const val REQUEST_CODE_CAPTURE_GALLERY_IMAGE = 103
 
     const val INTENT_TYPE_IMAGE = "image/*"
+
+    const val UNKNOWN_USER = "UNKNOWN_USER"
 }

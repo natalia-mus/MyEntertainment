@@ -8,6 +8,7 @@ import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
+import javax.inject.Named
 
 class ChangePasswordViewModel : ViewModel() {
 
@@ -19,6 +20,7 @@ class ChangePasswordViewModel : ViewModel() {
     lateinit var databaseAuth: FirebaseAuth
 
     @Inject
+    @Named("usersReference")
     lateinit var databaseReference: DatabaseReference
 
     val validationResult = MutableLiveData<ValidationResult>()

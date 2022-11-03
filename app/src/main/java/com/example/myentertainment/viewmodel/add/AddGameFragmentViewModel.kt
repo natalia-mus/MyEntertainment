@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import javax.inject.Inject
+import javax.inject.Named
 
 class AddGameFragmentViewModel : ViewModel() {
 
@@ -31,6 +32,7 @@ class AddGameFragmentViewModel : ViewModel() {
     lateinit var databaseAuth: FirebaseAuth
 
     @Inject
+    @Named("usersReference")
     lateinit var databaseReference: DatabaseReference
 
     val loading = MutableLiveData<Boolean>()

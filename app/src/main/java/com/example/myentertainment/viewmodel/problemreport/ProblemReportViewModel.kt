@@ -1,12 +1,12 @@
-package com.example.myentertainment.viewmodel.add
+package com.example.myentertainment.viewmodel.problemreport
 
+import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.Constants
-import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.`object`.ValidationResult
-import com.example.myentertainment.data.Book
+import com.example.myentertainment.data.ProblemReport
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -15,16 +15,14 @@ import com.google.firebase.database.ValueEventListener
 import javax.inject.Inject
 import javax.inject.Named
 
-class AddBookFragmentViewModel : ViewModel() {
+class ProblemReportViewModel : ViewModel() {
 
-    private val user: String
-    private val mainPath: DatabaseReference
+    private var user: String = Constants.UNKNOWN_USER
     private var itemId: String = "0"
 
     init {
         BaseApplication.baseApplicationComponent.inject(this)
-        user = databaseAuth.uid.toString()
-        mainPath = databaseReference.child(user).child(CategoryObject.BOOKS)
+        setUser()
         setItemId()
     }
 
@@ -32,52 +30,21 @@ class AddBookFragmentViewModel : ViewModel() {
     lateinit var databaseAuth: FirebaseAuth
 
     @Inject
-    @Named("usersReference")
+    @Named("reportsReference")
     lateinit var databaseReference: DatabaseReference
 
     val loading = MutableLiveData<Boolean>()
-    val book = MutableLiveData<Book>()
     val validationResult = MutableLiveData<ValidationResult>()
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
 
-    fun addToDatabase(item: Book) {
+    fun addToDatabase(summary: String, description: String) {
         loading.value = true
 
-        val title = item.title
-        val author = item.author
-        val releaseYear = item.releaseYear
-        val genre = item.genre
-        val rating = item.rating
+        if (validation(summary, description)) {
+            val report = ProblemReport(itemId, user, getDeviceModel(), getDeviceManufacturer(), getAndroidVersion(), summary, description)
 
-        val book = Book(itemId, title, author, releaseYear, genre, rating)
-
-        if (validation(book)) {
-            mainPath.child(itemId).setValue(book)
-                .addOnCompleteListener() { task ->
-                    if (task.isSuccessful) {
-                        loading.value = false
-                        addingToDatabaseResult.value = true
-                    } else {
-                        loading.value = false
-                        addingToDatabaseResult.value = false
-                    }
-                }
-        }
-    }
-
-    fun getBook(id: String) {
-        databaseReference.child(user).child(CategoryObject.BOOKS).get().addOnSuccessListener {
-            book.value = it.child(id).getValue(Book::class.java)
-        }
-    }
-
-    fun updateItem(item: Book) {
-        loading.value = true
-
-        if (validation(item)) {
-            val book = hashMapOf<String, Any>(item.id.toString() to item)
-            mainPath.updateChildren(book).addOnCompleteListener() { task ->
+            databaseReference.child(itemId).setValue(report).addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     loading.value = false
                     addingToDatabaseResult.value = true
@@ -89,8 +56,20 @@ class AddBookFragmentViewModel : ViewModel() {
         }
     }
 
+    private fun getAndroidVersion(): String {
+        return Build.VERSION.SDK_INT.toString()
+    }
+
+    private fun getDeviceManufacturer(): String {
+        return Build.MANUFACTURER
+    }
+
+    private fun getDeviceModel(): String {
+        return Build.MODEL
+    }
+
     private fun setItemId() {
-        mainPath
+        databaseReference
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {}
 
@@ -108,8 +87,16 @@ class AddBookFragmentViewModel : ViewModel() {
             })
     }
 
-    private fun validation(book: Book): Boolean {
-        return if (book.title.isNullOrEmpty()) {
+    private fun setUser() {
+        user = databaseAuth.uid.toString()
+
+        if (user == Constants.NULL) {
+            user = Constants.UNKNOWN_USER
+        }
+    }
+
+    private fun validation(summary: String, description: String): Boolean {
+        return if (summary.isEmpty() || description.isEmpty()) {
             loading.value = false
             validationResult.value = ValidationResult.EMPTY_VALUES
             false

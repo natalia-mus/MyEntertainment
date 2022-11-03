@@ -15,10 +15,10 @@ import com.example.myentertainment.OpeningContext
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.data.Book
-import com.example.myentertainment.interfaces.AddFragmentViewModelInterface
+import com.example.myentertainment.interfaces.AddToDatabaseInterface
 import com.example.myentertainment.viewmodel.add.AddBookFragmentViewModel
 
-class AddBookFragment : Fragment(), AddFragmentViewModelInterface {
+class AddBookFragment : Fragment(), AddToDatabaseInterface {
 
     private lateinit var openingContext: OpeningContext
     private lateinit var fragmentView: View

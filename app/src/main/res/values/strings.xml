@@ -19,8 +19,10 @@
     <string name="country">country:</string>
     <string name="create_one"> <u>Create one</u> </string>
     <string name="current_password">current password</string>
+    <string name="describe_your_problem">Describe your problem with this application. Provide us as many details as you can.</string>
     <string name="director">director</string>
     <string name="director_label">director:</string>
+    <string name="do_not_give_us_your_credentials">Do not give us your credentials or any other sensitive data.</string>
     <string name="email">e-mail:</string>
     <string name="email_address">e-mail address</string>
     <string name="enter_all_required_values">Enter all required values</string>
@@ -60,12 +62,16 @@
     <string name="password">password</string>
     <string name="password_too_short">Your password should be at least 6 characters long</string>
     <string name="password_updated">Password has been updated</string>
+    <string name="problem_report_has_been_sent">Problem report has been sent</string>
     <string name="rating">your rate:</string>
     <string name="release_year">release year</string>
     <string name="release_year_label">release year:</string>
     <string name="remove_birthdate_message">Are you sure you want to remove your birth date?</string>
     <string name="remove_profile_picture">Remove profile picture</string>
     <string name="remove_profile_picture_message">Are you sure you want to remove your profile picture?</string>
+    <string name="report">Report</string>
+    <string name="report_a_problem">Report a problem</string>
+    <string name="report_empty_fields">Please, complete both fields</string>
     <string name="save">save</string>
     <string name="set_your_birth_date">Set your birth date:</string>
     <string name="sign_in">sign in</string>
@@ -74,6 +80,7 @@
     <string name="sign_up">sign up</string>
     <string name="sign_up_message">Create your account</string>
     <string name="something_went_wrong">Something went wrong. Try again</string>
+    <string name="summarize_your_problem">Summarize your problem briefly</string>
     <string name="unknown">unknown</string>
     <string name="user_can_not_be_created">Unfortunately, user can not be created</string>
     <string name="user_profile">user profile</string>
