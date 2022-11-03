@@ -1,5 +1,6 @@
 package com.example.myentertainment
 
+import com.example.myentertainment.data.Date
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
