@@ -25,14 +25,14 @@ class FirebaseModule {
     @Provides
     @Named("usersReference")
     fun provideUsersReference(): DatabaseReference {
-        return FirebaseDatabase.getInstance().getReference("users")
+        return FirebaseDatabase.getInstance().getReference("unlimited").child("users")
     }
 
     @Singleton
     @Provides
     @Named("reportsReference")
     fun provideReportsReference(): DatabaseReference {
-        return FirebaseDatabase.getInstance().getReference("reports")
+        return FirebaseDatabase.getInstance().getReference("restricted").child("reports")
     }
 
     @Singleton
