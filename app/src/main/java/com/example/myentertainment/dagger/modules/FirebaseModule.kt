@@ -15,6 +15,11 @@ import javax.inject.Singleton
 @Module
 class FirebaseModule {
 
+    companion object {
+        private const val UNLIMITED = "unlimited"
+        private const val RESTRICTED = "restricted"
+    }
+
     @Singleton
     @Provides
     fun provideFirebaseAuth(): FirebaseAuth {
@@ -32,14 +37,21 @@ class FirebaseModule {
     @Provides
     @Named("usersReference")
     fun provideUsersReference(): DatabaseReference {
-        return FirebaseDatabase.getInstance().getReference("unlimited").child("users")
+        return FirebaseDatabase.getInstance().getReference(UNLIMITED).child("users")
     }
 
     @Singleton
     @Provides
     @Named("reportsReference")
     fun provideReportsReference(): DatabaseReference {
-        return FirebaseDatabase.getInstance().getReference("restricted").child("reports")
+        return FirebaseDatabase.getInstance().getReference(RESTRICTED).child("reports")
+    }
+
+    @Singleton
+    @Provides
+    @Named("aboutReference")
+    fun provideAboutReference(): DatabaseReference {
+        return FirebaseDatabase.getInstance().getReference(UNLIMITED).child("about")
     }
 
     @Singleton
