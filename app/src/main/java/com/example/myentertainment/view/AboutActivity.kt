@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
+import com.example.myentertainment.data.About
 import com.example.myentertainment.viewmodel.AboutViewModel
 
 class AboutActivity : AppCompatActivity() {
@@ -29,7 +30,7 @@ class AboutActivity : AppCompatActivity() {
 
     private fun setObservers() {
         viewModel.fetchingDataStatus.observe(this) { handleFetchingDataStatus(it) }
-        viewModel.description.observe(this) { updateView(it) }
+        viewModel.about.observe(this) { updateView(it) }
     }
 
     private fun handleFetchingDataStatus(status: Boolean) {
@@ -46,7 +47,7 @@ class AboutActivity : AppCompatActivity() {
         loadingSection = findViewById(R.id.about_loadingSection)
     }
 
-    private fun updateView(description: String) {
-        descriptionTextView.text = description
+    private fun updateView(about: About) {
+        descriptionTextView.text = about.description
     }
 }
