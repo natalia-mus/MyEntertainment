@@ -464,7 +464,7 @@ class UserProfileActivity : AppCompatActivity() {
             switchViewMode(false)
 
         } else {
-            onBackPressed()
+            finish()
             Toast.makeText(applicationContext, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
         }
     }

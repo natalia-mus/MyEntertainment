@@ -17,17 +17,16 @@ class AboutViewModel : ViewModel() {
     @Named("aboutReference")
     lateinit var databaseReference: DatabaseReference
 
-    val loading = MutableLiveData<Boolean>()
+    val fetchingDataStatus = MutableLiveData<Boolean>()
     val description = MutableLiveData<String>()
 
     fun getDescription() {
-        loading.value = true
         databaseReference.get().addOnCompleteListener() { task ->
             if (task.isSuccessful && task.result != null) {
-                loading.value = false
+                fetchingDataStatus.value = true
                 description.value = task.result!!.value.toString()
             } else {
-                loading.value = false
+                fetchingDataStatus.value = false
             }
         }
     }

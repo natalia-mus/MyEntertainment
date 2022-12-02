@@ -35,7 +35,7 @@
             android:label="@string/report_a_problem"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.About"
+            android:name=".view.AboutActivity"
             android:screenOrientation="portrait" />
     </application>
 
