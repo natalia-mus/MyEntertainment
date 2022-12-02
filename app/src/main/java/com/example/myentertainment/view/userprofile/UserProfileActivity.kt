@@ -68,8 +68,8 @@ class UserProfileActivity : AppCompatActivity() {
         yrs = resources.getString(R.string.yrs)
         viewModel = ViewModelProvider(this).get(UserProfileActivityViewModel::class.java)
         setObservers()
-        viewModel.getUserProfileData()
         initView()
+        viewModel.getUserProfileData()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -1,5 +1,6 @@
 package com.example.myentertainment.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.google.firebase.database.DatabaseReference
@@ -16,12 +17,17 @@ class AboutViewModel : ViewModel() {
     @Named("aboutReference")
     lateinit var databaseReference: DatabaseReference
 
+    val loading = MutableLiveData<Boolean>()
+    val description = MutableLiveData<String>()
+
     fun getDescription() {
+        loading.value = true
         databaseReference.get().addOnCompleteListener() { task ->
-            if (task.isSuccessful) {
-                // todo
+            if (task.isSuccessful && task.result != null) {
+                loading.value = false
+                description.value = task.result!!.value.toString()
             } else {
-                // todo
+                loading.value = false
             }
         }
     }
