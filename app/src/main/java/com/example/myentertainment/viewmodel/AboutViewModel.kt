@@ -21,7 +21,7 @@ class AboutViewModel : ViewModel() {
     val fetchingDataStatus = MutableLiveData<Boolean>()
     val about = MutableLiveData<About>()
 
-    fun getDescription() {
+    fun getData() {
         databaseReference.get().addOnCompleteListener() { task ->
             if (task.isSuccessful && task.result != null) {
                 fetchingDataStatus.value = true

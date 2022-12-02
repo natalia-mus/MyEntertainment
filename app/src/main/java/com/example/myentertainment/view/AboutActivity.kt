@@ -1,5 +1,7 @@
 package com.example.myentertainment.view
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -16,6 +18,7 @@ class AboutActivity : AppCompatActivity() {
     private lateinit var viewModel: AboutViewModel
 
     private lateinit var descriptionTextView: TextView
+    private lateinit var url: TextView
     private lateinit var loadingSection: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +28,7 @@ class AboutActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(AboutViewModel::class.java)
         initView()
         setObservers()
-        viewModel.getDescription()
+        viewModel.getData()
     }
 
     private fun setObservers() {
@@ -44,10 +47,23 @@ class AboutActivity : AppCompatActivity() {
 
     private fun initView() {
         descriptionTextView = findViewById(R.id.about_description)
+        url = findViewById(R.id.about_url)
         loadingSection = findViewById(R.id.about_loadingSection)
+
+        url.setOnClickListener() {
+            openUrl()
+        }
     }
 
     private fun updateView(about: About) {
         descriptionTextView.text = about.description
     }
+
+    private fun openUrl() {
+        val url = viewModel.about.value?.url
+        val uri = Uri.parse(url)
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        startActivity(intent)
+    }
+
 }

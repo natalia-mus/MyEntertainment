@@ -30,9 +30,22 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="30dp"
         android:gravity="center_horizontal"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vel mi aliquam, egestas mi ut, hendrerit nibh. Mauris nulla augue, sollicitudin ut laoreet vel, pellentesque in neque. Donec efficitur scelerisque orci. Fusce nulla orci, efficitur ultricies lobortis ac, vulputate in lacus. Proin malesuada felis mollis feugiat posuere. Etiam tristique odio id gravida lacinia." />
+
+    <TextView
+        android:id="@+id/about_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="@string/github"
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/about_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
