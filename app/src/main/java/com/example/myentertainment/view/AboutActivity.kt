@@ -4,7 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,9 +19,9 @@ class AboutActivity : AppCompatActivity() {
     private lateinit var viewModel: AboutViewModel
 
     private lateinit var descriptionTextView: TextView
-    private lateinit var url: TextView
+    private lateinit var historyTextView: TextView
+    private lateinit var url: Button
     private lateinit var loadingSection: ConstraintLayout
-    private lateinit var logo: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,9 +49,9 @@ class AboutActivity : AppCompatActivity() {
 
     private fun initView() {
         descriptionTextView = findViewById(R.id.about_description)
+        historyTextView = findViewById(R.id.about_history)
         url = findViewById(R.id.about_url)
         loadingSection = findViewById(R.id.about_loadingSection)
-        logo = findViewById(R.id.about_logo)
 
         url.setOnClickListener() {
             openUrl()
@@ -60,6 +60,7 @@ class AboutActivity : AppCompatActivity() {
 
     private fun updateView(about: About) {
         descriptionTextView.text = about.description
+        historyTextView.text = about.history
     }
 
     private fun openUrl() {
