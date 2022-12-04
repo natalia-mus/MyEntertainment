@@ -1,4 +1,5 @@
 <resources>
+    <string name="about">About</string>
     <string name="app_name">MyEntertainment</string>
     <string name="artist">artist</string>
     <string name="authentication_failed">"Authentication failed"</string>
@@ -37,6 +38,7 @@
     <string name="games">Games</string>
     <string name="genre">genre</string>
     <string name="genre_label">genre:</string>
+    <string name="github">Go to GitHub repository</string>
     <string name="incompatible_passwords">Passwords are incompatible</string>
     <string name="movie_add">add movie</string>
     <string name="movie_added">Movie added</string>

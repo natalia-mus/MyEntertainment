@@ -16,6 +16,10 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/menuItem_about"
+        android:title="@string/about" />
+
+    <item
         android:id="@+id/menuItem_reportAProblem"
         android:title="@string/report_a_problem" />
 

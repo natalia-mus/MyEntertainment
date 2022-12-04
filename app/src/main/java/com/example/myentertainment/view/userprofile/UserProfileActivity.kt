@@ -68,8 +68,8 @@ class UserProfileActivity : AppCompatActivity() {
         yrs = resources.getString(R.string.yrs)
         viewModel = ViewModelProvider(this).get(UserProfileActivityViewModel::class.java)
         setObservers()
-        viewModel.getUserProfileData()
         initView()
+        viewModel.getUserProfileData()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -464,7 +464,7 @@ class UserProfileActivity : AppCompatActivity() {
             switchViewMode(false)
 
         } else {
-            onBackPressed()
+            finish()
             Toast.makeText(applicationContext, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
         }
     }
