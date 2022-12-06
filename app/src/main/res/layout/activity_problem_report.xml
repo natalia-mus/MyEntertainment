@@ -30,7 +30,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="14dp"
                 android:background="@drawable/background_outlined_text_field"
-                android:paddingHorizontal="18dp"
+                android:paddingHorizontal="12dp"
                 android:textSize="18sp"
                 app:layout_constraintTop_toBottomOf="@+id/problemReportActivity_summaryLabel" />
 
@@ -70,7 +70,7 @@
                 android:layout_marginTop="14dp"
                 android:background="@drawable/background_outlined_text_field"
                 android:gravity="top"
-                android:paddingHorizontal="18dp"
+                android:paddingHorizontal="12dp"
                 android:paddingVertical="10dp"
                 android:textSize="14sp"
                 app:layout_constraintTop_toBottomOf="@+id/problemReportActivity_problemDescriptionLabel" />
