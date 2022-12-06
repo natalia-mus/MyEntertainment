@@ -66,6 +66,7 @@
     <string name="password_updated">Password has been updated</string>
     <string name="problem_report_has_been_sent">Problem report has been sent</string>
     <string name="rating">your rate:</string>
+    <string name="real_name">real name</string>
     <string name="release_year">release year</string>
     <string name="release_year_label">release year:</string>
     <string name="remove_birthdate_message">Are you sure you want to remove your birth date?</string>
