@@ -7,5 +7,6 @@ data class ProblemReport(
     val deviceManufacturer: String?,
     val androidVersion: String?,
     val summary: String?,
-    val description: String?
+    val description: String?,
+    val date: Date?
 )

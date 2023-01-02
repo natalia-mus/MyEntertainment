@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.Constants
 import com.example.myentertainment.`object`.ValidationResult
+import com.example.myentertainment.data.Date
 import com.example.myentertainment.data.ProblemReport
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -42,7 +43,7 @@ class ProblemReportViewModel : ViewModel() {
         loading.value = true
 
         if (validation(summary, description)) {
-            val report = ProblemReport(itemId, user, getDeviceModel(), getDeviceManufacturer(), getAndroidVersion(), summary, description)
+            val report = ProblemReport(itemId, user, getDeviceModel(), getDeviceManufacturer(), getAndroidVersion(), summary, description, getDate())
 
             databaseReference.child(itemId).setValue(report).addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
@@ -66,6 +67,13 @@ class ProblemReportViewModel : ViewModel() {
 
     private fun getDeviceModel(): String {
         return Build.MODEL
+    }
+
+    private fun getDate(): Date {
+        val currentDateTime = java.util.Date()
+        val date = Date(currentDateTime)
+        date.setTime(currentDateTime)
+        return date
     }
 
     private fun setItemId() {

@@ -1,8 +1,63 @@
 package com.example.myentertainment.data
 
+import android.annotation.SuppressLint
+import java.text.SimpleDateFormat
 import java.util.*
 
-class Date(var year: Int? = null, var month: Int? = null, var day: Int? = null) {
+class Date {
+
+    var year: Int? = null
+    var month: Int? = null
+    var day: Int? = null
+
+    var hours: Int? = null
+    var minutes: Int? = null
+    var seconds: Int? = null
+
+
+    constructor(year: Int? = null, month: Int? = null, day: Int? = null) {
+        this.year = year
+        this.month = month
+        this.day = day
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    constructor(date: java.util.Date) {
+        var simpleDateFormat = SimpleDateFormat("yyyy")
+        val year = simpleDateFormat.format(date)
+
+        simpleDateFormat = SimpleDateFormat("M")
+        val month = simpleDateFormat.format(date)
+
+        simpleDateFormat = SimpleDateFormat("dd")
+        val day = simpleDateFormat.format(date)
+
+        this.year = year.toInt()
+        this.month = month.toInt() - 1
+        this.day = day.toInt()
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun setTime(time: java.util.Date) {
+        var simpleDateFormat = SimpleDateFormat("H")
+        val hours = simpleDateFormat.format(time)
+
+        simpleDateFormat = SimpleDateFormat("m")
+        val minutes = simpleDateFormat.format(time)
+
+        simpleDateFormat = SimpleDateFormat("s")
+        val seconds = simpleDateFormat.format(time)
+
+        this.hours = hours.toInt()
+        this.minutes = minutes.toInt()
+        this.seconds = seconds.toInt()
+    }
+
+    fun setTime(hours: Int, minutes: Int, seconds: Int) {
+        this.hours = hours
+        this.minutes = minutes
+        this.seconds = seconds
+    }
 
     fun getMonthFullName(): String? {
         return when (month) {
