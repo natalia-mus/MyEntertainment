@@ -1,6 +1,7 @@
 package com.example.myentertainment.data
 
 import android.annotation.SuppressLint
+import com.google.firebase.database.Exclude
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -14,6 +15,10 @@ class Date {
     var minutes: Int? = null
     var seconds: Int? = null
 
+
+    // non-argument constructor required by Firebase
+    @Suppress("unused")
+    constructor() {}
 
     constructor(year: Int? = null, month: Int? = null, day: Int? = null) {
         this.year = year
@@ -59,6 +64,7 @@ class Date {
         this.seconds = seconds
     }
 
+    @Exclude
     fun getMonthFullName(): String? {
         return when (month) {
             0 -> "January"
@@ -77,6 +83,7 @@ class Date {
         }
     }
 
+    @Exclude
     fun getMonthShortName(): String? {
         return when (month) {
             0 -> "Jan"
@@ -95,6 +102,7 @@ class Date {
         }
     }
 
+    @Exclude
     fun getUserAge(): Int? {
         if (year != null && month != null && day != null) {
             val birthdayPast: Boolean
