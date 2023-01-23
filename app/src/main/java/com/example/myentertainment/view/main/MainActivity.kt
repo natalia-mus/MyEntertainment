@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
+import com.example.myentertainment.view.AboutActivity
 import com.example.myentertainment.view.add.AddActivity
 import com.example.myentertainment.view.authentication.AuthenticationActivity
 import com.example.myentertainment.view.problemreport.ProblemReportActivity
@@ -60,6 +61,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.menuItem_reportAProblem -> {
                 val intent = Intent(this, ProblemReportActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.menuItem_about -> {
+                val intent = Intent(this, AboutActivity::class.java)
                 startActivity(intent)
             }
         }

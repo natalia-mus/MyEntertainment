@@ -1,4 +1,5 @@
 <resources>
+    <string name="about">About</string>
     <string name="app_name">MyEntertainment</string>
     <string name="artist">artist</string>
     <string name="authentication_failed">"Authentication failed"</string>
@@ -37,6 +38,7 @@
     <string name="games">Games</string>
     <string name="genre">genre</string>
     <string name="genre_label">genre:</string>
+    <string name="github">Go to GitHub repository</string>
     <string name="incompatible_passwords">Passwords are incompatible</string>
     <string name="movie_add">add movie</string>
     <string name="movie_added">Movie added</string>
@@ -64,6 +66,7 @@
     <string name="password_updated">Password has been updated</string>
     <string name="problem_report_has_been_sent">Problem report has been sent</string>
     <string name="rating">your rate:</string>
+    <string name="real_name">real name</string>
     <string name="release_year">release year</string>
     <string name="release_year_label">release year:</string>
     <string name="remove_birthdate_message">Are you sure you want to remove your birth date?</string>

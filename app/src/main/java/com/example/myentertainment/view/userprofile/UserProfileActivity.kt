@@ -68,8 +68,8 @@ class UserProfileActivity : AppCompatActivity() {
         yrs = resources.getString(R.string.yrs)
         viewModel = ViewModelProvider(this).get(UserProfileActivityViewModel::class.java)
         setObservers()
-        viewModel.getUserProfileData()
         initView()
+        viewModel.getUserProfileData()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -304,6 +304,7 @@ class UserProfileActivity : AppCompatActivity() {
 
             datePickerDialog.dismiss()
             removeBirthDate.visibility = View.VISIBLE
+            age.visibility = View.GONE
             changesToSave = true
         }
 
@@ -352,7 +353,6 @@ class UserProfileActivity : AppCompatActivity() {
             city.visibility = View.VISIBLE
             country.visibility = View.VISIBLE
             birthDate.visibility = View.VISIBLE
-            age.visibility = View.VISIBLE
             removeBirthDate.visibility = View.GONE
             usernameEditable.visibility = View.GONE
             realNameEditable.visibility = View.GONE
@@ -363,8 +363,7 @@ class UserProfileActivity : AppCompatActivity() {
             editButton.visibility = View.VISIBLE
 
             birthDate.isClickable = false
-            prepareBirthDate(currentBirthDate)
-            newBirthDate = currentBirthDate
+            prepareBirthDate(newBirthDate)
             removeBirthDate.visibility = View.GONE
 
             usernameEditable.setText(if (username.text != "-") username.text else "")
@@ -384,6 +383,7 @@ class UserProfileActivity : AppCompatActivity() {
             val userAge = date.getUserAge()!!
             birthDate.text = "$monthName $day, $year"
             age.text = "($userAge $yrs)"
+            age.visibility = View.VISIBLE
         } else {
             birthDate.text = resources.getString(R.string.unknown)
             age.visibility = View.GONE
@@ -460,11 +460,12 @@ class UserProfileActivity : AppCompatActivity() {
             city.text = if (userProfileData.city?.isNotEmpty() == true) userProfileData.city else getString(R.string.none)
             country.text = if (userProfileData.country?.isNotEmpty() == true) userProfileData.country else getString(R.string.none)
             email.text = userProfileData.email
+            newBirthDate = userProfileData.birthDate
 
             switchViewMode(false)
 
         } else {
-            onBackPressed()
+            finish()
             Toast.makeText(applicationContext, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
         }
     }
