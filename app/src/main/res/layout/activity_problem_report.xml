@@ -75,19 +75,44 @@
                 android:textSize="14sp"
                 app:layout_constraintTop_toBottomOf="@+id/problemReportActivity_problemDescriptionLabel" />
 
+            <TextView
+                android:id="@+id/problemReportActivity_screenshotsLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="40dp"
+                android:text="@string/screenshots"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/problemReportActivity_problemDescription" />
+
+            <ImageView
+                android:id="@+id/problemReportActivity_screenshot"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="40dp"
+                android:background="@drawable/background_outlined_text_field"
+                android:padding="8dp"
+                android:src="@drawable/ic_add_photo"
+                app:layout_constraintBottom_toTopOf="@id/problemReportActivity_reportButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/problemReportActivity_screenshotsLabel"
+                app:tint="@color/blue_light" />
+
             <Button
                 android:id="@+id/problemReportActivity_reportButton"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_marginHorizontal="80dp"
-                android:layout_marginTop="60dp"
                 android:layout_marginBottom="30dp"
                 android:text="@string/report"
                 android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/problemReportActivity_problemDescription" />
+                app:layout_constraintTop_toBottomOf="@id/problemReportActivity_screenshot" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

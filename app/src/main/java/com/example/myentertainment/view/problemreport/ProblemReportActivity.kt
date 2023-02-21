@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -19,6 +20,7 @@ class ProblemReportActivity : AppCompatActivity() {
     private lateinit var summaryEditText: EditText
     private lateinit var descriptionEditText: EditText
     private lateinit var reportButton: Button
+    private lateinit var screenshot: ImageView
     private lateinit var loadingSection: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,10 +35,15 @@ class ProblemReportActivity : AppCompatActivity() {
         summaryEditText = findViewById(R.id.problemReportActivity_summary)
         descriptionEditText = findViewById(R.id.problemReportActivity_problemDescription)
         reportButton = findViewById(R.id.problemReportActivity_reportButton)
+        screenshot = findViewById(R.id.problemReportActivity_screenshot)
         loadingSection = findViewById(R.id.problemReportActivity_loadingSection)
 
         reportButton.setOnClickListener() {
             sendReport()
+        }
+
+        screenshot.setOnClickListener() {
+            addScreenshot()
         }
     }
 
@@ -74,6 +81,10 @@ class ProblemReportActivity : AppCompatActivity() {
         when (validationResult) {
             ValidationResult.EMPTY_VALUES -> Toast.makeText(this, R.string.report_empty_fields, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun addScreenshot() {
+        // TODO
     }
 
 }
