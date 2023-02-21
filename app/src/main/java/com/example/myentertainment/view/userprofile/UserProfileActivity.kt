@@ -422,18 +422,11 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun tryToOpenCamera() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             openCamera()
+
         } else {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.CAMERA),
-                Constants.REQUEST_CODE_PERMISSION_CAMERA
-            )
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), Constants.REQUEST_CODE_PERMISSION_CAMERA)
         }
     }
 

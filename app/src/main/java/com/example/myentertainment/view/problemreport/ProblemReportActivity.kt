@@ -1,5 +1,7 @@
 package com.example.myentertainment.view.problemreport
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -9,6 +11,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.viewmodel.problemreport.ProblemReportViewModel
@@ -20,8 +24,12 @@ class ProblemReportActivity : AppCompatActivity() {
     private lateinit var summaryEditText: EditText
     private lateinit var descriptionEditText: EditText
     private lateinit var reportButton: Button
-    private lateinit var screenshot: ImageView
+    private lateinit var screenshotFirst: ImageView
+    private lateinit var screenshotSecond: ImageView
+    private lateinit var screenshotThird: ImageView
     private lateinit var loadingSection: ConstraintLayout
+
+    private var screenshots = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,19 +39,44 @@ class ProblemReportActivity : AppCompatActivity() {
         initView()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE -> {
+                    if (data != null && data.data != null) {
+                        val file = data.data!!
+                        addScreenshot(file)
+                    }
+                }
+            }
+        }
+    }
+
     private fun initView() {
         summaryEditText = findViewById(R.id.problemReportActivity_summary)
         descriptionEditText = findViewById(R.id.problemReportActivity_problemDescription)
         reportButton = findViewById(R.id.problemReportActivity_reportButton)
-        screenshot = findViewById(R.id.problemReportActivity_screenshot)
+        screenshotFirst = findViewById(R.id.problemReportActivity_screenshot_1)
+        screenshotSecond = findViewById(R.id.problemReportActivity_screenshot_2)
+        screenshotThird = findViewById(R.id.problemReportActivity_screenshot_3)
         loadingSection = findViewById(R.id.problemReportActivity_loadingSection)
 
         reportButton.setOnClickListener() {
             sendReport()
         }
 
-        screenshot.setOnClickListener() {
-            addScreenshot()
+        screenshotFirst.setOnClickListener() {
+            openGallery()
+        }
+
+        screenshotSecond.setOnClickListener() {
+            openGallery()
+        }
+
+        screenshotThird.setOnClickListener() {
+            openGallery()
         }
     }
 
@@ -83,8 +116,42 @@ class ProblemReportActivity : AppCompatActivity() {
         }
     }
 
-    private fun addScreenshot() {
-        // TODO
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = Constants.INTENT_TYPE_IMAGE
+        startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE)
+    }
+
+    private fun addScreenshot(file: Uri) {
+        if (screenshots != 0) {
+            var screenshot: ImageView? = null
+            var nextScreenshot: ImageView? = null
+
+            when (screenshots) {
+                3 -> {
+                    screenshot = screenshotFirst
+                    nextScreenshot = screenshotSecond
+                }
+                2 -> {
+                    screenshot = screenshotSecond
+                    nextScreenshot = screenshotThird
+                }
+                1 -> {
+                    screenshot = screenshotThird
+                }
+            }
+
+            screenshots--
+
+            if (screenshot != null) {
+                screenshot.imageTintMode = null
+                Glide.with(this)
+                    .load(file)
+                    .into(screenshot)
+            }
+
+            nextScreenshot?.visibility = View.VISIBLE
+        }
     }
 
 }
