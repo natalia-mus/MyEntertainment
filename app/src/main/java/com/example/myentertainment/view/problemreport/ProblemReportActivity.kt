@@ -127,8 +127,10 @@ class ProblemReportActivity : AppCompatActivity() {
             var screenshot: ImageView? = null
             var nextScreenshot: ImageView? = null
 
-            when (screenshots) {
-                3 -> {
+            val screenshotId = 4 - screenshots
+
+            when (screenshotId) {
+                1 -> {
                     screenshot = screenshotFirst
                     nextScreenshot = screenshotSecond
                 }
@@ -136,21 +138,96 @@ class ProblemReportActivity : AppCompatActivity() {
                     screenshot = screenshotSecond
                     nextScreenshot = screenshotThird
                 }
-                1 -> {
+                3 -> {
                     screenshot = screenshotThird
                 }
             }
 
-            screenshots--
-
             if (screenshot != null) {
-                screenshot.imageTintMode = null
                 Glide.with(this)
                     .load(file)
                     .into(screenshot)
+
+                screenshot.setOnClickListener() {
+                    deleteScreenshot(screenshotId)
+                }
             }
 
             nextScreenshot?.visibility = View.VISIBLE
+
+            screenshots--
+        }
+    }
+
+    private fun deleteScreenshot(screenshotId: Int) {
+        screenshots++
+
+        when (screenshotId) {
+            1 -> {
+                when (screenshots) {
+                    3 -> {
+                        restoreScreenshotButton(screenshotFirst)
+                        hideScreenshotButton(screenshotSecond)
+
+                    }
+                    2 -> {
+                        moveScreenshot(screenshotSecond, screenshotFirst)
+                        restoreScreenshotButton(screenshotSecond)
+                        hideScreenshotButton(screenshotThird)
+
+                    }
+                    1 -> {
+                        moveScreenshot(screenshotSecond, screenshotFirst)
+                        moveScreenshot(screenshotThird, screenshotSecond)
+                        restoreScreenshotButton(screenshotThird)
+                    }
+                }
+
+            }
+            2 -> {
+                when (screenshots) {
+                    2 -> {
+                        restoreScreenshotButton(screenshotSecond)
+                        hideScreenshotButton(screenshotThird)
+                    }
+                    1 -> {
+                        moveScreenshot(screenshotThird, screenshotSecond)
+                        restoreScreenshotButton(screenshotThird)
+                    }
+                }
+
+            }
+            3 -> {
+                restoreScreenshotButton(screenshotThird)
+            }
+        }
+
+    }
+
+
+    private fun hideScreenshotButton(screenshot: ImageView) {
+        screenshot.visibility = View.GONE
+    }
+
+    /**
+     * Gets drawable from source screenshot button and sets it as a drawable of destination screenshot button
+     */
+    private fun moveScreenshot(sourceScreenshot: ImageView, destinationScreenshot: ImageView) {
+        val newScreenshot = sourceScreenshot.drawable
+
+        Glide.with(this)
+            .load(newScreenshot)
+            .into(destinationScreenshot)
+    }
+
+    /**
+     * Restores default look and functionality of a screenshot button
+     */
+    private fun restoreScreenshotButton(screenshot: ImageView) {
+        screenshot.setImageResource(R.drawable.ic_add_photo)
+
+        screenshot.setOnClickListener() {
+            openGallery()
         }
     }
 

@@ -108,8 +108,7 @@
                     android:layout_marginBottom="40dp"
                     android:background="@drawable/background_outlined_text_field"
                     android:padding="8dp"
-                    android:src="@drawable/ic_add_photo"
-                    app:tint="@color/blue_light" />
+                    android:src="@drawable/ic_add_photo" />
 
                 <ImageView
                     android:id="@+id/problemReportActivity_screenshot_2"
@@ -121,8 +120,7 @@
                     android:background="@drawable/background_outlined_text_field"
                     android:padding="8dp"
                     android:src="@drawable/ic_add_photo"
-                    android:visibility="gone"
-                    app:tint="@color/blue_light" />
+                    android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/problemReportActivity_screenshot_3"
@@ -134,8 +132,7 @@
                     android:background="@drawable/background_outlined_text_field"
                     android:padding="8dp"
                     android:src="@drawable/ic_add_photo"
-                    android:visibility="gone"
-                    app:tint="@color/blue_light" />
+                    android:visibility="gone" />
 
             </LinearLayout>
 
