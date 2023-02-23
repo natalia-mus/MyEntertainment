@@ -86,7 +86,7 @@
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@id/problemReportActivity_problemDescription" />
 
-            <LinearLayout
+            <com.example.myentertainment.view.ScreenshotsSection
                 android:id="@+id/problemReportActivity_screenshotsSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,44 +97,7 @@
                 app:layout_constraintBottom_toTopOf="@id/problemReportActivity_reportButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/problemReportActivity_screenshotsLabel">
-
-                <ImageView
-                    android:id="@+id/problemReportActivity_screenshot_1"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginBottom="40dp"
-                    android:background="@drawable/background_outlined_text_field"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_add_photo" />
-
-                <ImageView
-                    android:id="@+id/problemReportActivity_screenshot_2"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginBottom="40dp"
-                    android:background="@drawable/background_outlined_text_field"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_add_photo"
-                    android:visibility="gone" />
-
-                <ImageView
-                    android:id="@+id/problemReportActivity_screenshot_3"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginBottom="40dp"
-                    android:background="@drawable/background_outlined_text_field"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_add_photo"
-                    android:visibility="gone" />
-
-            </LinearLayout>
+                app:layout_constraintTop_toBottomOf="@id/problemReportActivity_screenshotsLabel" />
 
             <Button
                 android:id="@+id/problemReportActivity_reportButton"

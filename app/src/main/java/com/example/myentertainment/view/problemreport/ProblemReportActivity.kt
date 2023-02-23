@@ -24,9 +24,6 @@ class ProblemReportActivity : AppCompatActivity() {
     private lateinit var summaryEditText: EditText
     private lateinit var descriptionEditText: EditText
     private lateinit var reportButton: Button
-    private lateinit var screenshotFirst: ImageView
-    private lateinit var screenshotSecond: ImageView
-    private lateinit var screenshotThird: ImageView
     private lateinit var loadingSection: ConstraintLayout
 
     private var screenshots = 3
@@ -47,7 +44,7 @@ class ProblemReportActivity : AppCompatActivity() {
                 Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE -> {
                     if (data != null && data.data != null) {
                         val file = data.data!!
-                        addScreenshot(file)
+                        //addScreenshot(file)
                     }
                 }
             }
@@ -58,26 +55,12 @@ class ProblemReportActivity : AppCompatActivity() {
         summaryEditText = findViewById(R.id.problemReportActivity_summary)
         descriptionEditText = findViewById(R.id.problemReportActivity_problemDescription)
         reportButton = findViewById(R.id.problemReportActivity_reportButton)
-        screenshotFirst = findViewById(R.id.problemReportActivity_screenshot_1)
-        screenshotSecond = findViewById(R.id.problemReportActivity_screenshot_2)
-        screenshotThird = findViewById(R.id.problemReportActivity_screenshot_3)
         loadingSection = findViewById(R.id.problemReportActivity_loadingSection)
 
         reportButton.setOnClickListener() {
             sendReport()
         }
 
-        screenshotFirst.setOnClickListener() {
-            openGallery()
-        }
-
-        screenshotSecond.setOnClickListener() {
-            openGallery()
-        }
-
-        screenshotThird.setOnClickListener() {
-            openGallery()
-        }
     }
 
     private fun setObservers() {
@@ -122,113 +105,113 @@ class ProblemReportActivity : AppCompatActivity() {
         startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE)
     }
 
-    private fun addScreenshot(file: Uri) {
-        if (screenshots != 0) {
-            var screenshot: ImageView? = null
-            var nextScreenshot: ImageView? = null
-
-            val screenshotId = 4 - screenshots
-
-            when (screenshotId) {
-                1 -> {
-                    screenshot = screenshotFirst
-                    nextScreenshot = screenshotSecond
-                }
-                2 -> {
-                    screenshot = screenshotSecond
-                    nextScreenshot = screenshotThird
-                }
-                3 -> {
-                    screenshot = screenshotThird
-                }
-            }
-
-            if (screenshot != null) {
-                Glide.with(this)
-                    .load(file)
-                    .into(screenshot)
-
-                screenshot.setOnClickListener() {
-                    deleteScreenshot(screenshotId)
-                }
-            }
-
-            nextScreenshot?.visibility = View.VISIBLE
-
-            screenshots--
-        }
-    }
-
-    private fun deleteScreenshot(screenshotId: Int) {
-        screenshots++
-
-        when (screenshotId) {
-            1 -> {
-                when (screenshots) {
-                    3 -> {
-                        restoreScreenshotButton(screenshotFirst)
-                        hideScreenshotButton(screenshotSecond)
-
-                    }
-                    2 -> {
-                        moveScreenshot(screenshotSecond, screenshotFirst)
-                        restoreScreenshotButton(screenshotSecond)
-                        hideScreenshotButton(screenshotThird)
-
-                    }
-                    1 -> {
-                        moveScreenshot(screenshotSecond, screenshotFirst)
-                        moveScreenshot(screenshotThird, screenshotSecond)
-                        restoreScreenshotButton(screenshotThird)
-                    }
-                }
-
-            }
-            2 -> {
-                when (screenshots) {
-                    2 -> {
-                        restoreScreenshotButton(screenshotSecond)
-                        hideScreenshotButton(screenshotThird)
-                    }
-                    1 -> {
-                        moveScreenshot(screenshotThird, screenshotSecond)
-                        restoreScreenshotButton(screenshotThird)
-                    }
-                }
-
-            }
-            3 -> {
-                restoreScreenshotButton(screenshotThird)
-            }
-        }
-
-    }
-
-
-    private fun hideScreenshotButton(screenshot: ImageView) {
-        screenshot.visibility = View.GONE
-    }
-
-    /**
-     * Gets drawable from source screenshot button and sets it as a drawable of destination screenshot button
-     */
-    private fun moveScreenshot(sourceScreenshot: ImageView, destinationScreenshot: ImageView) {
-        val newScreenshot = sourceScreenshot.drawable
-
-        Glide.with(this)
-            .load(newScreenshot)
-            .into(destinationScreenshot)
-    }
-
-    /**
-     * Restores default look and functionality of a screenshot button
-     */
-    private fun restoreScreenshotButton(screenshot: ImageView) {
-        screenshot.setImageResource(R.drawable.ic_add_photo)
-
-        screenshot.setOnClickListener() {
-            openGallery()
-        }
-    }
+//    private fun addScreenshot(file: Uri) {
+//        if (screenshots != 0) {
+//            var screenshot: ImageView? = null
+//            var nextScreenshot: ImageView? = null
+//
+//            val screenshotId = 4 - screenshots
+//
+//            when (screenshotId) {
+//                1 -> {
+//                    screenshot = screenshotFirst
+//                    nextScreenshot = screenshotSecond
+//                }
+//                2 -> {
+//                    screenshot = screenshotSecond
+//                    nextScreenshot = screenshotThird
+//                }
+//                3 -> {
+//                    screenshot = screenshotThird
+//                }
+//            }
+//
+//            if (screenshot != null) {
+//                Glide.with(this)
+//                    .load(file)
+//                    .into(screenshot)
+//
+//                screenshot.setOnClickListener() {
+//                    deleteScreenshot(screenshotId)
+//                }
+//            }
+//
+//            nextScreenshot?.visibility = View.VISIBLE
+//
+//            screenshots--
+//        }
+//    }
+//
+//    private fun deleteScreenshot(screenshotId: Int) {
+//        screenshots++
+//
+//        when (screenshotId) {
+//            1 -> {
+//                when (screenshots) {
+//                    3 -> {
+//                        restoreScreenshotButton(screenshotFirst)
+//                        hideScreenshotButton(screenshotSecond)
+//
+//                    }
+//                    2 -> {
+//                        moveScreenshot(screenshotSecond, screenshotFirst)
+//                        restoreScreenshotButton(screenshotSecond)
+//                        hideScreenshotButton(screenshotThird)
+//
+//                    }
+//                    1 -> {
+//                        moveScreenshot(screenshotSecond, screenshotFirst)
+//                        moveScreenshot(screenshotThird, screenshotSecond)
+//                        restoreScreenshotButton(screenshotThird)
+//                    }
+//                }
+//
+//            }
+//            2 -> {
+//                when (screenshots) {
+//                    2 -> {
+//                        restoreScreenshotButton(screenshotSecond)
+//                        hideScreenshotButton(screenshotThird)
+//                    }
+//                    1 -> {
+//                        moveScreenshot(screenshotThird, screenshotSecond)
+//                        restoreScreenshotButton(screenshotThird)
+//                    }
+//                }
+//
+//            }
+//            3 -> {
+//                restoreScreenshotButton(screenshotThird)
+//            }
+//        }
+//
+//    }
+//
+//
+//    private fun hideScreenshotButton(screenshot: ImageView) {
+//        screenshot.visibility = View.GONE
+//    }
+//
+//    /**
+//     * Gets drawable from source screenshot button and sets it as a drawable of destination screenshot button
+//     */
+//    private fun moveScreenshot(sourceScreenshot: ImageView, destinationScreenshot: ImageView) {
+//        val newScreenshot = sourceScreenshot.drawable
+//
+//        Glide.with(this)
+//            .load(newScreenshot)
+//            .into(destinationScreenshot)
+//    }
+//
+//    /**
+//     * Restores default look and functionality of a screenshot button
+//     */
+//    private fun restoreScreenshotButton(screenshot: ImageView) {
+//        screenshot.setImageResource(R.drawable.ic_add_photo)
+//
+//        screenshot.setOnClickListener() {
+//            openGallery()
+//        }
+//    }
 
 }
