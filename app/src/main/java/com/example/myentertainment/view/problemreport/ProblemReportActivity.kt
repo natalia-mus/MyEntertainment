@@ -1,20 +1,19 @@
 package com.example.myentertainment.view.problemreport
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationResult
+import com.example.myentertainment.view.ScreenshotsSection
 import com.example.myentertainment.viewmodel.problemreport.ProblemReportViewModel
 
 class ProblemReportActivity : AppCompatActivity() {
@@ -25,8 +24,8 @@ class ProblemReportActivity : AppCompatActivity() {
     private lateinit var descriptionEditText: EditText
     private lateinit var reportButton: Button
     private lateinit var loadingSection: ConstraintLayout
+    private lateinit var screenshotsSection: ScreenshotsSection
 
-    private var screenshots = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +43,7 @@ class ProblemReportActivity : AppCompatActivity() {
                 Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE -> {
                     if (data != null && data.data != null) {
                         val file = data.data!!
-                        //addScreenshot(file)
+                        screenshotsSection.addScreenshot(file)
                     }
                 }
             }
@@ -56,17 +55,27 @@ class ProblemReportActivity : AppCompatActivity() {
         descriptionEditText = findViewById(R.id.problemReportActivity_problemDescription)
         reportButton = findViewById(R.id.problemReportActivity_reportButton)
         loadingSection = findViewById(R.id.problemReportActivity_loadingSection)
+        screenshotsSection = findViewById(R.id.problemReportActivity_screenshotsSection)
 
         reportButton.setOnClickListener() {
             sendReport()
         }
 
+        setOnEmptyScreenshotButtonClickListener()
     }
 
     private fun setObservers() {
         viewModel.loading.observe(this) { updateView(it) }
         viewModel.validationResult.observe(this) { handleValidationResult(it) }
         viewModel.addingToDatabaseResult.observe(this) { handleAddingToDatabaseResult(it) }
+    }
+
+    private fun setOnEmptyScreenshotButtonClickListener() {
+        val onEmptyScreenshotButtonClickListener = OnClickListener() {
+            openGallery()
+        }
+
+        screenshotsSection.setOnEmptyScreenshotButtonClickListener(onEmptyScreenshotButtonClickListener)
     }
 
     private fun sendReport() {
@@ -105,42 +114,6 @@ class ProblemReportActivity : AppCompatActivity() {
         startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE)
     }
 
-//    private fun addScreenshot(file: Uri) {
-//        if (screenshots != 0) {
-//            var screenshot: ImageView? = null
-//            var nextScreenshot: ImageView? = null
-//
-//            val screenshotId = 4 - screenshots
-//
-//            when (screenshotId) {
-//                1 -> {
-//                    screenshot = screenshotFirst
-//                    nextScreenshot = screenshotSecond
-//                }
-//                2 -> {
-//                    screenshot = screenshotSecond
-//                    nextScreenshot = screenshotThird
-//                }
-//                3 -> {
-//                    screenshot = screenshotThird
-//                }
-//            }
-//
-//            if (screenshot != null) {
-//                Glide.with(this)
-//                    .load(file)
-//                    .into(screenshot)
-//
-//                screenshot.setOnClickListener() {
-//                    deleteScreenshot(screenshotId)
-//                }
-//            }
-//
-//            nextScreenshot?.visibility = View.VISIBLE
-//
-//            screenshots--
-//        }
-//    }
 //
 //    private fun deleteScreenshot(screenshotId: Int) {
 //        screenshots++
@@ -188,30 +161,6 @@ class ProblemReportActivity : AppCompatActivity() {
 //    }
 //
 //
-//    private fun hideScreenshotButton(screenshot: ImageView) {
-//        screenshot.visibility = View.GONE
-//    }
 //
-//    /**
-//     * Gets drawable from source screenshot button and sets it as a drawable of destination screenshot button
-//     */
-//    private fun moveScreenshot(sourceScreenshot: ImageView, destinationScreenshot: ImageView) {
-//        val newScreenshot = sourceScreenshot.drawable
-//
-//        Glide.with(this)
-//            .load(newScreenshot)
-//            .into(destinationScreenshot)
-//    }
-//
-//    /**
-//     * Restores default look and functionality of a screenshot button
-//     */
-//    private fun restoreScreenshotButton(screenshot: ImageView) {
-//        screenshot.setImageResource(R.drawable.ic_add_photo)
-//
-//        screenshot.setOnClickListener() {
-//            openGallery()
-//        }
-//    }
 
 }
