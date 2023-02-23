@@ -20,24 +20,12 @@ class ScreenshotsSection @JvmOverloads constructor(
 
     private var onEmptyScreenshotButtonClickListener: OnClickListener? = null
 
-    private var onDeleteScreenshotClickListener: OnClickListener = OnClickListener() {
-        // TODO
-    }
-
     private var screenshotsLimit = 3
 
     init {
         createScreenshotButtons()
     }
 
-
-    fun setOnEmptyScreenshotButtonClickListener(listener: OnClickListener) {
-        onEmptyScreenshotButtonClickListener = listener
-
-        for (screenshotButton in children) {
-            screenshotButton.setOnClickListener(onEmptyScreenshotButtonClickListener)
-        }
-    }
 
     fun addScreenshot(file: Uri) {
         if (screenshotsLimit != 0) {
@@ -65,12 +53,20 @@ class ScreenshotsSection @JvmOverloads constructor(
                     .load(file)
                     .into(screenshot)
 
-                screenshot.setOnClickListener(onDeleteScreenshotClickListener)
+                screenshot.setOnClickListener(getOnDeleteScreenshotClickListener(screenshotId))
             }
 
             nextScreenshot?.visibility = View.VISIBLE
 
             screenshotsLimit--
+        }
+    }
+
+    fun setOnEmptyScreenshotButtonClickListener(listener: OnClickListener) {
+        onEmptyScreenshotButtonClickListener = listener
+
+        for (screenshotButton in children) {
+            screenshotButton.setOnClickListener(onEmptyScreenshotButtonClickListener)
         }
     }
 
@@ -91,6 +87,59 @@ class ScreenshotsSection @JvmOverloads constructor(
             addView(screenshotButton)
         }
 
+    }
+
+    private fun deleteScreenshot(screenshotId: Int) {
+        screenshotsLimit++
+
+        val screenshotFirst = getChildAt(0) as ImageView
+        val screenshotSecond = getChildAt(1) as ImageView
+        val screenshotThird = getChildAt(2) as ImageView
+
+        when (screenshotId) {
+            1 -> {
+                when (screenshotsLimit) {
+                    3 -> {
+                        restoreScreenshotButton(screenshotFirst)
+                        hideScreenshotButton(screenshotSecond)
+
+                    }
+                    2 -> {
+                        moveScreenshot(screenshotSecond, screenshotFirst)
+                        restoreScreenshotButton(screenshotSecond)
+                        hideScreenshotButton(screenshotThird)
+
+                    }
+                    1 -> {
+                        moveScreenshot(screenshotSecond, screenshotFirst)
+                        moveScreenshot(screenshotThird, screenshotSecond)
+                        restoreScreenshotButton(screenshotThird)
+                    }
+                }
+
+            }
+            2 -> {
+                when (screenshotsLimit) {
+                    2 -> {
+                        restoreScreenshotButton(screenshotSecond)
+                        hideScreenshotButton(screenshotThird)
+                    }
+                    1 -> {
+                        moveScreenshot(screenshotThird, screenshotSecond)
+                        restoreScreenshotButton(screenshotThird)
+                    }
+                }
+
+            }
+            3 -> {
+                restoreScreenshotButton(screenshotThird)
+            }
+        }
+
+    }
+
+    private fun getOnDeleteScreenshotClickListener(screenshotId: Int): OnClickListener {
+        return OnClickListener { deleteScreenshot(screenshotId) }
     }
 
     private fun hideScreenshotButton(screenshotButton: ImageView) {
