@@ -3,6 +3,7 @@ package com.example.myentertainment.view
 import android.content.Context
 import android.net.Uri
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.ImageView
@@ -11,6 +12,8 @@ import androidx.core.view.children
 import androidx.core.view.setPadding
 import com.bumptech.glide.Glide
 import com.example.myentertainment.R
+import kotlin.math.floor
+
 
 class ScreenshotsSection @JvmOverloads constructor(
     context: Context,
@@ -18,12 +21,18 @@ class ScreenshotsSection @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private val typedArray = context.obtainStyledAttributes(attrs, R.styleable.screenshotsSection)
+    companion object {
+        private const val DEFAULT_SCREENSHOTS_LIMIT = 1
+        private const val PADDING = 22
+    }
+
+    private val attributes = context.obtainStyledAttributes(attrs, R.styleable.ScreenshotsSection)
 
     private var onEmptyScreenshotButtonClickListener: OnClickListener? = null
-    private var screenshotsLimit = typedArray.getInt(R.styleable.screenshotsSection_screenshotsLimit, 3)
+    private var screenshotsLimit = attributes.getInt(R.styleable.ScreenshotsSection_screenshotsLimit, DEFAULT_SCREENSHOTS_LIMIT)
 
     init {
+        orientation = VERTICAL
         createScreenshotButtons()
     }
 
@@ -72,20 +81,29 @@ class ScreenshotsSection @JvmOverloads constructor(
     }
 
     private fun createScreenshotButtons() {
-        val params = LayoutParams(160, 160)
-        params.marginStart = 24
-        params.marginEnd = 24
-        params.topMargin = 14
-        params.bottomMargin = 40
+        val maxScreenshotButtonsPerLine = getMaxScreenshotButtonsPerLine()
+        var screenshotButtonsPerLine = 0
+        var line = newLine()
 
-        for (index in 0..2) {
+        for (index in 0 until screenshotsLimit) {
             val screenshotButton = ImageView(context)
-            screenshotButton.layoutParams = params
+            screenshotButton.layoutParams = getParams()
             screenshotButton.setImageResource(R.drawable.ic_add_photo)
             screenshotButton.setBackgroundResource(R.drawable.background_outlined_text_field)
-            screenshotButton.setPadding(22)
+            screenshotButton.setPadding(PADDING)
             if (index > 0) screenshotButton.visibility = View.GONE
-            addView(screenshotButton)
+            line.addView(screenshotButton)
+            screenshotButtonsPerLine++
+
+            if (screenshotButtonsPerLine == maxScreenshotButtonsPerLine) {
+                // next ScreenshotButton won't fit in the same line
+                addView(line)
+                line = newLine()
+                screenshotButtonsPerLine = 0
+
+            } else if (index == screenshotsLimit - 1) {
+                addView(line)
+            }
         }
 
     }
@@ -139,8 +157,32 @@ class ScreenshotsSection @JvmOverloads constructor(
 
     }
 
+    /**
+     * Returns max count of ScreenshotButtons that can fit in one horizontal line
+     */
+    private fun getMaxScreenshotButtonsPerLine(): Int {
+        val maxWidth = context.resources.displayMetrics.widthPixels
+        val screenshotButtonWidth = getParams().width + (PADDING * 2)
+
+        val result = (maxWidth / screenshotButtonWidth).toDouble()
+        return floor(result).toInt()
+    }
+
     private fun getOnDeleteScreenshotClickListener(screenshotId: Int): OnClickListener {
         return OnClickListener { deleteScreenshot(screenshotId) }
+    }
+
+    /**
+     * Returns ScreenshotButton params
+     */
+    private fun getParams(): LayoutParams {
+        val params = LayoutParams(160, 160)
+        params.marginStart = 24
+        params.marginEnd = 24
+        params.topMargin = 14
+        params.bottomMargin = 40
+
+        return params
     }
 
     private fun hideScreenshotButton(screenshotButton: ImageView) {
@@ -156,6 +198,12 @@ class ScreenshotsSection @JvmOverloads constructor(
         Glide.with(this)
             .load(newScreenshot)
             .into(destinationScreenshotButton)
+    }
+
+    private fun newLine(): LinearLayout {
+        val line = LinearLayout(context)
+        line.gravity = Gravity.CENTER
+        return line
     }
 
     /**
