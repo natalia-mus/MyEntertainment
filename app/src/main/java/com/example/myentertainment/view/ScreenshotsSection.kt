@@ -14,13 +14,14 @@ import com.example.myentertainment.R
 
 class ScreenshotsSection @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null,
+    attrs: AttributeSet,
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private var onEmptyScreenshotButtonClickListener: OnClickListener? = null
+    private val typedArray = context.obtainStyledAttributes(attrs, R.styleable.screenshotsSection)
 
-    private var screenshotsLimit = 3
+    private var onEmptyScreenshotButtonClickListener: OnClickListener? = null
+    private var screenshotsLimit = typedArray.getInt(R.styleable.screenshotsSection_screenshotsLimit, 3)
 
     init {
         createScreenshotButtons()
