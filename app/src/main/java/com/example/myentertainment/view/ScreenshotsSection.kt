@@ -9,6 +9,7 @@ import android.view.View.OnClickListener
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.view.children
+import androidx.core.view.setMargins
 import androidx.core.view.setPadding
 import com.bumptech.glide.Glide
 import com.example.myentertainment.R
@@ -23,6 +24,9 @@ class ScreenshotsSection @JvmOverloads constructor(
 
     companion object {
         private const val DEFAULT_SCREENSHOTS_LIMIT = 1
+
+        private const val SCREENSHOT_BUTTON_DIMENSION = 160
+        private const val MARGIN = 24
         private const val PADDING = 22
     }
 
@@ -30,6 +34,7 @@ class ScreenshotsSection @JvmOverloads constructor(
 
     private var onEmptyScreenshotButtonClickListener: OnClickListener? = null
     private var screenshotsLimit = attributes.getInt(R.styleable.ScreenshotsSection_screenshotsLimit, DEFAULT_SCREENSHOTS_LIMIT)
+    private var loadedScreenshots = 0
 
     init {
         orientation = VERTICAL
@@ -38,37 +43,23 @@ class ScreenshotsSection @JvmOverloads constructor(
 
 
     fun addScreenshot(file: Uri) {
-        if (screenshotsLimit != 0) {
-            var screenshot: ImageView? = null
-            var nextScreenshot: ImageView? = null
+        if (loadedScreenshots < screenshotsLimit) {
+            val screenshotButtons = getScreenshotButtons()
 
-            val screenshotId = 4 - screenshotsLimit
+            val screenshot = screenshotButtons[loadedScreenshots]
 
-            when (screenshotId) {
-                1 -> {
-                    screenshot = getChildAt(0) as ImageView
-                    nextScreenshot = getChildAt(1) as ImageView
-                }
-                2 -> {
-                    screenshot = getChildAt(1) as ImageView
-                    nextScreenshot = getChildAt(2) as ImageView
-                }
-                3 -> {
-                    screenshot = getChildAt(2) as ImageView
-                }
+            Glide.with(this)
+                .load(file)
+                .into(screenshot)
+
+            screenshot.setOnClickListener(getOnDeleteScreenshotClickListener(loadedScreenshots))
+
+            loadedScreenshots++
+
+            if (loadedScreenshots < screenshotButtons.size) {
+                val nextScreenshot = screenshotButtons[loadedScreenshots]
+                nextScreenshot.visibility = View.VISIBLE
             }
-
-            if (screenshot != null) {
-                Glide.with(this)
-                    .load(file)
-                    .into(screenshot)
-
-                screenshot.setOnClickListener(getOnDeleteScreenshotClickListener(screenshotId))
-            }
-
-            nextScreenshot?.visibility = View.VISIBLE
-
-            screenshotsLimit--
         }
     }
 
@@ -176,13 +167,24 @@ class ScreenshotsSection @JvmOverloads constructor(
      * Returns ScreenshotButton params
      */
     private fun getParams(): LayoutParams {
-        val params = LayoutParams(160, 160)
-        params.marginStart = 24
-        params.marginEnd = 24
-        params.topMargin = 14
-        params.bottomMargin = 40
+        val params = LayoutParams(SCREENSHOT_BUTTON_DIMENSION, SCREENSHOT_BUTTON_DIMENSION)
+        params.setMargins(MARGIN)
 
         return params
+    }
+
+    private fun getScreenshotButtons(): ArrayList<ImageView> {
+        val result = ArrayList<ImageView>()
+
+        for (line in children) {
+            val screenshotButtons = (line as LinearLayout).children
+
+            for (screenshotButton in screenshotButtons) {
+                result.add(screenshotButton as ImageView)
+            }
+        }
+
+        return result
     }
 
     private fun hideScreenshotButton(screenshotButton: ImageView) {
