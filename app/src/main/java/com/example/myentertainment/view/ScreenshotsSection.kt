@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.util.AttributeSet
 import android.view.Gravity
-import android.view.View
 import android.view.View.OnClickListener
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -39,7 +38,7 @@ class ScreenshotsSection @JvmOverloads constructor(
 
     init {
         orientation = VERTICAL
-        createScreenshotButtons()
+        createScreenshotButton()
     }
 
 
@@ -56,18 +55,14 @@ class ScreenshotsSection @JvmOverloads constructor(
             screenshot.setOnClickListener(getOnDeleteScreenshotClickListener(loadedScreenshots))
 
             loadedScreenshots++
-
-            if (loadedScreenshots < screenshotButtons.size) {
-                val nextScreenshot = screenshotButtons[loadedScreenshots]
-                nextScreenshot.visibility = View.VISIBLE
-            }
+            createScreenshotButton()
         }
     }
 
     fun setOnEmptyScreenshotButtonClickListener(listener: OnClickListener) {
         onEmptyScreenshotButtonClickListener = listener
 
-        for (screenshotButton in children) {
+        for (screenshotButton in getScreenshotButtons()) {
             screenshotButton.setOnClickListener(onEmptyScreenshotButtonClickListener)
         }
     }
@@ -88,12 +83,15 @@ class ScreenshotsSection @JvmOverloads constructor(
         return (dpHeight * (value / DESIGN_HEIGHT)).toInt()
     }
 
-    private fun createScreenshotButtons() {
-        val maxScreenshotButtonsPerLine = getMaxScreenshotButtonsPerLine()
-        var screenshotButtonsPerLine = 0
-        var line = newLine()
+    private fun createScreenshotButton() {
+        if (getScreenshotButtons().size < screenshotsLimit) {
+            if (childCount == 0) {
+                val firstLine = newLine()
+                addView(firstLine)
+            }
 
-        for (index in 0 until screenshotsLimit) {
+            val maxScreenshotButtonsPerLine = getMaxScreenshotButtonsPerLine()
+
             val screenshotButton = ImageView(context)
             screenshotButton.layoutParams = getParams()
             screenshotButton.setImageResource(R.drawable.ic_add_photo)
@@ -101,18 +99,18 @@ class ScreenshotsSection @JvmOverloads constructor(
             val paddingHorizontal = calcHorizontal(PADDING)
             val paddingVertical = calcVertical(PADDING)
             screenshotButton.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical)
-            if (index > 0) screenshotButton.visibility = View.GONE
-            line.addView(screenshotButton)
-            screenshotButtonsPerLine++
+            screenshotButton.setOnClickListener(onEmptyScreenshotButtonClickListener)
 
-            if (screenshotButtonsPerLine == maxScreenshotButtonsPerLine) {
-                // next ScreenshotButton won't fit in the same line
-                addView(line)
-                line = newLine()
-                screenshotButtonsPerLine = 0
+            val lastLine = children.last()
+            val screenshotButtonsPerLine = (lastLine as LinearLayout).childCount
 
-            } else if (index == screenshotsLimit - 1) {
-                addView(line)
+            if (screenshotButtonsPerLine < maxScreenshotButtonsPerLine) {
+                lastLine.addView(screenshotButton)
+
+                if (screenshotButtonsPerLine == maxScreenshotButtonsPerLine - 1) {
+                    val newLine = newLine()
+                    addView(newLine)
+                }
             }
         }
 
@@ -136,7 +134,7 @@ class ScreenshotsSection @JvmOverloads constructor(
         var lastVisibleScreenshotButton: ImageView
         if (loadedScreenshots < screenshotsLimit) {
             lastVisibleScreenshotButton = screenshotButtons[loadedScreenshots]
-            hideScreenshotButton(lastVisibleScreenshotButton)
+            removeScreenshotButton(lastVisibleScreenshotButton)
         }
 
         lastVisibleScreenshotButton = screenshotButtons[loadedScreenshots - 1]
@@ -188,8 +186,20 @@ class ScreenshotsSection @JvmOverloads constructor(
         return result
     }
 
-    private fun hideScreenshotButton(screenshotButton: ImageView) {
-        screenshotButton.visibility = View.GONE
+    private fun removeScreenshotButton(screenshotButton: ImageView) {
+        for (line in children) {
+            val linearLine = line as LinearLayout
+
+            for (button in linearLine.children) {
+                if (button == screenshotButton) {
+                    linearLine.removeView(button)
+                }
+            }
+
+            if (linearLine.childCount == 0) {
+                removeView(linearLine)
+            }
+        }
     }
 
     /**
