@@ -9,8 +9,6 @@ import android.view.View.OnClickListener
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.view.children
-import androidx.core.view.setMargins
-import androidx.core.view.setPadding
 import com.bumptech.glide.Glide
 import com.example.myentertainment.R
 import kotlin.math.floor
@@ -25,9 +23,12 @@ class ScreenshotsSection @JvmOverloads constructor(
     companion object {
         private const val DEFAULT_SCREENSHOTS_LIMIT = 1
 
-        private const val SCREENSHOT_BUTTON_DIMENSION = 160
-        private const val MARGIN = 24
-        private const val PADDING = 22
+        private const val DESIGN_WIDTH = 411f
+        private const val DESIGN_HEIGHT = 731f
+
+        private const val SCREENSHOT_BUTTON_DIMENSION = 70f
+        private const val MARGIN = 12f
+        private const val PADDING = 10f
     }
 
     private val attributes = context.obtainStyledAttributes(attrs, R.styleable.ScreenshotsSection)
@@ -71,6 +72,22 @@ class ScreenshotsSection @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Calculates horizontal dimension according to the device width in order to keep element's scale
+     */
+    private fun calcHorizontal(value: Float): Int {
+        val dpWidth = context.resources.displayMetrics.widthPixels
+        return (dpWidth * (value / DESIGN_WIDTH)).toInt()
+    }
+
+    /**
+     * Calculates vertical dimension according to the device height in order to keep element's scale
+     */
+    private fun calcVertical(value: Float): Int {
+        val dpHeight = context.resources.displayMetrics.heightPixels
+        return (dpHeight * (value / DESIGN_HEIGHT)).toInt()
+    }
+
     private fun createScreenshotButtons() {
         val maxScreenshotButtonsPerLine = getMaxScreenshotButtonsPerLine()
         var screenshotButtonsPerLine = 0
@@ -81,7 +98,9 @@ class ScreenshotsSection @JvmOverloads constructor(
             screenshotButton.layoutParams = getParams()
             screenshotButton.setImageResource(R.drawable.ic_add_photo)
             screenshotButton.setBackgroundResource(R.drawable.background_outlined_text_field)
-            screenshotButton.setPadding(PADDING)
+            val paddingHorizontal = calcHorizontal(PADDING)
+            val paddingVertical = calcVertical(PADDING)
+            screenshotButton.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical)
             if (index > 0) screenshotButton.visibility = View.GONE
             line.addView(screenshotButton)
             screenshotButtonsPerLine++
@@ -100,52 +119,29 @@ class ScreenshotsSection @JvmOverloads constructor(
     }
 
     private fun deleteScreenshot(screenshotId: Int) {
-        screenshotsLimit++
+        val screenshotButtons = getScreenshotButtons()
+        val screenshotsToMove = ArrayList<ImageView>()
 
-        val screenshotFirst = getChildAt(0) as ImageView
-        val screenshotSecond = getChildAt(1) as ImageView
-        val screenshotThird = getChildAt(2) as ImageView
-
-        when (screenshotId) {
-            1 -> {
-                when (screenshotsLimit) {
-                    3 -> {
-                        restoreScreenshotButton(screenshotFirst)
-                        hideScreenshotButton(screenshotSecond)
-
-                    }
-                    2 -> {
-                        moveScreenshot(screenshotSecond, screenshotFirst)
-                        restoreScreenshotButton(screenshotSecond)
-                        hideScreenshotButton(screenshotThird)
-
-                    }
-                    1 -> {
-                        moveScreenshot(screenshotSecond, screenshotFirst)
-                        moveScreenshot(screenshotThird, screenshotSecond)
-                        restoreScreenshotButton(screenshotThird)
-                    }
-                }
-
-            }
-            2 -> {
-                when (screenshotsLimit) {
-                    2 -> {
-                        restoreScreenshotButton(screenshotSecond)
-                        hideScreenshotButton(screenshotThird)
-                    }
-                    1 -> {
-                        moveScreenshot(screenshotThird, screenshotSecond)
-                        restoreScreenshotButton(screenshotThird)
-                    }
-                }
-
-            }
-            3 -> {
-                restoreScreenshotButton(screenshotThird)
-            }
+        for (id in screenshotId until screenshotButtons.size) {
+            val screenshotButton = screenshotButtons[id]
+            screenshotsToMove.add(screenshotButton)
         }
 
+        for (id in 1 until screenshotsToMove.size) {
+            val source = screenshotsToMove[id]
+            val destination = screenshotsToMove[id - 1]
+            moveScreenshot(source, destination)
+        }
+
+        var lastVisibleScreenshotButton: ImageView
+        if (loadedScreenshots < screenshotsLimit) {
+            lastVisibleScreenshotButton = screenshotButtons[loadedScreenshots]
+            hideScreenshotButton(lastVisibleScreenshotButton)
+        }
+
+        lastVisibleScreenshotButton = screenshotButtons[loadedScreenshots - 1]
+        restoreScreenshotButton(lastVisibleScreenshotButton)
+        loadedScreenshots--
     }
 
     /**
@@ -153,7 +149,7 @@ class ScreenshotsSection @JvmOverloads constructor(
      */
     private fun getMaxScreenshotButtonsPerLine(): Int {
         val maxWidth = context.resources.displayMetrics.widthPixels
-        val screenshotButtonWidth = getParams().width + (PADDING * 2)
+        val screenshotButtonWidth = getParams().width + (calcHorizontal(PADDING) * 2)
 
         val result = (maxWidth / screenshotButtonWidth).toDouble()
         return floor(result).toInt()
@@ -167,8 +163,13 @@ class ScreenshotsSection @JvmOverloads constructor(
      * Returns ScreenshotButton params
      */
     private fun getParams(): LayoutParams {
-        val params = LayoutParams(SCREENSHOT_BUTTON_DIMENSION, SCREENSHOT_BUTTON_DIMENSION)
-        params.setMargins(MARGIN)
+        val screenshotButtonWidth = calcHorizontal(SCREENSHOT_BUTTON_DIMENSION)
+        val screenshotButtonHeight = calcVertical(SCREENSHOT_BUTTON_DIMENSION)
+        val params = LayoutParams(screenshotButtonWidth, screenshotButtonHeight)
+
+        val marginHorizontal = calcHorizontal(MARGIN)
+        val marginVertical = calcVertical(MARGIN)
+        params.setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical)
 
         return params
     }
