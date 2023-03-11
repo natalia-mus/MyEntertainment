@@ -1,12 +1,16 @@
 package com.example.myentertainment.view
 
 import android.content.Context
+import android.graphics.Color
 import android.net.Uri
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View.OnClickListener
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.children
 import com.bumptech.glide.Glide
 import com.example.myentertainment.R
@@ -44,15 +48,15 @@ class ScreenshotsSection @JvmOverloads constructor(
 
     fun addScreenshot(file: Uri) {
         if (loadedScreenshots < screenshotsLimit) {
-            val screenshotButtons = getScreenshotButtons()
-
-            val screenshot = screenshotButtons[loadedScreenshots]
+            val screenshotButton = getScreenshotButton(loadedScreenshots)
+            val screenshot = screenshotButton.getViewById(R.id.screenshotButton_image) as ImageView
 
             Glide.with(this)
                 .load(file)
                 .into(screenshot)
 
             screenshot.setOnClickListener(getOnDeleteScreenshotClickListener(loadedScreenshots))
+            setDeleteIconVisible(screenshotButton)
 
             loadedScreenshots++
             createScreenshotButton()
@@ -92,25 +96,56 @@ class ScreenshotsSection @JvmOverloads constructor(
 
             val maxScreenshotButtonsPerLine = getMaxScreenshotButtonsPerLine()
 
-            val screenshotButton = ImageView(context)
+
+            // screenshotButton - parent
+            val screenshotButton = ConstraintLayout(context)
+            screenshotButton.id = R.id.screenshotButton
             screenshotButton.layoutParams = getParams()
-            screenshotButton.setImageResource(R.drawable.ic_add_photo)
-            screenshotButton.setBackgroundResource(R.drawable.background_outlined_text_field)
-            val paddingHorizontal = calcHorizontal(PADDING)
-            val paddingVertical = calcVertical(PADDING)
-            screenshotButton.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical)
             screenshotButton.setOnClickListener(onEmptyScreenshotButtonClickListener)
+
+            // image visible inside screenshotButton
+            val image = ImageView(context)
+            image.id = R.id.screenshotButton_image
+            image.layoutParams = getParams()
+            image.setImageResource(R.drawable.ic_add_photo)
+            image.setBackgroundResource(R.drawable.background_outlined_text_field)
+            val imagePaddingHorizontal = calcHorizontal(PADDING)
+            val imagePaddingVertical = calcVertical(PADDING)
+            image.setPadding(imagePaddingHorizontal, imagePaddingVertical, imagePaddingHorizontal, imagePaddingVertical)
+
+            // delete icon, visible only when screenshot added
+            val deleteIcon = ImageView(context)
+            deleteIcon.id = R.id.screenshotButton_deleteIcon
+            val iconWidth = calcHorizontal(SCREENSHOT_BUTTON_DIMENSION * 0.45f)
+            val iconHeight = calcVertical(SCREENSHOT_BUTTON_DIMENSION * 0.45f)
+            deleteIcon.layoutParams = LayoutParams(iconWidth, iconHeight)
+            deleteIcon.setColorFilter(Color.RED)
+            val paddingEnd = calcHorizontal(MARGIN * 0.5f)
+            val paddingBottom = calcVertical(MARGIN * 0.5f)
+            deleteIcon.setPadding(0, 0, paddingEnd, paddingBottom)
+
+            screenshotButton.addView(image)
+            screenshotButton.addView(deleteIcon)
+
+            val constraints = ConstraintSet()
+            constraints.clone(screenshotButton)
+            constraints.connect(deleteIcon.id, ConstraintSet.END, screenshotButton.id, ConstraintSet.END)
+            constraints.connect(deleteIcon.id, ConstraintSet.BOTTOM, screenshotButton.id, ConstraintSet.BOTTOM)
+            constraints.applyTo(screenshotButton)
+
+            screenshotButton.setConstraintSet(constraints)
+
 
             val lastLine = children.last()
             val screenshotButtonsPerLine = (lastLine as LinearLayout).childCount
 
-            if (screenshotButtonsPerLine < maxScreenshotButtonsPerLine) {
-                lastLine.addView(screenshotButton)
+            if (screenshotButtonsPerLine == maxScreenshotButtonsPerLine) {
+                val newLine = newLine()
+                newLine.addView(screenshotButton)
+                addView(newLine)
 
-                if (screenshotButtonsPerLine == maxScreenshotButtonsPerLine - 1) {
-                    val newLine = newLine()
-                    addView(newLine)
-                }
+            } else {
+                lastLine.addView(screenshotButton)
             }
         }
 
@@ -118,7 +153,7 @@ class ScreenshotsSection @JvmOverloads constructor(
 
     private fun deleteScreenshot(screenshotId: Int) {
         val screenshotButtons = getScreenshotButtons()
-        val screenshotsToMove = ArrayList<ImageView>()
+        val screenshotsToMove = ArrayList<ConstraintLayout>()
 
         for (id in screenshotId until screenshotButtons.size) {
             val screenshotButton = screenshotButtons[id]
@@ -131,14 +166,16 @@ class ScreenshotsSection @JvmOverloads constructor(
             moveScreenshot(source, destination)
         }
 
-        var lastVisibleScreenshotButton: ImageView
+        var lastScreenshotButton: ConstraintLayout
         if (loadedScreenshots < screenshotsLimit) {
-            lastVisibleScreenshotButton = screenshotButtons[loadedScreenshots]
-            removeScreenshotButton(lastVisibleScreenshotButton)
+            lastScreenshotButton = screenshotButtons[loadedScreenshots]
+            removeScreenshotButton(lastScreenshotButton)
         }
 
-        lastVisibleScreenshotButton = screenshotButtons[loadedScreenshots - 1]
-        restoreScreenshotButton(lastVisibleScreenshotButton)
+        lastScreenshotButton = screenshotButtons[loadedScreenshots - 1]
+        removeScreenshotButton(lastScreenshotButton)
+        createScreenshotButton()
+
         loadedScreenshots--
     }
 
@@ -172,21 +209,48 @@ class ScreenshotsSection @JvmOverloads constructor(
         return params
     }
 
-    private fun getScreenshotButtons(): ArrayList<ImageView> {
-        val result = ArrayList<ImageView>()
+    private fun getScreenshotButton(screenshotId: Int): ConstraintLayout {
+        val screenshotButtons = getScreenshotButtons()
+        return screenshotButtons[screenshotId]
+    }
+
+    private fun getScreenshotButtons(): ArrayList<ConstraintLayout> {
+        val result = ArrayList<ConstraintLayout>()
 
         for (line in children) {
             val screenshotButtons = (line as LinearLayout).children
 
             for (screenshotButton in screenshotButtons) {
-                result.add(screenshotButton as ImageView)
+                result.add(screenshotButton as ConstraintLayout)
             }
         }
 
         return result
     }
 
-    private fun removeScreenshotButton(screenshotButton: ImageView) {
+    /**
+     * Gets drawable from source screenshot button and sets it as a drawable of destination screenshot button
+     */
+    private fun moveScreenshot(sourceScreenshotButton: ConstraintLayout, destinationScreenshotButton: ConstraintLayout) {
+        val sourceScreenshot = sourceScreenshotButton.getViewById(R.id.screenshotButton_image) as ImageView
+        val destinationScreenshot = destinationScreenshotButton.getViewById(R.id.screenshotButton_image) as ImageView
+        val newScreenshot = sourceScreenshot.drawable
+
+        Glide.with(this)
+            .load(newScreenshot)
+            .into(destinationScreenshot)
+    }
+
+    /**
+     * Creates new line of screenshotButtons
+     */
+    private fun newLine(): LinearLayout {
+        val line = LinearLayout(context)
+        line.gravity = Gravity.CENTER
+        return line
+    }
+
+    private fun removeScreenshotButton(screenshotButton: ConstraintLayout) {
         for (line in children) {
             val linearLine = line as LinearLayout
 
@@ -203,28 +267,13 @@ class ScreenshotsSection @JvmOverloads constructor(
     }
 
     /**
-     * Gets drawable from source screenshot button and sets it as a drawable of destination screenshot button
+     * Makes deleteIcon visible by changing its drawable resource
+     * Setting actual visibility by setVisibility() method is ignored in ConstraintLayout
      */
-    private fun moveScreenshot(sourceScreenshotButton: ImageView, destinationScreenshotButton: ImageView) {
-        val newScreenshot = sourceScreenshotButton.drawable
-
-        Glide.with(this)
-            .load(newScreenshot)
-            .into(destinationScreenshotButton)
-    }
-
-    private fun newLine(): LinearLayout {
-        val line = LinearLayout(context)
-        line.gravity = Gravity.CENTER
-        return line
-    }
-
-    /**
-     * Restores default look and functionality of a screenshot button
-     */
-    private fun restoreScreenshotButton(screenshotButton: ImageView) {
-        screenshotButton.setImageResource(R.drawable.ic_add_photo)
-        screenshotButton.setOnClickListener(onEmptyScreenshotButtonClickListener)
+    private fun setDeleteIconVisible(screenshotButton: ConstraintLayout) {
+        val deleteIcon = screenshotButton.getViewById(R.id.screenshotButton_deleteIcon) as ImageView
+        val drawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_delete, null)
+        deleteIcon.setImageDrawable(drawable)
     }
 
 }

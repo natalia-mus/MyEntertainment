@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="screenshotButton" type="id" />
+    <item name="screenshotButton_image" type="id" />
+    <item name="screenshotButton_deleteIcon" type="id" />
+</resources>
