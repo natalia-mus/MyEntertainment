@@ -14,6 +14,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.children
 import com.bumptech.glide.Glide
 import com.example.myentertainment.R
+import java.util.*
 import kotlin.math.floor
 
 
@@ -38,7 +39,7 @@ class ScreenshotsSection @JvmOverloads constructor(
 
     private var onEmptyScreenshotButtonClickListener: OnClickListener? = null
     private var screenshotsLimit = attributes.getInt(R.styleable.ScreenshotsSection_screenshotsLimit, DEFAULT_SCREENSHOTS_LIMIT)
-    private var loadedScreenshots = 0
+    private val loadedScreenshots = HashMap<UUID, Uri>()
 
     init {
         orientation = VERTICAL
@@ -47,20 +48,24 @@ class ScreenshotsSection @JvmOverloads constructor(
 
 
     fun addScreenshot(file: Uri) {
-        if (loadedScreenshots < screenshotsLimit) {
-            val screenshotButton = getScreenshotButton(loadedScreenshots)
+        if (loadedScreenshots.size < screenshotsLimit) {
+            val screenshotButton = getScreenshotButton(loadedScreenshots.size)
             val screenshot = screenshotButton.getViewById(R.id.screenshotButton_image) as ImageView
 
             Glide.with(this)
                 .load(file)
                 .into(screenshot)
 
-            screenshot.setOnClickListener(getOnDeleteScreenshotClickListener(loadedScreenshots))
+            val uuid = UUID.randomUUID()
+            screenshot.setOnClickListener(getOnDeleteScreenshotClickListener(loadedScreenshots.size, uuid))
             setDeleteIconVisible(screenshotButton)
-
-            loadedScreenshots++
             createScreenshotButton()
+            loadedScreenshots.put(uuid, file)
         }
+    }
+
+    fun getScreenshots(): HashMap<UUID, Uri> {
+        return loadedScreenshots
     }
 
     fun setOnEmptyScreenshotButtonClickListener(listener: OnClickListener) {
@@ -113,7 +118,7 @@ class ScreenshotsSection @JvmOverloads constructor(
             val imagePaddingVertical = calcVertical(PADDING)
             image.setPadding(imagePaddingHorizontal, imagePaddingVertical, imagePaddingHorizontal, imagePaddingVertical)
 
-            // delete icon, visible only when screenshot added
+            // deleteIcon, visible only when screenshot added
             val deleteIcon = ImageView(context)
             deleteIcon.id = R.id.screenshotButton_deleteIcon
             val iconWidth = calcHorizontal(SCREENSHOT_BUTTON_DIMENSION * 0.45f)
@@ -151,7 +156,7 @@ class ScreenshotsSection @JvmOverloads constructor(
 
     }
 
-    private fun deleteScreenshot(screenshotId: Int) {
+    private fun deleteScreenshot(screenshotId: Int, screenshotUUID: UUID) {
         val screenshotButtons = getScreenshotButtons()
         val screenshotsToMove = ArrayList<ConstraintLayout>()
 
@@ -167,16 +172,16 @@ class ScreenshotsSection @JvmOverloads constructor(
         }
 
         var lastScreenshotButton: ConstraintLayout
-        if (loadedScreenshots < screenshotsLimit) {
-            lastScreenshotButton = screenshotButtons[loadedScreenshots]
+        if (loadedScreenshots.size < screenshotsLimit) {
+            lastScreenshotButton = screenshotButtons[loadedScreenshots.size]
             removeScreenshotButton(lastScreenshotButton)
         }
 
-        lastScreenshotButton = screenshotButtons[loadedScreenshots - 1]
+        lastScreenshotButton = screenshotButtons[loadedScreenshots.size - 1]
         removeScreenshotButton(lastScreenshotButton)
         createScreenshotButton()
 
-        loadedScreenshots--
+        loadedScreenshots.remove(screenshotUUID)
     }
 
     /**
@@ -190,8 +195,8 @@ class ScreenshotsSection @JvmOverloads constructor(
         return floor(result).toInt()
     }
 
-    private fun getOnDeleteScreenshotClickListener(screenshotId: Int): OnClickListener {
-        return OnClickListener { deleteScreenshot(screenshotId) }
+    private fun getOnDeleteScreenshotClickListener(screenshotId: Int, screenshotUUID: UUID): OnClickListener {
+        return OnClickListener { deleteScreenshot(screenshotId, screenshotUUID) }
     }
 
     /**

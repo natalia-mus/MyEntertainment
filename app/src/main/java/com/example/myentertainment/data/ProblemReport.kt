@@ -8,5 +8,6 @@ data class ProblemReport(
     val androidVersion: String?,
     val summary: String?,
     val description: String?,
+    val screenshots: ArrayList<String>,
     val date: Date?
 )

@@ -81,8 +81,9 @@ class ProblemReportActivity : AppCompatActivity() {
     private fun sendReport() {
         val summary = summaryEditText.text.toString()
         val description = descriptionEditText.text.toString()
+        val screenshots = screenshotsSection.getScreenshots()
 
-        viewModel.addToDatabase(summary, description)
+        viewModel.addToDatabase(summary, description, screenshots)
     }
 
     private fun updateView(loading: Boolean) {
