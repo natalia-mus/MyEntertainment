@@ -76,6 +76,7 @@
     <string name="report_a_problem">Report a problem</string>
     <string name="report_empty_fields">Please, complete both fields</string>
     <string name="save">save</string>
+    <string name="screenshots">Screenshots (optional):</string>
     <string name="set_your_birth_date">Set your birth date:</string>
     <string name="sign_in">sign in</string>
     <string name="sign_in_message">Don\'t have an account?</string>

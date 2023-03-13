@@ -6,15 +6,15 @@ import org.junit.Test
 
 class DateTest {
 
-    private val correctDate = Date(1992, 3, 27)
-    private val incorrectDate = Date(1992, 15, 35)
+    private val correctDate = Date(1993, 2, 12)
+    private val incorrectDate = Date(1993, 15, 35)
     private val nullDate = Date(null, null, null)
 
 
     // getMonthFullName:
     @Test
     fun monthFullNameWhenCorrectMonthValue() {
-        assertEquals("April", correctDate.getMonthFullName())
+        assertEquals("March", correctDate.getMonthFullName())
     }
 
     @Test
@@ -31,7 +31,7 @@ class DateTest {
     // getMonthShortName
     @Test
     fun monthShortNameWhenCorrectMonthValue() {
-        assertEquals("Apr", correctDate.getMonthShortName())
+        assertEquals("Mar", correctDate.getMonthShortName())
     }
 
     @Test
