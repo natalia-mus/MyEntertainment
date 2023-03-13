@@ -84,6 +84,26 @@ class Date {
     }
 
     @Exclude
+    fun getMonthLength(): Int? {
+        return when (month) {
+            0 -> 31
+            1 -> if (year != null) {
+                if (year!! % 4 == 0) return 29 else return 28
+            } else return null
+            2 -> 31
+            3 -> 30
+            4 -> 31
+            5 -> 30
+            6 -> 31
+            7 -> 31
+            8 -> 30
+            9 -> 31
+            10 -> 30
+            11 -> 31
+            else -> null
+        }
+    }
+
     fun getMonthShortName(): String? {
         return when (month) {
             0 -> "Jan"
@@ -104,7 +124,7 @@ class Date {
 
     @Exclude
     fun getUserAge(): Int? {
-        if (year != null && month != null && day != null) {
+        if (isDateCorrect()) {
             val birthdayPast: Boolean
             val today = GregorianCalendar()
             val birthDate = GregorianCalendar(year!!, month!!, day!!)
@@ -126,6 +146,22 @@ class Date {
             return age
 
         } else return null
+    }
+
+    private fun isDateCorrect(): Boolean {
+        var result = false
+
+        if (year != null && month != null && day != null) {
+
+            val actualYear = GregorianCalendar().get(Calendar.YEAR)
+            if ((year!! in 1900..actualYear) &&
+                (month!! in 0..11) &&
+                (day!! in 1..getMonthLength()!!)) {
+                result = true
+            }
+        }
+
+        return result
     }
 
 }
