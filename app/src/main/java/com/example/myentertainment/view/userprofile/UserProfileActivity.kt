@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -21,9 +22,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.myentertainment.Constants
-import com.example.myentertainment.data.Date
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationResult
+import com.example.myentertainment.data.Date
 import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.view.authentication.AuthenticationActivity
 import com.example.myentertainment.viewmodel.userprofile.UserProfileActivityViewModel
@@ -345,6 +346,8 @@ class UserProfileActivity : AppCompatActivity() {
                 removeBirthDate.setOnClickListener() {
                     removeBirthDate()
                 }
+            } else {
+                setBirthdateLabel(null)
             }
 
         } else {
@@ -376,19 +379,41 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun prepareBirthDate(date: Date?) {
+        var birthDateValue = resources.getString(R.string.unknown)
+
         if (date != null) {
             val monthName = date.getMonthShortName()
             val day = date.day!!
             val year = date.year!!
             val userAge = date.getUserAge()!!
-            birthDate.text = "$monthName $day, $year"
+            birthDateValue = "$monthName $day, $year"
             age.text = "($userAge $yrs)"
             age.visibility = View.VISIBLE
         } else {
-            birthDate.text = resources.getString(R.string.unknown)
             age.visibility = View.GONE
             removeBirthDate.visibility = View.GONE
         }
+
+        setBirthdateLabel(birthDateValue)
+    }
+
+    /**
+     * Sets birthDate label text and changes its appearance
+     */
+    private fun setBirthdateLabel(birthdateValue: String?) {
+        var text = birthdateValue
+        var textColor = resources.getColor(R.color.default_text_color, null)
+        var typeface = Typeface.create(birthDate.typeface, Typeface.NORMAL)
+
+        if (birthdateValue == null) {
+            text = resources.getString(R.string.set)
+            textColor = resources.getColor(R.color.blue_light, null)
+            typeface = Typeface.create(birthDate.typeface, Typeface.BOLD)
+        }
+
+        birthDate.text = text
+        birthDate.setTextColor(textColor)
+        birthDate.typeface = typeface
     }
 
     private fun refreshProfilePicture(uri: Uri?) {
@@ -410,6 +435,7 @@ class UserProfileActivity : AppCompatActivity() {
             removePanel.dismiss()
             newBirthDate = null
             prepareBirthDate(newBirthDate)
+            setBirthdateLabel(null)
             changesToSave = true
         }
 
