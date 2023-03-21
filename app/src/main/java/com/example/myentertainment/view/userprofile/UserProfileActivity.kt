@@ -368,7 +368,7 @@ class UserProfileActivity : AppCompatActivity() {
             editButton.visibility = View.VISIBLE
 
             birthDate.isClickable = false
-            prepareBirthDate(newBirthDate)
+            prepareBirthDate(currentBirthDate)
             removeBirthDate.visibility = View.GONE
 
             usernameEditable.setText(if (username.text != "-") username.text else "")
@@ -481,7 +481,7 @@ class UserProfileActivity : AppCompatActivity() {
             city.text = if (userProfileData.city?.isNotEmpty() == true) userProfileData.city else getString(R.string.none)
             country.text = if (userProfileData.country?.isNotEmpty() == true) userProfileData.country else getString(R.string.none)
             email.text = userProfileData.email
-            newBirthDate = userProfileData.birthDate
+            currentBirthDate = userProfileData.birthDate
 
             switchViewMode(false)
 
