@@ -64,6 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
+                    android:textColor="@color/default_text_color"
                     android:textSize="28dp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -91,6 +92,7 @@
                     android:id="@+id/userProfile_realName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/default_text_color"
                     android:textSize="18dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -134,6 +136,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:text="@string/city"
+                        android:textColor="@color/default_text_color"
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
@@ -142,6 +145,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toEndOf="@+id/userProfile_city_label"
+                        android:textColor="@color/default_text_color"
                         android:textSize="18dp"
                         tools:text="Los Angeles" />
 
@@ -171,6 +175,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:text="@string/country"
+                        android:textColor="@color/default_text_color"
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
@@ -179,6 +184,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toEndOf="@+id/userProfile_country_label"
+                        android:textColor="@color/default_text_color"
                         android:textSize="18dp"
                         tools:text="USA" />
 
@@ -208,6 +214,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:text="@string/birth_date"
+                        android:textColor="@color/default_text_color"
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
@@ -216,6 +223,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toEndOf="@+id/userProfile_birthDate_label"
+                        android:textColor="@color/default_text_color"
                         android:textSize="18dp"
                         tools:text="Oct 17, 1994" />
 
@@ -225,6 +233,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_toEndOf="@+id/userProfile_birthDate"
+                        android:textColor="@color/default_text_color"
                         android:textSize="18dp"
                         tools:text="(28 yrs)" />
 
@@ -251,6 +260,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:text="@string/email"
+                        android:textColor="@color/default_text_color"
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
@@ -259,6 +269,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toEndOf="@+id/userProfile_email_label"
+                        android:textColor="@color/default_text_color"
                         android:textSize="18dp"
                         tools:text="jane@doe.com" />
 

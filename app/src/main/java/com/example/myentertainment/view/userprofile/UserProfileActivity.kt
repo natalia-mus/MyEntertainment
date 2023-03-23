@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -21,9 +22,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.myentertainment.Constants
-import com.example.myentertainment.data.Date
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationResult
+import com.example.myentertainment.data.Date
 import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.view.authentication.AuthenticationActivity
 import com.example.myentertainment.viewmodel.userprofile.UserProfileActivityViewModel
@@ -43,8 +44,6 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var birthDate: TextView
     private lateinit var age: TextView
     private lateinit var removeBirthDate: ImageView
-    private lateinit var datePickerDialogView: View
-    private lateinit var datePicker: DatePicker
     private lateinit var email: TextView
     private lateinit var editButton: ImageButton
     private lateinit var saveButton: Button
@@ -223,8 +222,6 @@ class UserProfileActivity : AppCompatActivity() {
         cityEditable = findViewById(R.id.userProfile_city_editable)
         countryEditable = findViewById(R.id.userProfile_country_editable)
         changePassword = findViewById(R.id.userProfile_changePassword)
-        datePickerDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_date_picker, findViewById(R.id.datePicker_dialog))
-        datePicker = datePickerDialogView.findViewById(R.id.datePicker_date)
 
         removeBirthDate.visibility = View.GONE
 
@@ -291,10 +288,16 @@ class UserProfileActivity : AppCompatActivity() {
 
     private fun showDatePickerDialog() {
         val datePickerDialog = Dialog(this)
+        val datePickerDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_date_picker, findViewById(R.id.datePicker_dialog))
+        val datePicker = datePickerDialogView.findViewById<DatePicker>(R.id.datePicker_date)
 
-        if (currentBirthDate != null) datePicker.updateDate(currentBirthDate!!.year!!, currentBirthDate!!.month!!, currentBirthDate!!.day!!)
+        if (currentBirthDate != null) {
+            datePicker.updateDate(currentBirthDate!!.year!!, currentBirthDate!!.month!!, currentBirthDate!!.day!!)
+        }
 
         datePickerDialogView.findViewById<Button>(R.id.datePicker_buttonSave).setOnClickListener() {
+            datePicker.clearFocus()
+
             val month = datePicker.month
             val day = datePicker.dayOfMonth
             val year = datePicker.year
@@ -345,6 +348,8 @@ class UserProfileActivity : AppCompatActivity() {
                 removeBirthDate.setOnClickListener() {
                     removeBirthDate()
                 }
+            } else {
+                setBirthdateLabel(null)
             }
 
         } else {
@@ -363,7 +368,7 @@ class UserProfileActivity : AppCompatActivity() {
             editButton.visibility = View.VISIBLE
 
             birthDate.isClickable = false
-            prepareBirthDate(newBirthDate)
+            prepareBirthDate(currentBirthDate)
             removeBirthDate.visibility = View.GONE
 
             usernameEditable.setText(if (username.text != "-") username.text else "")
@@ -376,19 +381,41 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun prepareBirthDate(date: Date?) {
+        var birthDateValue = resources.getString(R.string.unknown)
+
         if (date != null) {
             val monthName = date.getMonthShortName()
             val day = date.day!!
             val year = date.year!!
             val userAge = date.getUserAge()!!
-            birthDate.text = "$monthName $day, $year"
+            birthDateValue = "$monthName $day, $year"
             age.text = "($userAge $yrs)"
             age.visibility = View.VISIBLE
         } else {
-            birthDate.text = resources.getString(R.string.unknown)
             age.visibility = View.GONE
             removeBirthDate.visibility = View.GONE
         }
+
+        setBirthdateLabel(birthDateValue)
+    }
+
+    /**
+     * Sets birthDate label text and changes its appearance
+     */
+    private fun setBirthdateLabel(birthdateValue: String?) {
+        var text = birthdateValue
+        var textColor = resources.getColor(R.color.default_text_color, null)
+        var typeface = Typeface.create(birthDate.typeface, Typeface.NORMAL)
+
+        if (birthdateValue == null) {
+            text = resources.getString(R.string.set)
+            textColor = resources.getColor(R.color.blue_light, null)
+            typeface = Typeface.create(birthDate.typeface, Typeface.BOLD)
+        }
+
+        birthDate.text = text
+        birthDate.setTextColor(textColor)
+        birthDate.typeface = typeface
     }
 
     private fun refreshProfilePicture(uri: Uri?) {
@@ -410,6 +437,7 @@ class UserProfileActivity : AppCompatActivity() {
             removePanel.dismiss()
             newBirthDate = null
             prepareBirthDate(newBirthDate)
+            setBirthdateLabel(null)
             changesToSave = true
         }
 
@@ -453,7 +481,7 @@ class UserProfileActivity : AppCompatActivity() {
             city.text = if (userProfileData.city?.isNotEmpty() == true) userProfileData.city else getString(R.string.none)
             country.text = if (userProfileData.country?.isNotEmpty() == true) userProfileData.country else getString(R.string.none)
             email.text = userProfileData.email
-            newBirthDate = userProfileData.birthDate
+            currentBirthDate = userProfileData.birthDate
 
             switchViewMode(false)
 
