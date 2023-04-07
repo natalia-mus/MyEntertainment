@@ -338,6 +338,8 @@ class UserProfileActivity : AppCompatActivity() {
             countryEditable.visibility = View.VISIBLE
             changePassword.visibility = View.VISIBLE
 
+            newBirthDate = currentBirthDate
+
             birthDate.isClickable = true
             birthDate.setOnClickListener() {
                 showDatePickerDialog()
