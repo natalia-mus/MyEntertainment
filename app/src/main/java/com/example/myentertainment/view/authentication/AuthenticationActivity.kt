@@ -14,7 +14,7 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_authentication)
+        setContentView(R.layout.host)
 
         if (intent.getBooleanExtra(Constants.CHANGE_PASSWORD, false)) {
             changeCurrentFragment(ChangePasswordFragment())
@@ -51,7 +51,7 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
 
     private fun changeCurrentFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.authenticationActivity_fragment, fragment)
+            replace(R.id.host_fragment, fragment)
             commit()
         }
     }
