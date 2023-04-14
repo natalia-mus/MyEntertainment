@@ -112,7 +112,6 @@ class UserProfileActivity : AppCompatActivity() {
         val intent = Intent(this, AuthenticationActivity::class.java)
         intent.putExtra(Constants.CHANGE_PASSWORD, true)
         startActivity(intent)
-        finish()
     }
 
     private fun changeProfilePicture() {
