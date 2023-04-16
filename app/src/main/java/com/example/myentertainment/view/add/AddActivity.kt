@@ -14,7 +14,7 @@ class AddActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add)
+        setContentView(R.layout.host)
         category = intent.getStringExtra(Constants.CATEGORY)
         category?.let { setFragment(it) }
         establishOpeningContext()
@@ -41,7 +41,7 @@ class AddActivity : AppCompatActivity() {
 
     private fun showFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.addActivity_fragment, fragment)
+            replace(R.id.host_fragment, fragment)
             commit()
         }
     }

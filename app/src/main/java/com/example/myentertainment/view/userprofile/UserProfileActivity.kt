@@ -112,7 +112,6 @@ class UserProfileActivity : AppCompatActivity() {
         val intent = Intent(this, AuthenticationActivity::class.java)
         intent.putExtra(Constants.CHANGE_PASSWORD, true)
         startActivity(intent)
-        finish()
     }
 
     private fun changeProfilePicture() {
@@ -337,6 +336,8 @@ class UserProfileActivity : AppCompatActivity() {
             cityEditable.visibility = View.VISIBLE
             countryEditable.visibility = View.VISIBLE
             changePassword.visibility = View.VISIBLE
+
+            newBirthDate = currentBirthDate
 
             birthDate.isClickable = true
             birthDate.setOnClickListener() {

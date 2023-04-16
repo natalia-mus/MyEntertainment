@@ -14,17 +14,17 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_authentication)
+        setContentView(R.layout.host)
 
         if (intent.getBooleanExtra(Constants.CHANGE_PASSWORD, false)) {
-            changeCurrentFragment(ChangePasswordFragment())
+            changeCurrentFragment(ChangePasswordFragment(), false)
         } else {
-            changeCurrentFragment(SignInFragment(this))
+            changeCurrentFragment(SignInFragment(this), false)
         }
     }
 
     override fun signUpClicked() {
-        changeCurrentFragment(SignUpFragment())
+        changeCurrentFragment(SignUpFragment(), true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -49,9 +49,14 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
         menu.findItem(R.id.menuItem_signOut).isVisible = false
     }
 
-    private fun changeCurrentFragment(fragment: Fragment) {
+    private fun changeCurrentFragment(fragment: Fragment, addToBackstack: Boolean) {
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.authenticationActivity_fragment, fragment)
+            replace(R.id.host_fragment, fragment)
+
+            if (addToBackstack) {
+                addToBackStack("AUTHENTICATION_FRAGMENT")
+            }
+
             commit()
         }
     }

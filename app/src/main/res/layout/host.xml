@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <FrameLayout
-        android:id="@+id/addActivity_fragment"
+        android:id="@+id/host_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
