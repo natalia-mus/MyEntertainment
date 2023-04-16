@@ -31,13 +31,15 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_camera" />
+                android:src="@drawable/ic_camera"
+                app:tint="@color/blue_light" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/camera"
+                android:textColor="@color/blue_light"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -59,13 +61,15 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_image" />
+                android:src="@drawable/ic_image"
+                app:tint="@color/blue_light" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/gallery"
+                android:textColor="@color/blue_light"
                 android:textStyle="bold" />
 
         </LinearLayout>

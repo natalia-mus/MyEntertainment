@@ -5,6 +5,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="white_transparent">#BFFFFFFF</color>
     <color name="blue_light">#0073C1</color>
+    <color name="blue_light_focused">#005E9E</color>
     <color name="yellow">#FFD600</color>
     <color name="red">#C60909</color>
     <color name="green">#14750E</color>
