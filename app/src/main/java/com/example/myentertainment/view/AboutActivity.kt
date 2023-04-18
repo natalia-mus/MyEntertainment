@@ -33,11 +33,6 @@ class AboutActivity : AppCompatActivity() {
         viewModel.getData()
     }
 
-    private fun setObservers() {
-        viewModel.fetchingDataStatus.observe(this) { handleFetchingDataStatus(it) }
-        viewModel.about.observe(this) { updateView(it) }
-    }
-
     private fun handleFetchingDataStatus(status: Boolean) {
         if (status) {
             loadingSection.visibility = View.GONE
@@ -58,16 +53,21 @@ class AboutActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateView(about: About) {
-        descriptionTextView.text = about.description
-        historyTextView.text = about.history
-    }
-
     private fun openUrl() {
         val url = viewModel.about.value?.url
         val uri = Uri.parse(url)
         val intent = Intent(Intent.ACTION_VIEW, uri)
         startActivity(intent)
+    }
+
+    private fun setObservers() {
+        viewModel.fetchingDataStatus.observe(this) { handleFetchingDataStatus(it) }
+        viewModel.about.observe(this) { updateView(it) }
+    }
+
+    private fun updateView(about: About) {
+        descriptionTextView.text = about.description
+        historyTextView.text = about.history
     }
 
 }
