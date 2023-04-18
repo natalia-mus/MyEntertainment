@@ -256,6 +256,56 @@ class UserProfileActivity : AppCompatActivity() {
         startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE)
     }
 
+    private fun prepareBirthDate(date: Date?) {
+        var birthDateValue = resources.getString(R.string.unknown)
+
+        if (date != null) {
+            val monthName = date.getMonthShortName()
+            val day = date.day!!
+            val year = date.year!!
+            val userAge = date.getUserAge()!!
+            birthDateValue = "$monthName $day, $year"
+            age.text = "($userAge $yrs)"
+            age.visibility = View.VISIBLE
+        } else {
+            age.visibility = View.GONE
+            removeBirthDate.visibility = View.GONE
+        }
+
+        setBirthdateLabel(birthDateValue)
+    }
+
+    private fun refreshProfilePicture(uri: Uri?) {
+        val placeholder = ResourcesCompat.getDrawable(resources, R.drawable.placeholder_user, null)
+        Glide.with(this)
+            .load(uri)
+            .placeholder(placeholder)
+            .circleCrop()
+            .into(photo)
+    }
+
+    private fun removeBirthDate() {
+        val removePanel = BottomSheetDialog(this)
+        val removePanelView = LayoutInflater.from(this).inflate(R.layout.panel_remove, findViewById(R.id.panelRemove))
+
+        removePanelView.findViewById<TextView>(R.id.panelRemove_message).text = resources.getString(R.string.remove_birthdate_message)
+
+        removePanelView.findViewById<LinearLayout>(R.id.panelRemove_confirmationButton).setOnClickListener() {
+            removePanel.dismiss()
+            newBirthDate = null
+            prepareBirthDate(newBirthDate)
+            setBirthdateLabel(null)
+            changesToSave = true
+        }
+
+        removePanelView.findViewById<LinearLayout>(R.id.panelRemove_dismissButton).setOnClickListener() {
+            removePanel.dismiss()
+        }
+
+        removePanel.setContentView(removePanelView)
+        removePanel.show()
+    }
+
     private fun removeProfilePicture() {
         val removePanel = BottomSheetDialog(this)
         val removePanelView = LayoutInflater.from(this).inflate(R.layout.panel_remove, findViewById(R.id.panelRemove))
@@ -274,6 +324,25 @@ class UserProfileActivity : AppCompatActivity() {
 
         removePanel.setContentView(removePanelView)
         removePanel.show()
+    }
+
+    /**
+     * Sets birthDate label text and changes its appearance
+     */
+    private fun setBirthdateLabel(birthdateValue: String?) {
+        var text = birthdateValue
+        var textColor = resources.getColor(R.color.default_text_color, null)
+        var typeface = Typeface.create(birthDate.typeface, Typeface.NORMAL)
+
+        if (birthdateValue == null) {
+            text = resources.getString(R.string.set)
+            textColor = resources.getColor(R.color.blue_light, null)
+            typeface = Typeface.create(birthDate.typeface, Typeface.BOLD)
+        }
+
+        birthDate.text = text
+        birthDate.setTextColor(textColor)
+        birthDate.typeface = typeface
     }
 
     private fun setObservers() {
@@ -379,75 +448,6 @@ class UserProfileActivity : AppCompatActivity() {
 
             changesToSave = false
         }
-    }
-
-    private fun prepareBirthDate(date: Date?) {
-        var birthDateValue = resources.getString(R.string.unknown)
-
-        if (date != null) {
-            val monthName = date.getMonthShortName()
-            val day = date.day!!
-            val year = date.year!!
-            val userAge = date.getUserAge()!!
-            birthDateValue = "$monthName $day, $year"
-            age.text = "($userAge $yrs)"
-            age.visibility = View.VISIBLE
-        } else {
-            age.visibility = View.GONE
-            removeBirthDate.visibility = View.GONE
-        }
-
-        setBirthdateLabel(birthDateValue)
-    }
-
-    /**
-     * Sets birthDate label text and changes its appearance
-     */
-    private fun setBirthdateLabel(birthdateValue: String?) {
-        var text = birthdateValue
-        var textColor = resources.getColor(R.color.default_text_color, null)
-        var typeface = Typeface.create(birthDate.typeface, Typeface.NORMAL)
-
-        if (birthdateValue == null) {
-            text = resources.getString(R.string.set)
-            textColor = resources.getColor(R.color.blue_light, null)
-            typeface = Typeface.create(birthDate.typeface, Typeface.BOLD)
-        }
-
-        birthDate.text = text
-        birthDate.setTextColor(textColor)
-        birthDate.typeface = typeface
-    }
-
-    private fun refreshProfilePicture(uri: Uri?) {
-        val placeholder = ResourcesCompat.getDrawable(resources, R.drawable.placeholder_user, null)
-        Glide.with(this)
-            .load(uri)
-            .placeholder(placeholder)
-            .circleCrop()
-            .into(photo)
-    }
-
-    private fun removeBirthDate() {
-        val removePanel = BottomSheetDialog(this)
-        val removePanelView = LayoutInflater.from(this).inflate(R.layout.panel_remove, findViewById(R.id.panelRemove))
-
-        removePanelView.findViewById<TextView>(R.id.panelRemove_message).text = resources.getString(R.string.remove_birthdate_message)
-
-        removePanelView.findViewById<LinearLayout>(R.id.panelRemove_confirmationButton).setOnClickListener() {
-            removePanel.dismiss()
-            newBirthDate = null
-            prepareBirthDate(newBirthDate)
-            setBirthdateLabel(null)
-            changesToSave = true
-        }
-
-        removePanelView.findViewById<LinearLayout>(R.id.panelRemove_dismissButton).setOnClickListener() {
-            removePanel.dismiss()
-        }
-
-        removePanel.setContentView(removePanelView)
-        removePanel.show()
     }
 
     private fun tryToOpenCamera() {

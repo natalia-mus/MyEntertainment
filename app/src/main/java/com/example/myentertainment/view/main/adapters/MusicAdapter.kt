@@ -16,8 +16,7 @@ class MusicAdapter(
     private val context: Context,
     private var music: List<Music>,
     private val onItemClickAction: OnItemClickAction
-) :
-    RecyclerView.Adapter<MusicViewHolder>() {
+) : RecyclerView.Adapter<MusicViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.single_music, parent, false)

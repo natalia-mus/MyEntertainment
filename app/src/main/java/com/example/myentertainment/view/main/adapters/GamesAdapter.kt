@@ -16,8 +16,7 @@ class GamesAdapter(
     private val context: Context,
     private var games: List<Game>,
     private val onItemClickAction: OnItemClickAction
-) :
-    RecyclerView.Adapter<GamesViewHolder>() {
+) : RecyclerView.Adapter<GamesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GamesViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.single_game, parent, false)

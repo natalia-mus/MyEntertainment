@@ -22,8 +22,21 @@ class FirebaseModule {
 
     @Singleton
     @Provides
+    @Named("aboutReference")
+    fun provideAboutReference(): DatabaseReference {
+        return FirebaseDatabase.getInstance().getReference(UNLIMITED).child("about")
+    }
+
+    @Singleton
+    @Provides
     fun provideFirebaseAuth(): FirebaseAuth {
         return Firebase.auth
+    }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseStorageReference(): StorageReference {
+        return Firebase.storage.reference
     }
 
     @Singleton
@@ -35,13 +48,6 @@ class FirebaseModule {
 
     @Singleton
     @Provides
-    @Named("usersReference")
-    fun provideUsersReference(): DatabaseReference {
-        return FirebaseDatabase.getInstance().getReference(UNLIMITED).child("users")
-    }
-
-    @Singleton
-    @Provides
     @Named("reportsReference")
     fun provideReportsReference(): DatabaseReference {
         return FirebaseDatabase.getInstance().getReference(RESTRICTED).child("reports")
@@ -49,15 +55,9 @@ class FirebaseModule {
 
     @Singleton
     @Provides
-    @Named("aboutReference")
-    fun provideAboutReference(): DatabaseReference {
-        return FirebaseDatabase.getInstance().getReference(UNLIMITED).child("about")
-    }
-
-    @Singleton
-    @Provides
-    fun provideFirebaseStorageReference(): StorageReference {
-        return Firebase.storage.reference
+    @Named("usersReference")
+    fun provideUsersReference(): DatabaseReference {
+        return FirebaseDatabase.getInstance().getReference(UNLIMITED).child("users")
     }
 
 }

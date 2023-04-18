@@ -23,10 +23,6 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
         }
     }
 
-    override fun signUpClicked() {
-        changeCurrentFragment(SignUpFragment(), true)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.main_menu, menu)
@@ -44,9 +40,8 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun hideOptions(menu: Menu) {
-        menu.findItem(R.id.menuItem_userProfile).isVisible = false
-        menu.findItem(R.id.menuItem_signOut).isVisible = false
+    override fun signUpClicked() {
+        changeCurrentFragment(SignUpFragment(), true)
     }
 
     private fun changeCurrentFragment(fragment: Fragment, addToBackstack: Boolean) {
@@ -59,6 +54,11 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
 
             commit()
         }
+    }
+
+    private fun hideOptions(menu: Menu) {
+        menu.findItem(R.id.menuItem_userProfile).isVisible = false
+        menu.findItem(R.id.menuItem_signOut).isVisible = false
     }
 
 }

@@ -38,26 +38,6 @@ class ChangePasswordFragment : Fragment() {
         return fragmentView
     }
 
-    private fun initView() {
-        currentPasswordEditText = fragmentView.findViewById(R.id.changePassword_currentPassword)
-        newPasswordEditText = fragmentView.findViewById(R.id.changePassword_newPassword)
-        confirmPasswordEditText = fragmentView.findViewById(R.id.changePassword_confirmPassword)
-        saveButton = fragmentView.findViewById(R.id.changePassword_buttonSave)
-        cancelButton = fragmentView.findViewById(R.id.changePassword_buttonCancel)
-        loadingSection = fragmentView.findViewById(R.id.changePassword_loadingSection)
-
-        saveButton.setOnClickListener() {
-            val currentPassword = currentPasswordEditText.text.toString()
-            val newPassword = newPasswordEditText.text.toString()
-            val confirmPassword = confirmPasswordEditText.text.toString()
-            viewModel.changePassword(currentPassword, newPassword, confirmPassword)
-        }
-
-        cancelButton.setOnClickListener() {
-            activity!!.finish()
-        }
-    }
-
     private fun handlePasswordChangeResult(result: Boolean) {
         val message: String
 
@@ -82,6 +62,26 @@ class ChangePasswordFragment : Fragment() {
         }
 
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun initView() {
+        currentPasswordEditText = fragmentView.findViewById(R.id.changePassword_currentPassword)
+        newPasswordEditText = fragmentView.findViewById(R.id.changePassword_newPassword)
+        confirmPasswordEditText = fragmentView.findViewById(R.id.changePassword_confirmPassword)
+        saveButton = fragmentView.findViewById(R.id.changePassword_buttonSave)
+        cancelButton = fragmentView.findViewById(R.id.changePassword_buttonCancel)
+        loadingSection = fragmentView.findViewById(R.id.changePassword_loadingSection)
+
+        saveButton.setOnClickListener() {
+            val currentPassword = currentPasswordEditText.text.toString()
+            val newPassword = newPasswordEditText.text.toString()
+            val confirmPassword = confirmPasswordEditText.text.toString()
+            viewModel.changePassword(currentPassword, newPassword, confirmPassword)
+        }
+
+        cancelButton.setOnClickListener() {
+            activity!!.finish()
+        }
     }
 
     private fun setObservers() {
