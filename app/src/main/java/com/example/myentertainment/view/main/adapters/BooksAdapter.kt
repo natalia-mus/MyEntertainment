@@ -16,8 +16,7 @@ class BooksAdapter(
     private val context: Context,
     private var books: List<Book>,
     private val onItemClickAction: OnItemClickAction
-) :
-    RecyclerView.Adapter<BooksViewHolder>() {
+) : RecyclerView.Adapter<BooksViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BooksViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.single_book, parent, false)

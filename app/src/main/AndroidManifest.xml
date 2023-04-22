@@ -25,13 +25,13 @@
             android:name=".view.main.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.userprofile.UserProfileActivity"
+            android:name=".view.UserProfileActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.add.AddActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.problemreport.ProblemReportActivity"
+            android:name=".view.ProblemReportActivity"
             android:label="@string/report_a_problem"
             android:screenOrientation="portrait" />
         <activity

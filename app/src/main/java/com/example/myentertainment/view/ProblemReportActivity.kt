@@ -1,4 +1,4 @@
-package com.example.myentertainment.view.problemreport
+package com.example.myentertainment.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationResult
-import com.example.myentertainment.view.ScreenshotsSection
 import com.example.myentertainment.viewmodel.problemreport.ProblemReportViewModel
 
 class ProblemReportActivity : AppCompatActivity() {
@@ -50,6 +49,21 @@ class ProblemReportActivity : AppCompatActivity() {
         }
     }
 
+    private fun handleAddingToDatabaseResult(result: Boolean) {
+        if (result) {
+            finish()
+            Toast.makeText(applicationContext, getString(R.string.problem_report_has_been_sent), Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun handleValidationResult(validationResult: ValidationResult) {
+        when (validationResult) {
+            ValidationResult.EMPTY_VALUES -> Toast.makeText(this, R.string.report_empty_fields, Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun initView() {
         summaryEditText = findViewById(R.id.problemReportActivity_summary)
         descriptionEditText = findViewById(R.id.problemReportActivity_problemDescription)
@@ -62,6 +76,20 @@ class ProblemReportActivity : AppCompatActivity() {
         }
 
         setOnEmptyScreenshotButtonClickListener()
+    }
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = Constants.INTENT_TYPE_IMAGE
+        startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE)
+    }
+
+    private fun sendReport() {
+        val summary = summaryEditText.text.toString()
+        val description = descriptionEditText.text.toString()
+        val screenshots = screenshotsSection.getScreenshots()
+
+        viewModel.addToDatabase(summary, description, screenshots)
     }
 
     private fun setObservers() {
@@ -78,41 +106,12 @@ class ProblemReportActivity : AppCompatActivity() {
         screenshotsSection.setOnEmptyScreenshotButtonClickListener(onEmptyScreenshotButtonClickListener)
     }
 
-    private fun sendReport() {
-        val summary = summaryEditText.text.toString()
-        val description = descriptionEditText.text.toString()
-        val screenshots = screenshotsSection.getScreenshots()
-
-        viewModel.addToDatabase(summary, description, screenshots)
-    }
-
     private fun updateView(loading: Boolean) {
         if (loading) {
             loadingSection.visibility = View.VISIBLE
         } else {
             loadingSection.visibility = View.GONE
         }
-    }
-
-    private fun handleAddingToDatabaseResult(result: Boolean) {
-        if (result) {
-            finish()
-            Toast.makeText(applicationContext, getString(R.string.problem_report_has_been_sent), Toast.LENGTH_LONG).show()
-        } else {
-            Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
-        }
-    }
-
-    private fun handleValidationResult(validationResult: ValidationResult) {
-        when (validationResult) {
-            ValidationResult.EMPTY_VALUES -> Toast.makeText(this, R.string.report_empty_fields, Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = Constants.INTENT_TYPE_IMAGE
-        startActivityForResult(intent, Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE)
     }
 
 }

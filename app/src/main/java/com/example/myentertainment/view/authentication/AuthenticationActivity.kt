@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
-import com.example.myentertainment.view.problemreport.ProblemReportActivity
+import com.example.myentertainment.view.ProblemReportActivity
 
 class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
 
@@ -21,10 +21,6 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
         } else {
             changeCurrentFragment(SignInFragment(this), false)
         }
-    }
-
-    override fun signUpClicked() {
-        changeCurrentFragment(SignUpFragment(), true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -44,9 +40,8 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun hideOptions(menu: Menu) {
-        menu.findItem(R.id.menuItem_userProfile).isVisible = false
-        menu.findItem(R.id.menuItem_signOut).isVisible = false
+    override fun signUpClicked() {
+        changeCurrentFragment(SignUpFragment(), true)
     }
 
     private fun changeCurrentFragment(fragment: Fragment, addToBackstack: Boolean) {
@@ -59,6 +54,11 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
 
             commit()
         }
+    }
+
+    private fun hideOptions(menu: Menu) {
+        menu.findItem(R.id.menuItem_userProfile).isVisible = false
+        menu.findItem(R.id.menuItem_signOut).isVisible = false
     }
 
 }

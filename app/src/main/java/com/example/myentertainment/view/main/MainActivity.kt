@@ -13,8 +13,8 @@ import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.view.AboutActivity
 import com.example.myentertainment.view.add.AddActivity
 import com.example.myentertainment.view.authentication.AuthenticationActivity
-import com.example.myentertainment.view.problemreport.ProblemReportActivity
-import com.example.myentertainment.view.userprofile.UserProfileActivity
+import com.example.myentertainment.view.ProblemReportActivity
+import com.example.myentertainment.view.UserProfileActivity
 import com.example.myentertainment.viewmodel.main.MainActivityViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
