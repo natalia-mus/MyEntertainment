@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
-import com.example.myentertainment.view.problemreport.ProblemReportActivity
+import com.example.myentertainment.view.ProblemReportActivity
 
 class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
 

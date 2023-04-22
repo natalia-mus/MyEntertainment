@@ -1,4 +1,4 @@
-package com.example.myentertainment.view.problemreport
+package com.example.myentertainment.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationResult
-import com.example.myentertainment.view.ScreenshotsSection
 import com.example.myentertainment.viewmodel.problemreport.ProblemReportViewModel
 
 class ProblemReportActivity : AppCompatActivity() {

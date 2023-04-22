@@ -1,4 +1,4 @@
-package com.example.myentertainment.view.userprofile
+package com.example.myentertainment.view
 
 import android.app.Activity
 import android.app.Dialog
