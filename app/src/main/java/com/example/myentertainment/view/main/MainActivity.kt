@@ -11,6 +11,7 @@ import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.view.AboutActivity
+import com.example.myentertainment.view.FindFriendsActivity
 import com.example.myentertainment.view.add.AddActivity
 import com.example.myentertainment.view.authentication.AuthenticationActivity
 import com.example.myentertainment.view.ProblemReportActivity
@@ -59,12 +60,16 @@ class MainActivity : AppCompatActivity() {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
-            R.id.menuItem_reportAProblem -> {
-                val intent = Intent(this, ProblemReportActivity::class.java)
-                startActivity(intent)
-            }
             R.id.menuItem_about -> {
                 val intent = Intent(this, AboutActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.menuItem_findFriends -> {
+                val intent = Intent(this, FindFriendsActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.menuItem_reportAProblem -> {
+                val intent = Intent(this, ProblemReportActivity::class.java)
                 startActivity(intent)
             }
         }

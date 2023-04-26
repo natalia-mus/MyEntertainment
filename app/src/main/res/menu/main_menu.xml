@@ -20,6 +20,10 @@
         android:title="@string/about" />
 
     <item
+        android:id="@+id/menuItem_findFriends"
+        android:title="@string/find_friends" />
+
+    <item
         android:id="@+id/menuItem_reportAProblem"
         android:title="@string/report_a_problem" />
 

@@ -28,6 +28,8 @@
     <string name="email_address">e-mail address</string>
     <string name="enter_all_required_values">Enter all required values</string>
     <string name="failed_to_sign_in">Failed to sign in</string>
+    <string name="find_friends">Find friends</string>
+    <string name="find_friends_hint">type real name or username</string>
     <string name="gallery">GALLERY</string>
     <string name="game_add">add game</string>
     <string name="game_added">Game added</string>
@@ -60,6 +62,7 @@
     <string name="no_go_back">no, go back</string>
     <string name="no_movies">you have no movies</string>
     <string name="no_music">you have no songs</string>
+    <string name="no_results_info">no users found</string>
     <string name="none">-</string>
     <string name="password">password</string>
     <string name="password_too_short">Your password should be at least 6 characters long</string>
