@@ -53,16 +53,15 @@ class AddBookFragmentViewModel : ViewModel() {
         val book = Book(itemId, title, author, releaseYear, genre, rating)
 
         if (validation(book)) {
-            mainPath.child(itemId).setValue(book)
-                .addOnCompleteListener() { task ->
-                    if (task.isSuccessful) {
-                        loading.value = false
-                        addingToDatabaseResult.value = true
-                    } else {
-                        loading.value = false
-                        addingToDatabaseResult.value = false
-                    }
+            mainPath.child(itemId).setValue(book).addOnCompleteListener() { task ->
+                if (task.isSuccessful) {
+                    loading.value = false
+                    addingToDatabaseResult.value = true
+                } else {
+                    loading.value = false
+                    addingToDatabaseResult.value = false
                 }
+            }
         }
     }
 

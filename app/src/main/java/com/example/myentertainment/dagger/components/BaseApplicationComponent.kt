@@ -11,8 +11,8 @@ import com.example.myentertainment.viewmodel.authentication.ChangePasswordViewMo
 import com.example.myentertainment.viewmodel.authentication.SignInFragmentViewModel
 import com.example.myentertainment.viewmodel.authentication.SignUpFragmentViewModel
 import com.example.myentertainment.viewmodel.main.*
-import com.example.myentertainment.viewmodel.problemreport.ProblemReportViewModel
-import com.example.myentertainment.viewmodel.userprofile.UserProfileActivityViewModel
+import com.example.myentertainment.viewmodel.ProblemReportViewModel
+import com.example.myentertainment.viewmodel.UserProfileActivityViewModel
 import dagger.Component
 import javax.inject.Singleton
 

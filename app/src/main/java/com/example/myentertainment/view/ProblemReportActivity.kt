@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationResult
-import com.example.myentertainment.viewmodel.problemreport.ProblemReportViewModel
+import com.example.myentertainment.viewmodel.ProblemReportViewModel
 
 class ProblemReportActivity : AppCompatActivity() {
 

@@ -27,7 +27,7 @@ import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.data.Date
 import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.view.authentication.AuthenticationActivity
-import com.example.myentertainment.viewmodel.userprofile.UserProfileActivityViewModel
+import com.example.myentertainment.viewmodel.UserProfileActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.ByteArrayOutputStream
 

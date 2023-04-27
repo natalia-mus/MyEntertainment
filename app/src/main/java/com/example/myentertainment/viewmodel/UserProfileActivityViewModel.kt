@@ -1,4 +1,4 @@
-package com.example.myentertainment.viewmodel.userprofile
+package com.example.myentertainment.viewmodel
 
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
