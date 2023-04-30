@@ -24,7 +24,7 @@ class AddMovieFragmentViewModel : ViewModel() {
     init {
         BaseApplication.baseApplicationComponent.inject(this)
         user = databaseAuth.uid.toString()
-        mainPath = databaseReference.child(user).child(CategoryObject.MOVIES)
+        mainPath = entertainmentReference.child(user).child(CategoryObject.MOVIES)
         setItemId()
     }
 
@@ -32,8 +32,8 @@ class AddMovieFragmentViewModel : ViewModel() {
     lateinit var databaseAuth: FirebaseAuth
 
     @Inject
-    @Named("usersReference")
-    lateinit var databaseReference: DatabaseReference
+    @Named("entertainmentReference")
+    lateinit var entertainmentReference: DatabaseReference
 
     val loading = MutableLiveData<Boolean>()
     val movie = MutableLiveData<Movie>()
@@ -69,7 +69,7 @@ class AddMovieFragmentViewModel : ViewModel() {
     }
 
     fun getMovie(id: String) {
-        databaseReference.child(user).child(CategoryObject.MOVIES).get().addOnSuccessListener {
+        mainPath.get().addOnSuccessListener {
             movie.value = it.child(id).getValue(Movie::class.java)
         }
     }
@@ -92,22 +92,21 @@ class AddMovieFragmentViewModel : ViewModel() {
     }
 
     private fun setItemId() {
-        mainPath
-            .addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(error: DatabaseError) {}
+        mainPath.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {}
 
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        val childrenCount = snapshot.childrenCount
-                        itemId = childrenCount.toString()
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val childrenCount = snapshot.childrenCount
+                    itemId = childrenCount.toString()
 
-                        for (i in 0 until childrenCount) {
-                            val child = snapshot.child(i.toString()).value
-                            if (child.toString() == Constants.NULL) itemId = i.toString()
-                        }
+                    for (i in 0 until childrenCount) {
+                        val child = snapshot.child(i.toString()).value
+                        if (child.toString() == Constants.NULL) itemId = i.toString()
                     }
                 }
-            })
+            }
+        })
     }
 
     private fun validation(movie: Movie): Boolean {

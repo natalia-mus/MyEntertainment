@@ -37,7 +37,7 @@ class DatabaseRebuilder {
 
                     for ((id, book) in objectsToMove.withIndex()) {
                         // adding book to the new path
-                        entertainmentReference.child(userId).child(id.toString()).child("books").setValue(book)
+                        entertainmentReference.child(userId).child("books").child(id.toString()).setValue(book)
                     }
 
                     // deleting all books from the previous path
@@ -51,7 +51,7 @@ class DatabaseRebuilder {
 
                     for ((id, movie) in objectsToMove.withIndex()) {
                         // adding movie to the new path
-                        entertainmentReference.child(userId).child(id.toString()).child("movies").setValue(movie)
+                        entertainmentReference.child(userId).child("movies").child(id.toString()).setValue(movie)
                     }
 
                     // deleting all movies from the previous path
@@ -65,7 +65,7 @@ class DatabaseRebuilder {
 
                     for ((id, game) in objectsToMove.withIndex()) {
                         // adding game to the new path
-                        entertainmentReference.child(userId).child(id.toString()).child("games").setValue(game)
+                        entertainmentReference.child(userId).child("games").child(id.toString()).setValue(game)
                     }
 
                     // deleting all games from the previous path
@@ -79,10 +79,10 @@ class DatabaseRebuilder {
 
                     for ((id, song) in objectsToMove.withIndex()) {
                         // adding song to the new path
-                        entertainmentReference.child(userId).child(id.toString()).child("music").setValue(song)
+                        entertainmentReference.child(userId).child("music").child(id.toString()).setValue(song)
                     }
 
-                    // deleting all books from the previous path
+                    // deleting all songs from the previous path
                     usersReference.child(userId).child("music").removeValue()
                 }
             }
