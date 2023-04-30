@@ -1,6 +1,7 @@
 package com.example.myentertainment.dagger.components
 
 import android.app.Application
+import com.example.myentertainment.DatabaseRebuilder
 import com.example.myentertainment.dagger.modules.FirebaseModule
 import com.example.myentertainment.viewmodel.AboutViewModel
 import com.example.myentertainment.viewmodel.add.AddBookFragmentViewModel
@@ -36,4 +37,6 @@ interface BaseApplicationComponent {
     fun inject(viewModel: MusicFragmentViewModel)
     fun inject(viewModel: ProblemReportViewModel)
     fun inject(viewModel: AboutViewModel)
+
+    fun inject(databaseRebuilder: DatabaseRebuilder)
 }

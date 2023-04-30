@@ -13,18 +13,21 @@ import javax.inject.Named
 
 class GamesFragmentViewModel : ViewModel() {
 
+    private val mainPath: DatabaseReference
+    private val user: String
+
     init {
         BaseApplication.baseApplicationComponent.inject(this)
+        user = databaseAuth.uid.toString()
+        mainPath = entertainmentReference.child(user).child(CategoryObject.GAMES)
     }
 
     @Inject
     lateinit var databaseAuth: FirebaseAuth
 
     @Inject
-    @Named("usersReference")
-    lateinit var databaseReference: DatabaseReference
-
-    private val user = databaseAuth.uid.toString()
+    @Named("entertainmentReference")
+    lateinit var entertainmentReference: DatabaseReference
 
     val games = MutableLiveData<List<Game>>()
     val itemDeleted = MutableLiveData<Boolean>(false)
@@ -32,7 +35,7 @@ class GamesFragmentViewModel : ViewModel() {
 
     fun deleteGame(id: String?) {
         itemDeleted.value = false
-        databaseReference.child(user).child(CategoryObject.GAMES).child(id.toString()).removeValue()
+        mainPath.child(id.toString()).removeValue()
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     fetchGames()
@@ -44,7 +47,7 @@ class GamesFragmentViewModel : ViewModel() {
     }
 
     fun fetchGames() {
-        databaseReference.child(user).child(CategoryObject.GAMES).get().addOnSuccessListener {
+        mainPath.get().addOnSuccessListener {
             val gamesList: MutableList<Game> = mutableListOf()
             var lastChild = it.childrenCount
 

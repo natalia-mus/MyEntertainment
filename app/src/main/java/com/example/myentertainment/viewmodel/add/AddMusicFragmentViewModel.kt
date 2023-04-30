@@ -24,7 +24,7 @@ class AddMusicFragmentViewModel : ViewModel() {
     init {
         BaseApplication.baseApplicationComponent.inject(this)
         user = databaseAuth.uid.toString()
-        mainPath = databaseReference.child(user).child(CategoryObject.MUSIC)
+        mainPath = entertainmentReference.child(user).child(CategoryObject.MUSIC)
         setItemId()
     }
 
@@ -32,8 +32,8 @@ class AddMusicFragmentViewModel : ViewModel() {
     lateinit var databaseAuth: FirebaseAuth
 
     @Inject
-    @Named("usersReference")
-    lateinit var databaseReference: DatabaseReference
+    @Named("entertainmentReference")
+    lateinit var entertainmentReference: DatabaseReference
 
     val loading = MutableLiveData<Boolean>()
     val song = MutableLiveData<Music>()
@@ -69,7 +69,7 @@ class AddMusicFragmentViewModel : ViewModel() {
     }
 
     fun getSong(id: String) {
-        databaseReference.child(user).child(CategoryObject.MUSIC).get().addOnSuccessListener {
+        mainPath.get().addOnSuccessListener {
             song.value = it.child(id).getValue(Music::class.java)
         }
     }
@@ -92,22 +92,21 @@ class AddMusicFragmentViewModel : ViewModel() {
     }
 
     private fun setItemId() {
-        mainPath
-            .addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(error: DatabaseError) {}
+        mainPath.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {}
 
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        val childrenCount = snapshot.childrenCount
-                        itemId = childrenCount.toString()
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val childrenCount = snapshot.childrenCount
+                    itemId = childrenCount.toString()
 
-                        for (i in 0 until childrenCount) {
-                            val child = snapshot.child(i.toString()).value
-                            if (child.toString() == Constants.NULL) itemId = i.toString()
-                        }
+                    for (i in 0 until childrenCount) {
+                        val child = snapshot.child(i.toString()).value
+                        if (child.toString() == Constants.NULL) itemId = i.toString()
                     }
                 }
-            })
+            }
+        })
     }
 
     private fun validation(music: Music): Boolean {
