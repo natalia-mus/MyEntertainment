@@ -1,5 +1,6 @@
 package com.example.myentertainment.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.data.Date
@@ -8,7 +9,7 @@ import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
 import javax.inject.Named
 
-class FindFriendsViewModel: ViewModel() {
+class FindFriendsViewModel : ViewModel() {
 
     init {
         BaseApplication.baseApplicationComponent.inject(this)
@@ -18,8 +19,13 @@ class FindFriendsViewModel: ViewModel() {
     @Named("usersReference")
     lateinit var databaseReference: DatabaseReference
 
+    val loading = MutableLiveData<Boolean>()
+    val status = MutableLiveData<SearchUsersStatus>()
+    val results = MutableLiveData<ArrayList<UserProfile>>()
+
 
     fun findFriends(phrase: String) {
+        loading.value = true
         val filtered = ArrayList<UserProfile>()
 
         // fetching all users:
@@ -35,15 +41,22 @@ class FindFriendsViewModel: ViewModel() {
                         if (containsPhrase(userProfile, phrase)) {
                             filtered.add(userProfile)
                         }
-
                     }
 
+                    loading.value = false
+                    results.value = filtered
+                    status.value = if (filtered.isNotEmpty()) SearchUsersStatus.SUCCESS else SearchUsersStatus.NO_RESULTS
+
                 } else {
-                    // TODO - no results
+                    loading.value = false
+                    results.value?.clear()
+                    status.value = SearchUsersStatus.NO_RESULTS
                 }
 
             } else {
-                // TODO - error
+                loading.value = false
+                results.value?.clear()
+                status.value = SearchUsersStatus.ERROR
             }
         }
     }
@@ -95,4 +108,9 @@ class FindFriendsViewModel: ViewModel() {
         return UserProfile(userName, realName, city, country, birthDate, email)
     }
 
+}
+
+
+enum class SearchUsersStatus {
+    SUCCESS, NO_RESULTS, ERROR
 }

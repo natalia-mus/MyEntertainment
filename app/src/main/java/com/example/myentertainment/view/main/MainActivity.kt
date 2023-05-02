@@ -22,12 +22,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: MainActivityViewModel
     private val moviesFragment = MoviesFragment()
     private val booksFragment = BooksFragment()
     private val gamesFragment = GamesFragment()
     private val musicFragment = MusicFragment()
 
+    private lateinit var viewModel: MainActivityViewModel
     private lateinit var currentFragment: String
 
     private lateinit var bottomNavigation: BottomNavigationView
