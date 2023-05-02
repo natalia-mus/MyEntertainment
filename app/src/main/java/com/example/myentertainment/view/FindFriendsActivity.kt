@@ -1,7 +1,7 @@
 package com.example.myentertainment.view
 
 import android.os.Bundle
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +13,7 @@ class FindFriendsActivity : AppCompatActivity() {
     private lateinit var viewModel: FindFriendsViewModel
 
     private lateinit var searchField: TextView
-    private lateinit var searchButton: Button
+    private lateinit var searchButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +24,7 @@ class FindFriendsActivity : AppCompatActivity() {
     }
 
     private fun findFriends() {
-        val phrase = searchField.text
+        val phrase = searchField.text.toString()
         viewModel.findFriends(phrase)
     }
 

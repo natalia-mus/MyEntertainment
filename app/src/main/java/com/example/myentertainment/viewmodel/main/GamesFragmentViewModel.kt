@@ -35,15 +35,14 @@ class GamesFragmentViewModel : ViewModel() {
 
     fun deleteGame(id: String?) {
         itemDeleted.value = false
-        mainPath.child(id.toString()).removeValue()
-            .addOnCompleteListener() { task ->
-                if (task.isSuccessful) {
-                    fetchGames()
-                    itemDeleted.value = true
-                } else {
-                    Log.e("error", "error")
-                }
+        mainPath.child(id.toString()).removeValue().addOnCompleteListener() { task ->
+            if (task.isSuccessful) {
+                fetchGames()
+                itemDeleted.value = true
+            } else {
+                Log.e("error", "error")
             }
+        }
     }
 
     fun fetchGames() {
