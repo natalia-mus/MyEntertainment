@@ -1,11 +1,14 @@
 package com.example.myentertainment.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
+import com.example.myentertainment.`object`.StoragePathObject
 import com.example.myentertainment.data.Date
 import com.example.myentertainment.data.UserProfile
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.storage.StorageReference
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -19,10 +22,13 @@ class FindFriendsViewModel : ViewModel() {
     @Named("usersReference")
     lateinit var databaseReference: DatabaseReference
 
+    @Inject
+    lateinit var storageReference: StorageReference
+
     val loading = MutableLiveData<Boolean>()
     val status = MutableLiveData<SearchUsersStatus>()
-    val results = MutableLiveData<ArrayList<UserProfile>>()
-
+    val users = MutableLiveData<ArrayList<UserProfile>>()
+    val profilePictures = MutableLiveData<HashMap<String, Uri>>()
 
     fun findFriends(phrase: String) {
         loading.value = true
@@ -43,19 +49,18 @@ class FindFriendsViewModel : ViewModel() {
                         }
                     }
 
-                    loading.value = false
-                    results.value = filtered
-                    status.value = if (filtered.isNotEmpty()) SearchUsersStatus.SUCCESS else SearchUsersStatus.NO_RESULTS
+                    users.value = filtered
+                    getProfilePictures()
 
                 } else {
                     loading.value = false
-                    results.value?.clear()
+                    users.value?.clear()
                     status.value = SearchUsersStatus.NO_RESULTS
                 }
 
             } else {
                 loading.value = false
-                results.value?.clear()
+                users.value?.clear()
                 status.value = SearchUsersStatus.ERROR
             }
         }
@@ -65,13 +70,43 @@ class FindFriendsViewModel : ViewModel() {
         return (item.username?.contains(phrase, true) == true || item.realName?.contains(phrase, true) == true)
     }
 
+    private fun getProfilePictures() {
+        val pictures = HashMap<String, Uri>()
+        if (users.value != null) {
+            val usersSet = users.value!!
+
+            var iterator = 0
+            while (iterator < usersSet.size - 1) {
+                val user = usersSet[iterator]
+                profilePictureReference(user.userId!!).downloadUrl.addOnCompleteListener() { task ->
+                    if (task.isSuccessful && task.result != null) {
+                        pictures.put(user.userId, task.result!!)
+                    }
+
+                    if (iterator == usersSet.size - 1) {
+                        profilePictures.value = pictures
+                        status.value = if (users.value?.isNotEmpty() == true) SearchUsersStatus.SUCCESS else SearchUsersStatus.NO_RESULTS
+                        loading.value = false
+                    }
+                }
+                iterator++
+            }
+
+        }
+    }
+
     private fun parseUserProfileObject(user: HashMap<String, UserProfile>): UserProfile {
+        var userId = ""
         var userName = ""
         var realName = ""
         var city: String? = null
         var country: String? = null
         var birthDate: Date? = null
         var email: String? = null
+
+        if (user.containsKey("userId")) {
+            userId = user["userId"].toString()
+        }
 
         if (user.containsKey("username")) {
             userName = user["username"].toString()
@@ -105,7 +140,12 @@ class FindFriendsViewModel : ViewModel() {
             email = user["email"].toString()
         }
 
-        return UserProfile(userName, realName, city, country, birthDate, email)
+        return UserProfile(userId, userName, realName, city, country, birthDate, email)
+    }
+
+    private fun profilePictureReference(userId: String): StorageReference {
+        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + userId
+        return storageReference.child(path)
     }
 
 }

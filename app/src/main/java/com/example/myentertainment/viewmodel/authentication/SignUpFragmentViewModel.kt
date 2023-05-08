@@ -3,7 +3,6 @@ package com.example.myentertainment.viewmodel.authentication
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
-import com.example.myentertainment.Constants
 import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.data.UserProfile
 import com.google.firebase.auth.FirebaseAuth
@@ -47,10 +46,10 @@ class SignUpFragmentViewModel : ViewModel() {
     }
 
     private fun createUserProfile(username: String, email: String) {
-        val user = databaseAuth.uid.toString()
-        val userProfileData = UserProfile(username, null, null, null, null, email)
+        val userId = databaseAuth.uid.toString()
+        val userProfileData = UserProfile(userId, username, null, null, null, null, email)
 
-        databaseReference.child(user).child(Constants.USER_PROFILE_DATA).setValue(userProfileData)
+        databaseReference.child(userId).setValue(userProfileData)
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     loading.value = false

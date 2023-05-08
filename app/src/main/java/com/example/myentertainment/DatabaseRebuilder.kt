@@ -1,5 +1,7 @@
 package com.example.myentertainment
 
+import com.example.myentertainment.data.Date
+import com.example.myentertainment.data.UserProfile
 import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
 import javax.inject.Named
@@ -22,6 +24,34 @@ class DatabaseRebuilder {
     @Named("usersReference")
     lateinit var usersReference: DatabaseReference
 
+
+    fun addUserIdToUserProfile() {
+        usersReference.get().addOnSuccessListener {
+            val userObjectsSet = it.value as HashMap<String, HashMap<String, Any>>
+
+            for (userObject in userObjectsSet) {
+                val userId = userObject.key
+
+                val username = userObject.value["username"] as String
+                val realName = userObject.value["realName"] as String
+                val city = userObject.value["city"] as String
+                val country = userObject.value["country"] as String
+                val email = userObject.value["email"] as String
+
+                var birthDate: Date? = null
+                if (userObject.value.containsKey("birthDate")) {
+                    val date = userObject.value["birthDate"] as HashMap<String, Any>
+                    val year = date["year"].toString().toIntOrNull()
+                    val month = date["month"].toString().toIntOrNull()
+                    val day = date["day"].toString().toIntOrNull()
+                    birthDate = Date(year, month, day)
+                }
+
+                val userProfile = UserProfile(userId, username, realName, city, country, birthDate, email)
+                usersReference.child(userId).setValue(userProfile)
+            }
+        }
+    }
 
     fun rebuild() {
         // fetching all records from rebuilding path

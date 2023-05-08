@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
-import com.example.myentertainment.Constants
 import com.example.myentertainment.`object`.StoragePathObject
 import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.data.UserProfile
@@ -32,7 +31,7 @@ class UserProfileActivityViewModel : ViewModel() {
     @Inject
     lateinit var storageReference: StorageReference
 
-    private val user = databaseAuth.uid.toString()
+    val userId = databaseAuth.uid.toString()
 
     val loading = MutableLiveData<Boolean>()
     val userProfile = MutableLiveData<UserProfile?>()
@@ -56,7 +55,7 @@ class UserProfileActivityViewModel : ViewModel() {
 
     fun getUserProfileData() {
         loading.value = true
-        databaseReference.child(user).child(Constants.USER_PROFILE_DATA).get()
+        databaseReference.child(userId).get()
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     userProfile.value = task.result?.getValue(UserProfile::class.java)
@@ -84,8 +83,8 @@ class UserProfileActivityViewModel : ViewModel() {
         loading.value = true
 
         if (validation(userProfileData)) {
-            val data = hashMapOf<String, Any>(Constants.USER_PROFILE_DATA to userProfileData)
-            databaseReference.child(user).updateChildren(data).addOnCompleteListener() { task ->
+            val data = hashMapOf<String, Any>(userId to userProfileData)
+            databaseReference.updateChildren(data).addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     loading.value = false
                     updatingUserProfileDataSuccessful.value = true
@@ -126,8 +125,8 @@ class UserProfileActivityViewModel : ViewModel() {
             }
     }
 
-    private fun profilePictureReference() : StorageReference {
-        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + user
+    private fun profilePictureReference(): StorageReference {
+        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + userId
         return storageReference.child(path)
     }
 

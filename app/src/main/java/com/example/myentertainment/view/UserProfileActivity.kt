@@ -468,7 +468,7 @@ class UserProfileActivity : AppCompatActivity() {
             val email = email.text.toString()
 
             val userProfileData =
-                UserProfile(username, realName, city, country, newBirthDate, email)
+                UserProfile(viewModel.userId, username, realName, city, country, newBirthDate, email)
             viewModel.updateUserProfileData(userProfileData)
         } else {
             switchViewMode(false)
