@@ -56,9 +56,12 @@ class FindFriendsActivity : AppCompatActivity() {
     }
 
     private fun showResults() {
-        if (viewModel.users.value != null && viewModel.profilePictures.value != null) {
+        val users = viewModel.users.value
+        val profilePictures = viewModel.profilePictures.value
+
+        if (users != null && profilePictures != null) {
             usersList.layoutManager = GridLayoutManager(this, 2)
-            val adapter = FindFriendsAdapter(this, viewModel.users.value!!, viewModel.profilePictures.value!!)
+            val adapter = FindFriendsAdapter(this, users, profilePictures)
             usersList.adapter = adapter
 
             usersList.visibility = View.VISIBLE

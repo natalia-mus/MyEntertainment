@@ -9,6 +9,7 @@ import com.example.myentertainment.data.Date
 import com.example.myentertainment.data.UserProfile
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.storage.StorageReference
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -29,6 +30,8 @@ class FindFriendsViewModel : ViewModel() {
     val status = MutableLiveData<SearchUsersStatus>()
     val users = MutableLiveData<ArrayList<UserProfile>>()
     val profilePictures = MutableLiveData<HashMap<String, Uri>>()
+
+    private var profilePicturesRequests = 0
 
     fun findFriends(phrase: String) {
         loading.value = true
@@ -72,24 +75,23 @@ class FindFriendsViewModel : ViewModel() {
 
     private fun getProfilePictures() {
         val pictures = HashMap<String, Uri>()
-        if (users.value != null) {
-            val usersSet = users.value!!
-
-            var iterator = 0
-            while (iterator < usersSet.size - 1) {
-                val user = usersSet[iterator]
+        val usersSet = users.value
+        if (usersSet != null) {
+            for (user in usersSet) {
+                profilePicturesRequests++
                 profilePictureReference(user.userId!!).downloadUrl.addOnCompleteListener() { task ->
                     if (task.isSuccessful && task.result != null) {
                         pictures.put(user.userId, task.result!!)
                     }
 
-                    if (iterator == usersSet.size - 1) {
+                    profilePicturesRequests--
+                    if (profilePicturesRequests == 0) {
                         profilePictures.value = pictures
                         status.value = if (users.value?.isNotEmpty() == true) SearchUsersStatus.SUCCESS else SearchUsersStatus.NO_RESULTS
                         loading.value = false
                     }
                 }
-                iterator++
+
             }
 
         }
