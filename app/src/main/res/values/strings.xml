@@ -27,7 +27,8 @@
     <string name="email">e-mail:</string>
     <string name="email_address">e-mail address</string>
     <string name="enter_all_required_values">Enter all required values</string>
-    <string name="error">An error occurred. Please, try again.</string>
+    <string name="error">An error occurred</string>
+    <string name="error_try_again">An error occurred. Please, try again.</string>
     <string name="failed_to_sign_in">Failed to sign in</string>
     <string name="find_friends">Find friends</string>
     <string name="find_friends_hint">type real name or username</string>

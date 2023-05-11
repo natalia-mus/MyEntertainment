@@ -42,7 +42,7 @@ class MoviesFragmentViewModel : ViewModel() {
                     fetchMovies()
                     itemDeleted.value = true
                 } else {
-                    Log.e("error", "error")
+                    Log.e("MoviesFragmentViewModel", "error")
                 }
             }
     }

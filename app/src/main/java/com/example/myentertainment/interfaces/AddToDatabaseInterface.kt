@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.myentertainment.Constants
+import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.view.main.MainActivity
 
@@ -29,17 +30,13 @@ interface AddToDatabaseInterface {
             context.startActivity(intent)
 
         } else {
-            Toast.makeText(context, "An error occurred", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, context.resources.getString(R.string.error), Toast.LENGTH_LONG).show()
         }
     }
 
     fun handleValidationResult(validationResult: ValidationResult, context: Context, message: String) {
         when (validationResult) {
-            ValidationResult.EMPTY_VALUES -> Toast.makeText(
-                context,
-                message,
-                Toast.LENGTH_SHORT
-            ).show()
+            ValidationResult.EMPTY_VALUES -> Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
 

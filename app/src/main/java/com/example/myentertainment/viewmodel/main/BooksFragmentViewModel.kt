@@ -41,7 +41,7 @@ class BooksFragmentViewModel : ViewModel() {
                     fetchBooks()
                     itemDeleted.value = true
                 } else {
-                    Log.e("error", "error")
+                    Log.e("BooksFragmentViewModel", "error")
                 }
             }
     }

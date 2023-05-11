@@ -89,7 +89,7 @@ class FindFriendsActivity : AppCompatActivity() {
             SearchUsersStatus.ERROR -> {
                 usersList.visibility = View.GONE
                 noResultsInfo.visibility = View.VISIBLE
-                Toast.makeText(this, getString(R.string.error), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.error_try_again), Toast.LENGTH_LONG).show()
             }
         }
     }

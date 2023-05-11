@@ -40,7 +40,7 @@ class GamesFragmentViewModel : ViewModel() {
                 fetchGames()
                 itemDeleted.value = true
             } else {
-                Log.e("error", "error")
+                Log.e("GamesFragmentViewModel", "error")
             }
         }
     }
