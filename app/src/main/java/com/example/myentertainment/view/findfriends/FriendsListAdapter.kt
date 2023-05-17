@@ -2,12 +2,12 @@ package com.example.myentertainment.view.findfriends
 
 import android.content.Context
 import android.net.Uri
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.bumptech.glide.Glide
@@ -55,10 +55,15 @@ class FriendsListViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
     val realName: TextView = view.findViewById(R.id.userTile_realName)
     val location: TextView = view.findViewById(R.id.userTile_location)
 
-    private val userTile: ConstraintLayout = view.findViewById(R.id.userTile)
-
     fun customView(context: Context) {
-        userTile.layoutParams.width = LayoutDimensionsUtil.calcWidth(context, Dimensions.USER_TILE_WIDTH)
-        userTile.layoutParams.height = LayoutDimensionsUtil.calcHeight(context, Dimensions.USER_TILE_HEIGHT)
+        image.layoutParams.width = LayoutDimensionsUtil.calcWidth(context, Dimensions.USER_TILE_PROFILE_PICTURE_SIZE)
+        image.layoutParams.height = LayoutDimensionsUtil.calcHeight(context, Dimensions.USER_TILE_PROFILE_PICTURE_SIZE)
+
+        val usernameTextSize = LayoutDimensionsUtil.calcTextSize(context, Dimensions.USER_TILE_USERNAME_TEXT_SIZE)
+        val realNameTextSize = LayoutDimensionsUtil.calcTextSize(context, Dimensions.USER_TILE_REAL_NAME_TEXT_SIZE)
+        val locationTextSize = LayoutDimensionsUtil.calcTextSize(context, Dimensions.USER_TILE_LOCATION_TEXT_SIZE)
+        username.setTextSize(TypedValue.COMPLEX_UNIT_PX, usernameTextSize)
+        realName.setTextSize(TypedValue.COMPLEX_UNIT_PX, realNameTextSize)
+        location.setTextSize(TypedValue.COMPLEX_UNIT_PX, locationTextSize)
     }
 }

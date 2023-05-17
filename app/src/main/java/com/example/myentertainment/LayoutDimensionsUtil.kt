@@ -1,6 +1,7 @@
 package com.example.myentertainment
 
 import android.content.Context
+import android.util.TypedValue
 
 object LayoutDimensionsUtil {
 
@@ -38,6 +39,10 @@ object LayoutDimensionsUtil {
     fun calcWidth(context: Context, value: Int): Int {
         val dpWidth = context.resources.displayMetrics.widthPixels
         return (dpWidth * (value / DESIGN_WIDTH)).toInt()
+    }
+
+    fun calcTextSize(context: Context, value: Int): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value.toFloat(), context.resources.displayMetrics)
     }
 
 }
