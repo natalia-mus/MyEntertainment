@@ -31,7 +31,7 @@
     <string name="error_try_again">An error occurred. Please, try again.</string>
     <string name="failed_to_sign_in">Failed to sign in</string>
     <string name="find_friends">Find friends</string>
-    <string name="find_friends_hint">type real name or username</string>
+    <string name="find_friends_hint">real name or username</string>
     <string name="gallery">GALLERY</string>
     <string name="game_add">add game</string>
     <string name="game_added">Game added</string>
