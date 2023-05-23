@@ -55,11 +55,13 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var loadingSection: ConstraintLayout
     private lateinit var buttonsSection: LinearLayout
 
+    private lateinit var yrs: String
+
     private var currentUser = true
     private var changesToSave = false
     private var newBirthDate: Date? = null
     private var currentBirthDate: Date? = null
-    private lateinit var yrs: String
+    private var viewPreparedForContext = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -174,8 +176,7 @@ class UserProfileActivity : AppCompatActivity() {
 
     private fun handleDatabaseTaskExecutionResult(successful: Boolean) {
         if (!successful) {
-            Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG)
-                .show()
+            Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -234,26 +235,6 @@ class UserProfileActivity : AppCompatActivity() {
         changePassword = findViewById(R.id.userProfile_changePassword)
 
         removeBirthDate.visibility = View.GONE
-
-        photo.setOnClickListener() {
-            changeProfilePicture()
-        }
-
-        changePassword.setOnClickListener() {
-            changePassword()
-        }
-
-        editButton.setOnClickListener() {
-            switchViewMode(true)
-        }
-
-        saveButton.setOnClickListener() {
-            updateUserProfileData()
-        }
-
-        cancelButton.setOnClickListener() {
-            switchViewMode(false)
-        }
     }
 
     private fun openCamera() {
@@ -284,6 +265,42 @@ class UserProfileActivity : AppCompatActivity() {
         }
 
         setBirthdateLabel(birthDateValue)
+    }
+
+    /**
+     * Prepares view depending on opening context - current user's profile and another user's profile options differ
+     */
+    private fun prepareViewForContext() {
+        if (!viewPreparedForContext) {
+
+            if (currentUser) {
+                photo.setOnClickListener() {
+                    changeProfilePicture()
+                }
+
+                changePassword.setOnClickListener() {
+                    changePassword()
+                }
+
+                editButton.visibility = View.VISIBLE
+                editButton.setOnClickListener() {
+                    switchViewMode(true)
+                }
+
+                saveButton.setOnClickListener() {
+                    updateUserProfileData()
+                }
+
+                cancelButton.setOnClickListener() {
+                    switchViewMode(false)
+                }
+
+            } else {
+                editButton.visibility = View.GONE
+            }
+
+            viewPreparedForContext = true
+        }
     }
 
     private fun refreshProfilePicture(uri: Uri?) {
@@ -496,6 +513,7 @@ class UserProfileActivity : AppCompatActivity() {
             currentBirthDate = userProfileData.birthDate
 
             switchViewMode(false)
+            prepareViewForContext()
 
         } else {
             finish()

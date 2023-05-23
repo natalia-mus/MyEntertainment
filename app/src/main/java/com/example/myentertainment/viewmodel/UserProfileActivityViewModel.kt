@@ -43,13 +43,13 @@ class UserProfileActivityViewModel : ViewModel() {
 
     fun changeProfilePicture(file: ByteArray) {
         loading.value = true
-        val uploadTask = profilePictureReference().putBytes(file)
+        val uploadTask = profilePictureReference(user).putBytes(file)
         changeProfilePicture(uploadTask)
     }
 
     fun changeProfilePicture(file: Uri) {
         loading.value = true
-        val uploadTask = profilePictureReference().putFile(file)
+        val uploadTask = profilePictureReference(user).putFile(file)
         changeProfilePicture(uploadTask)
     }
 
@@ -60,7 +60,7 @@ class UserProfileActivityViewModel : ViewModel() {
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     userProfile.value = task.result?.getValue(UserProfile::class.java)
-                    getProfilePictureUrl()
+                    getProfilePictureUrl(id)
                 } else {
                     loading.value = false
                     userProfile.value = null
@@ -70,9 +70,9 @@ class UserProfileActivityViewModel : ViewModel() {
 
     fun removeProfilePicture() {
         loading.value = true
-        profilePictureReference().delete().addOnCompleteListener() { task ->
+        profilePictureReference(user).delete().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
-                getProfilePictureUrl()
+                getProfilePictureUrl(user)
             } else {
                 loading.value = false
                 databaseTaskExecutionSuccessful.value = false
@@ -100,7 +100,7 @@ class UserProfileActivityViewModel : ViewModel() {
     private fun changeProfilePicture(uploadTask: UploadTask) {
         uploadTask.addOnCompleteListener() { task ->
             if (task.isSuccessful) {
-                getProfilePictureUrl()
+                getProfilePictureUrl(user)
             } else {
                 loading.value = false
                 databaseTaskExecutionSuccessful.value = false
@@ -108,8 +108,8 @@ class UserProfileActivityViewModel : ViewModel() {
         }
     }
 
-    private fun getProfilePictureUrl() {
-        profilePictureReference().downloadUrl
+    private fun getProfilePictureUrl(id: String) {
+        profilePictureReference(id).downloadUrl
             .addOnSuccessListener {
                 loading.value = false
                 profilePicture.value = it
@@ -126,8 +126,8 @@ class UserProfileActivityViewModel : ViewModel() {
             }
     }
 
-    private fun profilePictureReference(): StorageReference {
-        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + user
+    private fun profilePictureReference(id: String): StorageReference {
+        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + id
         return storageReference.child(path)
     }
 
