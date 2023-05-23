@@ -31,7 +31,7 @@ class UserProfileActivityViewModel : ViewModel() {
     @Inject
     lateinit var storageReference: StorageReference
 
-    val userId = databaseAuth.uid.toString()
+    val user = databaseAuth.uid.toString()
 
     val loading = MutableLiveData<Boolean>()
     val userProfile = MutableLiveData<UserProfile?>()
@@ -53,9 +53,10 @@ class UserProfileActivityViewModel : ViewModel() {
         changeProfilePicture(uploadTask)
     }
 
-    fun getUserProfileData() {
+    fun getUserProfileData(userId: String?) {
         loading.value = true
-        databaseReference.child(userId).get()
+        val id = userId ?: user
+        databaseReference.child(id).get()
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     userProfile.value = task.result?.getValue(UserProfile::class.java)
@@ -83,7 +84,7 @@ class UserProfileActivityViewModel : ViewModel() {
         loading.value = true
 
         if (validation(userProfileData)) {
-            val data = hashMapOf<String, Any>(userId to userProfileData)
+            val data = hashMapOf<String, Any>(user to userProfileData)
             databaseReference.updateChildren(data).addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     loading.value = false
@@ -126,7 +127,7 @@ class UserProfileActivityViewModel : ViewModel() {
     }
 
     private fun profilePictureReference(): StorageReference {
-        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + userId
+        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + user
         return storageReference.child(path)
     }
 

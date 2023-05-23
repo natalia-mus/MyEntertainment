@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.view.UserProfileActivity
 import com.example.myentertainment.viewmodel.FindFriendsViewModel
@@ -35,8 +36,11 @@ class FindFriendsActivity : AppCompatActivity(), UserTileClickListener {
         setObservers()
     }
 
-    override fun onUserTileClicked() {
+    override fun onUserTileClicked(userId: String?) {
         val intent = Intent(this, UserProfileActivity::class.java)
+        if (userId != null) {
+            intent.putExtra(Constants.USER_ID, userId)
+        }
         startActivity(intent)
     }
 

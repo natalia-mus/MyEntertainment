@@ -50,7 +50,7 @@ class FriendsListAdapter(
         holder.location.text = user.city + ", " + user.country
 
         holder.userTile.setOnClickListener {
-            userTileClickListener.onUserTileClicked()
+            userTileClickListener.onUserTileClicked(user.userId)
         }
     }
 }
@@ -76,5 +76,5 @@ class FriendsListViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 }
 
 interface UserTileClickListener {
-    fun onUserTileClicked()
+    fun onUserTileClicked(userId: String?)
 }

@@ -34,7 +34,6 @@ import java.io.ByteArrayOutputStream
 class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var viewModel: UserProfileActivityViewModel
-    private var changesToSave = false
 
     private lateinit var photo: ImageView
     private lateinit var username: TextView
@@ -56,6 +55,8 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var loadingSection: ConstraintLayout
     private lateinit var buttonsSection: LinearLayout
 
+    private var currentUser = true
+    private var changesToSave = false
     private var newBirthDate: Date? = null
     private var currentBirthDate: Date? = null
     private lateinit var yrs: String
@@ -68,7 +69,17 @@ class UserProfileActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(UserProfileActivityViewModel::class.java)
         setObservers()
         initView()
-        viewModel.getUserProfileData()
+        getUserProfileData(intent)
+    }
+
+    private fun getUserProfileData(intent: Intent) {
+        var userId: String? = null
+
+        if (intent.hasExtra(Constants.USER_ID)) {
+            userId = intent.getStringExtra(Constants.USER_ID)
+            currentUser = false
+        }
+        viewModel.getUserProfileData(userId)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -184,7 +195,7 @@ class UserProfileActivity : AppCompatActivity() {
             Toast.makeText(this, getString(R.string.user_profile_data_updated), Toast.LENGTH_LONG)
                 .show()
             hideKeyboard()
-            viewModel.getUserProfileData()
+            viewModel.getUserProfileData(null)
         } else handleDatabaseTaskExecutionResult(false)
     }
 
@@ -468,7 +479,7 @@ class UserProfileActivity : AppCompatActivity() {
             val email = email.text.toString()
 
             val userProfileData =
-                UserProfile(viewModel.userId, username, realName, city, country, newBirthDate, email)
+                UserProfile(viewModel.user, username, realName, city, country, newBirthDate, email)
             viewModel.updateUserProfileData(userProfileData)
         } else {
             switchViewMode(false)
