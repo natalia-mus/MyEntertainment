@@ -1,5 +1,6 @@
 package com.example.myentertainment.view.findfriends
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -11,10 +12,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
+import com.example.myentertainment.view.UserProfileActivity
 import com.example.myentertainment.viewmodel.FindFriendsViewModel
 import com.example.myentertainment.viewmodel.SearchUsersStatus
 
-class FindFriendsActivity : AppCompatActivity() {
+class FindFriendsActivity : AppCompatActivity(), UserTileClickListener {
 
     private lateinit var viewModel: FindFriendsViewModel
 
@@ -31,6 +33,11 @@ class FindFriendsActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(FindFriendsViewModel::class.java)
         initView()
         setObservers()
+    }
+
+    override fun onUserTileClicked() {
+        val intent = Intent(this, UserProfileActivity::class.java)
+        startActivity(intent)
     }
 
     private fun findFriends() {
@@ -61,7 +68,7 @@ class FindFriendsActivity : AppCompatActivity() {
 
         if (users != null && profilePictures != null) {
             usersList.layoutManager = GridLayoutManager(this, 2)
-            val adapter = FriendsListAdapter(this, users, profilePictures)
+            val adapter = FriendsListAdapter(this, users, profilePictures, this)
             usersList.adapter = adapter
 
             usersList.visibility = View.VISIBLE

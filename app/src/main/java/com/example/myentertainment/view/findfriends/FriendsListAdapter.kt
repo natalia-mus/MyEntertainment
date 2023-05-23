@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.bumptech.glide.Glide
@@ -19,7 +20,8 @@ import com.example.myentertainment.viewmodel.Dimensions
 class FriendsListAdapter(
     private val context: Context,
     private val users: ArrayList<UserProfile>,
-    private val profilePictures: HashMap<String, Uri>
+    private val profilePictures: HashMap<String, Uri>,
+    private val userTileClickListener: UserTileClickListener
 ) : Adapter<FriendsListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendsListViewHolder {
@@ -46,10 +48,15 @@ class FriendsListAdapter(
         holder.username.text = user.username
         holder.realName.text = user.realName
         holder.location.text = user.city + ", " + user.country
+
+        holder.userTile.setOnClickListener {
+            userTileClickListener.onUserTileClicked()
+        }
     }
 }
 
 class FriendsListViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    val userTile: ConstraintLayout = view.findViewById(R.id.userTile)
     val image: ImageView = view.findViewById(R.id.userTile_image)
     val username: TextView = view.findViewById(R.id.userTile_username)
     val realName: TextView = view.findViewById(R.id.userTile_realName)
@@ -66,4 +73,8 @@ class FriendsListViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         realName.setTextSize(TypedValue.COMPLEX_UNIT_PX, realNameTextSize)
         location.setTextSize(TypedValue.COMPLEX_UNIT_PX, locationTextSize)
     }
+}
+
+interface UserTileClickListener {
+    fun onUserTileClicked()
 }
