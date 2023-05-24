@@ -54,6 +54,7 @@ class UserProfileActivity : AppCompatActivity() {
     private val editButton: ImageButton by lazy { findViewById(R.id.userProfile_buttonEdit) }
     private val saveButton: Button by lazy { findViewById(R.id.userProfile_buttonSave) }
     private val cancelButton: Button by lazy { findViewById(R.id.userProfile_buttonCancel) }
+    private val addFriendButton: ImageButton by lazy { findViewById(R.id.userProfile_buttonAddFriend) }
     private val usernameEditable: EditText by lazy { findViewById(R.id.userProfile_username_editable) }
     private val realNameEditable: EditText by lazy { findViewById(R.id.userProfile_realName_editable) }
     private val cityEditable: EditText by lazy { findViewById(R.id.userProfile_city_editable) }
@@ -112,6 +113,10 @@ class UserProfileActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == Constants.REQUEST_CODE_PERMISSION_CAMERA && grantResults[0] == PackageManager.PERMISSION_GRANTED) openCamera()
+    }
+
+    private fun addFriend() {
+        // TODO
     }
 
     private fun areValuesDifferent(originalValue: String, newValue: String): Boolean {
@@ -269,6 +274,11 @@ class UserProfileActivity : AppCompatActivity() {
 
             } else {
                 editButton.visibility = View.GONE
+                addFriendButton.visibility = View.VISIBLE
+
+                addFriendButton.setOnClickListener {
+                    addFriend()
+                }
             }
 
             viewPreparedForContext = true
