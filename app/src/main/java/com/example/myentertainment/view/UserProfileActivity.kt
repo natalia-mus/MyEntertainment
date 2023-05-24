@@ -34,27 +34,6 @@ import java.io.ByteArrayOutputStream
 class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var viewModel: UserProfileActivityViewModel
-
-    private lateinit var photo: ImageView
-    private lateinit var username: TextView
-    private lateinit var realName: TextView
-    private lateinit var city: TextView
-    private lateinit var country: TextView
-    private lateinit var birthDate: TextView
-    private lateinit var age: TextView
-    private lateinit var removeBirthDate: ImageView
-    private lateinit var email: TextView
-    private lateinit var editButton: ImageButton
-    private lateinit var saveButton: Button
-    private lateinit var cancelButton: Button
-    private lateinit var usernameEditable: EditText
-    private lateinit var realNameEditable: EditText
-    private lateinit var cityEditable: EditText
-    private lateinit var countryEditable: EditText
-    private lateinit var changePassword: TextView
-    private lateinit var loadingSection: ConstraintLayout
-    private lateinit var buttonsSection: LinearLayout
-
     private lateinit var yrs: String
 
     private var currentUser = true
@@ -63,6 +42,26 @@ class UserProfileActivity : AppCompatActivity() {
     private var currentBirthDate: Date? = null
     private var viewPreparedForContext = false
 
+    private val photo: ImageView by lazy { findViewById(R.id.userProfile_photo) }
+    private val username: TextView by lazy { findViewById(R.id.userProfile_username) }
+    private val realName: TextView by lazy { findViewById(R.id.userProfile_realName) }
+    private val city: TextView by lazy { findViewById(R.id.userProfile_city) }
+    private val country: TextView by lazy { findViewById(R.id.userProfile_country) }
+    private val birthDate: TextView by lazy { findViewById(R.id.userProfile_birthDate) }
+    private val age: TextView by lazy { findViewById(R.id.userProfile_age) }
+    private val removeBirthDate: ImageView by lazy { findViewById(R.id.userProfile_removeBirthDate) }
+    private val email: TextView by lazy { findViewById(R.id.userProfile_email) }
+    private val editButton: ImageButton by lazy { findViewById(R.id.userProfile_buttonEdit) }
+    private val saveButton: Button by lazy { findViewById(R.id.userProfile_buttonSave) }
+    private val cancelButton: Button by lazy { findViewById(R.id.userProfile_buttonCancel) }
+    private val usernameEditable: EditText by lazy { findViewById(R.id.userProfile_username_editable) }
+    private val realNameEditable: EditText by lazy { findViewById(R.id.userProfile_realName_editable) }
+    private val cityEditable: EditText by lazy { findViewById(R.id.userProfile_city_editable) }
+    private val countryEditable: EditText by lazy { findViewById(R.id.userProfile_country_editable) }
+    private val changePassword: TextView by lazy { findViewById(R.id.userProfile_changePassword) }
+    private val loadingSection: ConstraintLayout by lazy { findViewById(R.id.userProfile_loadingSection) }
+    private val buttonsSection: LinearLayout by lazy { findViewById(R.id.userProfile_buttonsSection) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
@@ -70,7 +69,6 @@ class UserProfileActivity : AppCompatActivity() {
         yrs = resources.getString(R.string.yrs)
         viewModel = ViewModelProvider(this).get(UserProfileActivityViewModel::class.java)
         setObservers()
-        initView()
         getUserProfileData(intent)
     }
 
@@ -181,9 +179,6 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun handleLoadingStatus(loading: Boolean) {
-        if (!this::loadingSection.isInitialized) {
-            loadingSection = findViewById(R.id.userProfile_loadingSection)
-        }
         if (loading) {
             loadingSection.visibility = View.VISIBLE
         } else {
@@ -212,29 +207,6 @@ class UserProfileActivity : AppCompatActivity() {
             getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         val view = findViewById<View>(android.R.id.content).rootView
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-
-    private fun initView() {
-        photo = findViewById(R.id.userProfile_photo)
-        username = findViewById(R.id.userProfile_username)
-        realName = findViewById(R.id.userProfile_realName)
-        city = findViewById(R.id.userProfile_city)
-        country = findViewById(R.id.userProfile_country)
-        birthDate = findViewById(R.id.userProfile_birthDate)
-        age = findViewById(R.id.userProfile_age)
-        removeBirthDate = findViewById(R.id.userProfile_removeBirthDate)
-        email = findViewById(R.id.userProfile_email)
-        editButton = findViewById(R.id.userProfile_buttonEdit)
-        saveButton = findViewById(R.id.userProfile_buttonSave)
-        cancelButton = findViewById(R.id.userProfile_buttonCancel)
-        buttonsSection = findViewById(R.id.userProfile_buttonsSection)
-        usernameEditable = findViewById(R.id.userProfile_username_editable)
-        realNameEditable = findViewById(R.id.userProfile_realName_editable)
-        cityEditable = findViewById(R.id.userProfile_city_editable)
-        countryEditable = findViewById(R.id.userProfile_country_editable)
-        changePassword = findViewById(R.id.userProfile_changePassword)
-
-        removeBirthDate.visibility = View.GONE
     }
 
     private fun openCamera() {
