@@ -186,10 +186,15 @@ class UserProfileActivity : AppCompatActivity() {
         }
     }
 
+    private fun handleSendingInvitationResult(successful: Boolean) {
+        if (!successful) {
+            Toast.makeText(this, getString(R.string.invitation_sending_error), Toast.LENGTH_LONG).show()
+        }
+    }
+
     private fun handleUpdatingUserProfileDataResult(successful: Boolean) {
         if (successful) {
-            Toast.makeText(this, getString(R.string.user_profile_data_updated), Toast.LENGTH_LONG)
-                .show()
+            Toast.makeText(this, getString(R.string.user_profile_data_updated), Toast.LENGTH_LONG).show()
             hideKeyboard()
             viewModel.getUserProfileData(null)
         } else handleDatabaseTaskExecutionResult(false)
@@ -360,7 +365,8 @@ class UserProfileActivity : AppCompatActivity() {
         viewModel.profilePicture.observe(this) { refreshProfilePicture(it) }
         viewModel.validationResult.observe(this) { handleValidationResult(it) }
         viewModel.updatingUserProfileDataSuccessful.observe(this) { handleUpdatingUserProfileDataResult(it) }
-        viewModel.databaseTaskExecutionSuccessful.observe(this) { handleDatabaseTaskExecutionResult(it) }
+        viewModel.updatingProfilePictureSuccessful.observe(this) { handleDatabaseTaskExecutionResult(it) }
+        viewModel.sendingInvitationSuccessful.observe(this) { handleSendingInvitationResult(it) }
     }
 
     private fun showDatePickerDialog() {

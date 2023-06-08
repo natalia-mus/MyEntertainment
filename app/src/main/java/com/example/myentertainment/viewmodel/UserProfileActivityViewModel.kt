@@ -43,7 +43,8 @@ class UserProfileActivityViewModel : ViewModel() {
     val userProfile = MutableLiveData<UserProfile?>()
     val validationResult = MutableLiveData<ValidationResult>()
     val updatingUserProfileDataSuccessful = MutableLiveData<Boolean>()
-    val databaseTaskExecutionSuccessful = MutableLiveData<Boolean>()
+    val updatingProfilePictureSuccessful = MutableLiveData<Boolean>()
+    val sendingInvitationSuccessful = MutableLiveData<Boolean>()
     val profilePicture = MutableLiveData<Uri?>()
 
 
@@ -80,7 +81,7 @@ class UserProfileActivityViewModel : ViewModel() {
                 getProfilePictureUrl(user)
             } else {
                 loading.value = false
-                databaseTaskExecutionSuccessful.value = false
+                updatingProfilePictureSuccessful.value = false
             }
         }
     }
@@ -89,7 +90,11 @@ class UserProfileActivityViewModel : ViewModel() {
         loading.value = true
         val invitationId = UUID.randomUUID().toString()
         val invitation = Invitation(invitationId, user)
-        invitationsReference.child(invitingUserId).child(invitationId).setValue(invitation)
+
+        invitationsReference.child(invitingUserId).child(invitationId).setValue(invitation).addOnCompleteListener() { task ->
+            loading.value = false
+            sendingInvitationSuccessful.value = task.isSuccessful
+        }
     }
 
     fun updateUserProfileData(userProfileData: UserProfile) {
@@ -110,7 +115,7 @@ class UserProfileActivityViewModel : ViewModel() {
                 getProfilePictureUrl(user)
             } else {
                 loading.value = false
-                databaseTaskExecutionSuccessful.value = false
+                updatingProfilePictureSuccessful.value = false
             }
         }
     }
@@ -128,7 +133,7 @@ class UserProfileActivityViewModel : ViewModel() {
                 if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
                     profilePicture.value = null
                 } else {
-                    databaseTaskExecutionSuccessful.value = false
+                    updatingProfilePictureSuccessful.value = false
                 }
             }
     }
