@@ -6,12 +6,14 @@ import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.`object`.StoragePathObject
 import com.example.myentertainment.`object`.ValidationResult
+import com.example.myentertainment.data.Invitation
 import com.example.myentertainment.data.UserProfile
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -26,7 +28,11 @@ class UserProfileActivityViewModel : ViewModel() {
 
     @Inject
     @Named("usersReference")
-    lateinit var databaseReference: DatabaseReference
+    lateinit var usersReference: DatabaseReference
+
+    @Inject
+    @Named("invitationsReference")
+    lateinit var invitationsReference: DatabaseReference
 
     @Inject
     lateinit var storageReference: StorageReference
@@ -56,16 +62,15 @@ class UserProfileActivityViewModel : ViewModel() {
     fun getUserProfileData(userId: String?) {
         loading.value = true
         val id = userId ?: user
-        databaseReference.child(id).get()
-            .addOnCompleteListener() { task ->
-                if (task.isSuccessful) {
-                    userProfile.value = task.result?.getValue(UserProfile::class.java)
-                    getProfilePictureUrl(id)
-                } else {
-                    loading.value = false
-                    userProfile.value = null
-                }
+        usersReference.child(id).get().addOnCompleteListener() { task ->
+            if (task.isSuccessful) {
+                userProfile.value = task.result?.getValue(UserProfile::class.java)
+                getProfilePictureUrl(id)
+            } else {
+                loading.value = false
+                userProfile.value = null
             }
+        }
     }
 
     fun removeProfilePicture() {
@@ -80,19 +85,21 @@ class UserProfileActivityViewModel : ViewModel() {
         }
     }
 
+    fun sendInvitation(invitingUserId: String) {
+        loading.value = true
+        val invitationId = UUID.randomUUID().toString()
+        val invitation = Invitation(invitationId, user)
+        invitationsReference.child(invitingUserId).child(invitationId).setValue(invitation)
+    }
+
     fun updateUserProfileData(userProfileData: UserProfile) {
         loading.value = true
 
         if (validation(userProfileData)) {
             val data = hashMapOf<String, Any>(user to userProfileData)
-            databaseReference.updateChildren(data).addOnCompleteListener() { task ->
-                if (task.isSuccessful) {
-                    loading.value = false
-                    updatingUserProfileDataSuccessful.value = true
-                } else {
-                    loading.value = false
-                    updatingUserProfileDataSuccessful.value = false
-                }
+            usersReference.updateChildren(data).addOnCompleteListener() { task ->
+                loading.value = false
+                updatingUserProfileDataSuccessful.value = task.isSuccessful
             }
         }
     }

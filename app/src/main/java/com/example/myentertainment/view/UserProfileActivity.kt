@@ -41,6 +41,7 @@ class UserProfileActivity : AppCompatActivity() {
     private var newBirthDate: Date? = null
     private var currentBirthDate: Date? = null
     private var viewPreparedForContext = false
+    private var userId: String? = null
 
     private val photo: ImageView by lazy { findViewById(R.id.userProfile_photo) }
     private val username: TextView by lazy { findViewById(R.id.userProfile_username) }
@@ -74,8 +75,6 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun getUserProfileData(intent: Intent) {
-        var userId: String? = null
-
         if (intent.hasExtra(Constants.USER_ID)) {
             userId = intent.getStringExtra(Constants.USER_ID)
             currentUser = false
@@ -113,10 +112,6 @@ class UserProfileActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == Constants.REQUEST_CODE_PERMISSION_CAMERA && grantResults[0] == PackageManager.PERMISSION_GRANTED) openCamera()
-    }
-
-    private fun addFriend() {
-        // TODO
     }
 
     private fun areValuesDifferent(originalValue: String, newValue: String): Boolean {
@@ -277,7 +272,7 @@ class UserProfileActivity : AppCompatActivity() {
                 addFriendButton.visibility = View.VISIBLE
 
                 addFriendButton.setOnClickListener {
-                    addFriend()
+                    sendInvitation()
                 }
             }
 
@@ -334,6 +329,10 @@ class UserProfileActivity : AppCompatActivity() {
 
         removePanel.setContentView(removePanelView)
         removePanel.show()
+    }
+
+    private fun sendInvitation() {
+        userId?.let { viewModel.sendInvitation(it) }
     }
 
     /**
