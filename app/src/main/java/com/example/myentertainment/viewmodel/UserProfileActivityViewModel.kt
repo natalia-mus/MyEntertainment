@@ -16,6 +16,7 @@ import com.google.firebase.storage.UploadTask
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
+import kotlin.collections.HashMap
 
 class UserProfileActivityViewModel : ViewModel() {
 
@@ -46,6 +47,7 @@ class UserProfileActivityViewModel : ViewModel() {
     val updatingProfilePictureSuccessful = MutableLiveData<Boolean>()
     val sendingInvitationSuccessful = MutableLiveData<Boolean>()
     val profilePicture = MutableLiveData<Uri?>()
+    val friendshipStatus = MutableLiveData<FriendshipStatus>()
 
 
     fun changeProfilePicture(file: ByteArray) {
@@ -60,9 +62,39 @@ class UserProfileActivityViewModel : ViewModel() {
         changeProfilePicture(uploadTask)
     }
 
+    fun getFriendshipStatus(userId: String?) {
+        friendshipStatus.value = FriendshipStatus.UNKNOWN
+        if (userId != null && userId != user) {
+
+            // check if friendship status is pending:
+            invitationsReference.child(userId).get().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        if (task.result != null && task.result!!.value != null) {
+                            val pendingInvitations = task.result!!.value as HashMap<String, Any>
+
+                            for (item in pendingInvitations) {
+                                val invitationObject = item.value as HashMap<String, Invitation>
+                                val invitation = parseInvitation(invitationObject)
+                                if (invitation.invitingUserId == user) {
+                                    friendshipStatus.value = FriendshipStatus.PENDING
+                                    break
+                                }
+                            }
+                        }
+
+                    } else {
+                        // TODO
+                    }
+                }
+
+            // TODO - check if current user exists in table "friends"
+        }
+    }
+
     fun getUserProfileData(userId: String?) {
         loading.value = true
         val id = userId ?: user
+
         usersReference.child(id).get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 userProfile.value = task.result?.getValue(UserProfile::class.java)
@@ -86,12 +118,12 @@ class UserProfileActivityViewModel : ViewModel() {
         }
     }
 
-    fun sendInvitation(invitingUserId: String) {
+    fun sendInvitation(invitedUserId: String) {
         loading.value = true
         val invitationId = UUID.randomUUID().toString()
         val invitation = Invitation(invitationId, user)
 
-        invitationsReference.child(invitingUserId).child(invitationId).setValue(invitation).addOnCompleteListener() { task ->
+        invitationsReference.child(invitedUserId).child(invitationId).setValue(invitation).addOnCompleteListener() { task ->
             loading.value = false
             sendingInvitationSuccessful.value = task.isSuccessful
         }
@@ -151,4 +183,24 @@ class UserProfileActivityViewModel : ViewModel() {
         } else true
     }
 
+    private fun parseInvitation(invitation: HashMap<String, Invitation>): Invitation {
+        var id = ""
+        var invitingUserId = ""
+
+        if (invitation.containsKey("id")) {
+            id = invitation["id"].toString()
+        }
+
+        if (invitation.containsKey("invitingUserId")) {
+            invitingUserId = invitation["invitingUserId"].toString()
+        }
+
+        return Invitation(id, invitingUserId)
+    }
+
+}
+
+
+enum class FriendshipStatus {
+    UNKNOWN, PENDING, READY_TO_INVITE, READY_TO_DELETE
 }
