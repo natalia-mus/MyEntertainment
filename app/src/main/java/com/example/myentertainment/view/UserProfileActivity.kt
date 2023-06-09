@@ -27,6 +27,7 @@ import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.data.Date
 import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.view.authentication.AuthenticationActivity
+import com.example.myentertainment.viewmodel.FriendshipStatus
 import com.example.myentertainment.viewmodel.UserProfileActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.ByteArrayOutputStream
@@ -55,7 +56,7 @@ class UserProfileActivity : AppCompatActivity() {
     private val editButton: ImageButton by lazy { findViewById(R.id.userProfile_buttonEdit) }
     private val saveButton: Button by lazy { findViewById(R.id.userProfile_buttonSave) }
     private val cancelButton: Button by lazy { findViewById(R.id.userProfile_buttonCancel) }
-    private val addFriendButton: ImageButton by lazy { findViewById(R.id.userProfile_buttonAddFriend) }
+    private val friendshipButton: ImageButton by lazy { findViewById(R.id.userProfile_buttonFriendship) }
     private val usernameEditable: EditText by lazy { findViewById(R.id.userProfile_username_editable) }
     private val realNameEditable: EditText by lazy { findViewById(R.id.userProfile_realName_editable) }
     private val cityEditable: EditText by lazy { findViewById(R.id.userProfile_city_editable) }
@@ -72,14 +73,6 @@ class UserProfileActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(UserProfileActivityViewModel::class.java)
         setObservers()
         getUserProfileData(intent)
-    }
-
-    private fun getUserProfileData(intent: Intent) {
-        if (intent.hasExtra(Constants.USER_ID)) {
-            userId = intent.getStringExtra(Constants.USER_ID)
-            currentUser = false
-        }
-        viewModel.getUserProfileData(userId)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -172,9 +165,43 @@ class UserProfileActivity : AppCompatActivity() {
                 areValuesDifferent(this.country.text.toString(), country)
     }
 
+    private fun getFriendshipStatus() {
+        viewModel.getFriendshipStatus(userId)
+    }
+
+    private fun getUserProfileData(intent: Intent) {
+        if (intent.hasExtra(Constants.USER_ID)) {
+            userId = intent.getStringExtra(Constants.USER_ID)
+            currentUser = false
+        }
+        //viewModel.getFriendshipStatus(userId)
+        viewModel.getUserProfileData(userId)
+    }
+
     private fun handleDatabaseTaskExecutionResult(successful: Boolean) {
         if (!successful) {
             Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun handleFriendshipStatus(friendshipStatus: FriendshipStatus) {
+        when (friendshipStatus) {
+            FriendshipStatus.PENDING -> {
+                // button "delete invitation"
+                friendshipButton.visibility = View.VISIBLE
+            }
+            FriendshipStatus.READY_TO_INVITE -> {
+                // button "send invitation"
+                friendshipButton.visibility = View.VISIBLE
+            }
+            FriendshipStatus.READY_TO_UNFRIEND -> {
+                // button "unfriend"
+                friendshipButton.visibility = View.VISIBLE
+            }
+            FriendshipStatus.UNKNOWN -> {
+                // ukryj przycisk
+                friendshipButton.visibility = View.GONE
+            }
         }
     }
 
@@ -274,9 +301,9 @@ class UserProfileActivity : AppCompatActivity() {
 
             } else {
                 editButton.visibility = View.GONE
-                addFriendButton.visibility = View.VISIBLE
+                friendshipButton.visibility = View.VISIBLE
 
-                addFriendButton.setOnClickListener {
+                friendshipButton.setOnClickListener {
                     sendInvitation()
                 }
             }
@@ -367,6 +394,7 @@ class UserProfileActivity : AppCompatActivity() {
         viewModel.updatingUserProfileDataSuccessful.observe(this) { handleUpdatingUserProfileDataResult(it) }
         viewModel.updatingProfilePictureSuccessful.observe(this) { handleDatabaseTaskExecutionResult(it) }
         viewModel.sendingInvitationSuccessful.observe(this) { handleSendingInvitationResult(it) }
+        viewModel.friendshipStatus.observe(this) { handleFriendshipStatus(it) }
     }
 
     private fun showDatePickerDialog() {

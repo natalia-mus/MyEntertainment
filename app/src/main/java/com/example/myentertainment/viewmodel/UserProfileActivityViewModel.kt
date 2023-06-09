@@ -202,5 +202,5 @@ class UserProfileActivityViewModel : ViewModel() {
 
 
 enum class FriendshipStatus {
-    UNKNOWN, PENDING, READY_TO_INVITE, READY_TO_DELETE
+    UNKNOWN, PENDING, READY_TO_INVITE, READY_TO_UNFRIEND
 }
