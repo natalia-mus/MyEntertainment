@@ -1,6 +1,5 @@
 package com.example.myentertainment.view
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,7 +11,6 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -23,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
+import com.example.myentertainment.Utils
 import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.data.Date
 import com.example.myentertainment.data.UserProfile
@@ -165,6 +164,10 @@ class UserProfileActivity : AppCompatActivity() {
                 areValuesDifferent(this.country.text.toString(), country)
     }
 
+    private fun deleteInvitation() {
+        // TODO
+    }
+
     private fun getFriendshipStatus() {
         viewModel.getFriendshipStatus(userId)
     }
@@ -189,17 +192,25 @@ class UserProfileActivity : AppCompatActivity() {
             FriendshipStatus.PENDING -> {
                 // button "delete invitation"
                 friendshipButton.visibility = View.VISIBLE
+                friendshipButton.setOnClickListener() {
+                    deleteInvitation()
+                }
             }
             FriendshipStatus.READY_TO_INVITE -> {
                 // button "send invitation"
                 friendshipButton.visibility = View.VISIBLE
+                friendshipButton.setOnClickListener() {
+                    sendInvitation()
+                }
             }
             FriendshipStatus.READY_TO_UNFRIEND -> {
                 // button "unfriend"
                 friendshipButton.visibility = View.VISIBLE
+                friendshipButton.setOnClickListener() {
+                    unfriend()
+                }
             }
             FriendshipStatus.UNKNOWN -> {
-                // ukryj przycisk
                 friendshipButton.visibility = View.GONE
             }
         }
@@ -221,24 +232,16 @@ class UserProfileActivity : AppCompatActivity() {
 
     private fun handleUpdatingUserProfileDataResult(successful: Boolean) {
         if (successful) {
+            Utils.hideKeyboard(this)
             Toast.makeText(this, getString(R.string.user_profile_data_updated), Toast.LENGTH_LONG).show()
-            hideKeyboard()
             viewModel.getUserProfileData(null)
         } else handleDatabaseTaskExecutionResult(false)
     }
 
     private fun handleValidationResult(validationResult: ValidationResult) {
         if (validationResult == ValidationResult.EMPTY_VALUES) {
-            Toast.makeText(this, getString(R.string.username_can_not_be_empty), Toast.LENGTH_LONG)
-                .show()
+            Toast.makeText(this, getString(R.string.username_can_not_be_empty), Toast.LENGTH_LONG).show()
         }
-    }
-
-    private fun hideKeyboard() {
-        val inputMethodManager =
-            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        val view = findViewById<View>(android.R.id.content).rootView
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     private fun openCamera() {
@@ -301,11 +304,6 @@ class UserProfileActivity : AppCompatActivity() {
 
             } else {
                 editButton.visibility = View.GONE
-                friendshipButton.visibility = View.VISIBLE
-
-                friendshipButton.setOnClickListener {
-                    sendInvitation()
-                }
             }
 
             viewPreparedForContext = true
@@ -500,6 +498,10 @@ class UserProfileActivity : AppCompatActivity() {
         } else {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), Constants.REQUEST_CODE_PERMISSION_CAMERA)
         }
+    }
+
+    private fun unfriend() {
+        // TODO
     }
 
     private fun updateUserProfileData() {

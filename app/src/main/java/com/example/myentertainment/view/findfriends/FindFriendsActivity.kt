@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
+import com.example.myentertainment.Utils
 import com.example.myentertainment.view.UserProfileActivity
 import com.example.myentertainment.viewmodel.FindFriendsViewModel
 import com.example.myentertainment.viewmodel.SearchUsersStatus
@@ -58,6 +59,7 @@ class FindFriendsActivity : AppCompatActivity(), UserTileClickListener {
 
         searchButton.setOnClickListener {
             findFriends()
+            Utils.hideKeyboard(this)
         }
     }
 
