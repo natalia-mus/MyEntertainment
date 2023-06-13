@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         initView()
         checkCategory()
+        getInvitations()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -115,6 +116,10 @@ class MainActivity : AppCompatActivity() {
         } else {
             changeCurrentFragment(moviesFragment)
         }
+    }
+
+    private fun getInvitations() {
+        viewModel.getInvitations()
     }
 
     private fun initView() {
