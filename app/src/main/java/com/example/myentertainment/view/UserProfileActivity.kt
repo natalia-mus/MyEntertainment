@@ -72,6 +72,9 @@ class UserProfileActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(UserProfileActivityViewModel::class.java)
         setObservers()
         getUserProfileData(intent)
+        handleFriendshipStatus(FriendshipStatus.READY_TO_INVITE)    // temporary
+
+        showUID()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -392,7 +395,7 @@ class UserProfileActivity : AppCompatActivity() {
         viewModel.updatingUserProfileDataSuccessful.observe(this) { handleUpdatingUserProfileDataResult(it) }
         viewModel.updatingProfilePictureSuccessful.observe(this) { handleDatabaseTaskExecutionResult(it) }
         viewModel.sendingInvitationSuccessful.observe(this) { handleSendingInvitationResult(it) }
-        viewModel.friendshipStatus.observe(this) { handleFriendshipStatus(it) }
+        //viewModel.friendshipStatus.observe(this) { handleFriendshipStatus(it) }       // temporary
     }
 
     private fun showDatePickerDialog() {
@@ -430,6 +433,20 @@ class UserProfileActivity : AppCompatActivity() {
         }
         datePickerDialog.setContentView(datePickerDialogView)
         datePickerDialog.show()
+    }
+
+    /**
+     * Shows user id in user profile for development purposes
+     */
+    private fun showUID() {
+        val uidLabel = findViewById<TextView>(R.id.userProfile_uid)
+        uidLabel.visibility = View.VISIBLE
+
+        if (userId != null) {
+            uidLabel.text = userId
+        } else {
+            uidLabel.text = viewModel.user
+        }
     }
 
     private fun switchViewMode(switchToEditMode: Boolean) {
