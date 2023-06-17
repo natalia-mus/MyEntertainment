@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
+import com.example.myentertainment.data.Invitation
 import com.example.myentertainment.view.AboutActivity
 import com.example.myentertainment.view.ProblemReportActivity
 import com.example.myentertainment.view.UserProfileActivity
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         initView()
+        setObservers()
         checkCategory()
         getInvitations()
     }
@@ -141,6 +143,15 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra(Constants.CATEGORY, currentFragment)
             startActivity(intent)
         }
+    }
+
+    private fun setObservers() {
+        viewModel.invitations.observe(this) { showInvitations(it) }
+    }
+
+    private fun showInvitations(invitations: ArrayList<Invitation>) {
+        val invitationDialog = InvitationDialog(this, invitations)
+        invitationDialog.show()
     }
 
 }
