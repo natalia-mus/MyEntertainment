@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Invitation
-import com.example.myentertainment.data.UserProfile
 
 class InvitationDialog(context: Context, private val invitations: ArrayList<Invitation>) : Dialog(context) {
 

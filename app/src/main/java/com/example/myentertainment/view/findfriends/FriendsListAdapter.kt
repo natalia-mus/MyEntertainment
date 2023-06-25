@@ -14,12 +14,12 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.bumptech.glide.Glide
 import com.example.myentertainment.LayoutDimensionsUtil
 import com.example.myentertainment.R
-import com.example.myentertainment.data.UserProfile
+import com.example.myentertainment.data.UserProfileData
 import com.example.myentertainment.viewmodel.Dimensions
 
 class FriendsListAdapter(
     private val context: Context,
-    private val users: ArrayList<UserProfile>,
+    private val users: ArrayList<UserProfileData>,
     private val profilePictures: HashMap<String, Uri>,
     private val userTileClickListener: UserTileClickListener
 ) : Adapter<FriendsListViewHolder>() {

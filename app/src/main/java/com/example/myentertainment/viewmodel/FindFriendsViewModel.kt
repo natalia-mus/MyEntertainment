@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.`object`.StoragePathObject
 import com.example.myentertainment.data.Date
-import com.example.myentertainment.data.UserProfile
+import com.example.myentertainment.data.UserProfileData
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.storage.StorageReference
 import java.util.*
@@ -28,14 +28,14 @@ class FindFriendsViewModel : ViewModel() {
 
     val loading = MutableLiveData<Boolean>()
     val status = MutableLiveData<SearchUsersStatus>()
-    val users = MutableLiveData<ArrayList<UserProfile>>()
+    val users = MutableLiveData<ArrayList<UserProfileData>>()
     val profilePictures = MutableLiveData<HashMap<String, Uri>>()
 
     private var profilePicturesRequests = 0
 
     fun findFriends(phrase: String) {
         loading.value = true
-        val filtered = ArrayList<UserProfile>()
+        val filtered = ArrayList<UserProfileData>()
 
         // fetching all users:
         databaseReference.get().addOnCompleteListener() { task ->
@@ -44,7 +44,7 @@ class FindFriendsViewModel : ViewModel() {
                     val allUsers = task.result!!.value as HashMap<String, Any>
 
                     for (item in allUsers) {
-                        val user = item.value as HashMap<String, UserProfile>
+                        val user = item.value as HashMap<String, UserProfileData>
                         val userProfile = parseUserProfileObject(user)
 
                         if (containsPhrase(userProfile, phrase)) {
@@ -69,7 +69,7 @@ class FindFriendsViewModel : ViewModel() {
         }
     }
 
-    private fun containsPhrase(item: UserProfile, phrase: String): Boolean {
+    private fun containsPhrase(item: UserProfileData, phrase: String): Boolean {
         return (item.username?.contains(phrase, true) == true || item.realName?.contains(phrase, true) == true)
     }
 
@@ -97,7 +97,7 @@ class FindFriendsViewModel : ViewModel() {
         }
     }
 
-    private fun parseUserProfileObject(user: HashMap<String, UserProfile>): UserProfile {
+    private fun parseUserProfileObject(user: HashMap<String, UserProfileData>): UserProfileData {
         var userId = ""
         var userName = ""
         var realName = ""
@@ -142,7 +142,7 @@ class FindFriendsViewModel : ViewModel() {
             email = user["email"].toString()
         }
 
-        return UserProfile(userId, userName, realName, city, country, birthDate, email)
+        return UserProfileData(userId, userName, realName, city, country, birthDate, email)
     }
 
     private fun profilePictureReference(userId: String): StorageReference {

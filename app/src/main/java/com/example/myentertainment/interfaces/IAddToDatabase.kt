@@ -10,7 +10,7 @@ import com.example.myentertainment.R
 import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.view.main.MainActivity
 
-interface AddToDatabaseInterface {
+interface IAddToDatabase {
 
     fun initView()
     fun setObservers()

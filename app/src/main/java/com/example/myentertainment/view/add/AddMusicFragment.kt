@@ -15,10 +15,10 @@ import com.example.myentertainment.OpeningContext
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.data.Music
-import com.example.myentertainment.interfaces.AddToDatabaseInterface
+import com.example.myentertainment.interfaces.IAddToDatabase
 import com.example.myentertainment.viewmodel.add.AddMusicFragmentViewModel
 
-class AddMusicFragment : Fragment(), AddToDatabaseInterface {
+class AddMusicFragment : Fragment(), IAddToDatabase {
 
     private lateinit var openingContext: OpeningContext
     private lateinit var fragmentView: View

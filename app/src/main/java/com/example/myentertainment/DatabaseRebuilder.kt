@@ -1,7 +1,7 @@
 package com.example.myentertainment
 
 import com.example.myentertainment.data.Date
-import com.example.myentertainment.data.UserProfile
+import com.example.myentertainment.data.UserProfileData
 import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
 import javax.inject.Named
@@ -47,8 +47,8 @@ class DatabaseRebuilder {
                     birthDate = Date(year, month, day)
                 }
 
-                val userProfile = UserProfile(userId, username, realName, city, country, birthDate, email)
-                usersReference.child(userId).setValue(userProfile)
+                val userProfileData = UserProfileData(userId, username, realName, city, country, birthDate, email)
+                usersReference.child(userId).setValue(userProfileData)
             }
         }
     }

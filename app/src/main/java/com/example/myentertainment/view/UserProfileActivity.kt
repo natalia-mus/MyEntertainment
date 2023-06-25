@@ -25,6 +25,7 @@ import com.example.myentertainment.Utils
 import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.data.Date
 import com.example.myentertainment.data.UserProfile
+import com.example.myentertainment.data.UserProfileData
 import com.example.myentertainment.view.authentication.AuthenticationActivity
 import com.example.myentertainment.viewmodel.FriendshipStatus
 import com.example.myentertainment.viewmodel.UserProfileActivityViewModel
@@ -137,7 +138,7 @@ class UserProfileActivity : AppCompatActivity() {
                 photoSourcePanel.dismiss()
             }
 
-        if (viewModel.profilePicture.value == null) {
+        if (viewModel.userProfile.value?.userProfilePicture == null) {
             photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove).visibility =
                 View.GONE
 
@@ -181,7 +182,7 @@ class UserProfileActivity : AppCompatActivity() {
             currentUser = false
         }
         //viewModel.getFriendshipStatus(userId)
-        viewModel.getUserProfileData(userId)
+        viewModel.getUserProfile(userId)
     }
 
     private fun handleDatabaseTaskExecutionResult(successful: Boolean) {
@@ -237,8 +238,13 @@ class UserProfileActivity : AppCompatActivity() {
         if (successful) {
             Utils.hideKeyboard(this)
             Toast.makeText(this, getString(R.string.user_profile_data_updated), Toast.LENGTH_LONG).show()
-            viewModel.getUserProfileData(null)
+            viewModel.getUserProfile(null)
         } else handleDatabaseTaskExecutionResult(false)
+    }
+
+    private fun handleUserProfile(userProfile: UserProfile) {
+        updateView(userProfile.userProfileData)
+        refreshProfilePicture(userProfile.userProfilePicture)
     }
 
     private fun handleValidationResult(validationResult: ValidationResult) {
@@ -389,8 +395,7 @@ class UserProfileActivity : AppCompatActivity() {
 
     private fun setObservers() {
         viewModel.loading.observe(this) { handleLoadingStatus(it) }
-        viewModel.userProfile.observe(this) { updateView(it) }
-        viewModel.profilePicture.observe(this) { refreshProfilePicture(it) }
+        viewModel.userProfile.observe(this) { handleUserProfile(it) }
         viewModel.validationResult.observe(this) { handleValidationResult(it) }
         viewModel.updatingUserProfileDataSuccessful.observe(this) { handleUpdatingUserProfileDataResult(it) }
         viewModel.updatingProfilePictureSuccessful.observe(this) { handleDatabaseTaskExecutionResult(it) }
@@ -529,15 +534,14 @@ class UserProfileActivity : AppCompatActivity() {
             val country = countryEditable.text.toString()
             val email = email.text.toString()
 
-            val userProfileData =
-                UserProfile(viewModel.user, username, realName, city, country, newBirthDate, email)
+            val userProfileData = UserProfileData(viewModel.user, username, realName, city, country, newBirthDate, email)
             viewModel.updateUserProfileData(userProfileData)
         } else {
             switchViewMode(false)
         }
     }
 
-    private fun updateView(userProfileData: UserProfile?) {
+    private fun updateView(userProfileData: UserProfileData?) {
         if (userProfileData != null) {
             username.text = userProfileData.username
             realName.text = userProfileData.realName

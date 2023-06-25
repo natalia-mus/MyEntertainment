@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.`object`.ValidationResult
-import com.example.myentertainment.data.UserProfile
+import com.example.myentertainment.data.UserProfileData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
@@ -47,7 +47,7 @@ class SignUpFragmentViewModel : ViewModel() {
 
     private fun createUserProfile(username: String, email: String) {
         val userId = databaseAuth.uid.toString()
-        val userProfileData = UserProfile(userId, username, null, null, null, null, email)
+        val userProfileData = UserProfileData(userId, username, null, null, null, null, email)
 
         databaseReference.child(userId).setValue(userProfileData)
             .addOnCompleteListener() { task ->

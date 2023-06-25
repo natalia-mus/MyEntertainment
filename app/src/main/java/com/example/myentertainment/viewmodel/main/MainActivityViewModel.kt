@@ -1,38 +1,26 @@
 package com.example.myentertainment.viewmodel.main
 
-import android.net.Uri
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.data.Invitation
-import com.example.myentertainment.data.UserProfile
-import com.example.myentertainment.viewmodel.SearchUsersStatus
-import com.google.firebase.auth.FirebaseAuth
+import com.example.myentertainment.data.UserProfileData
+import com.example.myentertainment.viewmodel.UserProfileViewModel
 import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
 import javax.inject.Named
 
-class MainActivityViewModel : ViewModel() {
+class MainActivityViewModel : UserProfileViewModel() {
 
     init {
         BaseApplication.baseApplicationComponent.inject(this)
     }
 
     @Inject
-    lateinit var databaseAuth: FirebaseAuth
-
-    @Inject
     @Named("invitationsReference")
     lateinit var invitationsReference: DatabaseReference
 
-    @Inject
-    @Named("usersReference")
-    lateinit var usersReference: DatabaseReference
-
-    val user = databaseAuth.uid.toString()
-
     val invitations = MutableLiveData<ArrayList<Invitation>>()
-    val invitingUsers = MutableLiveData<ArrayList<UserProfile>>()
+    val invitingUsers = MutableLiveData<ArrayList<UserProfileData>>()
 
     private var invitingUsersRequests = 0
     private var profilePicturesRequests = 0
@@ -63,7 +51,7 @@ class MainActivityViewModel : ViewModel() {
         val invitations = invitations.value
 
         if (invitations != null) {
-            val users = ArrayList<UserProfile>()
+            val users = ArrayList<UserProfileData>()
 
             for (invitation in invitations) {
                 val userId = invitation.invitingUserId
@@ -71,8 +59,8 @@ class MainActivityViewModel : ViewModel() {
                     invitingUsersRequests++
                     usersReference.child(userId).get().addOnCompleteListener() { task ->
                         if (task.isSuccessful && task.result != null) {
-                            val userProfile = task.result!!.getValue(UserProfile::class.java)
-                            if (userProfile != null) { users.add(userProfile) }
+                            val userProfileData = task.result!!.getValue(UserProfileData::class.java)
+                            if (userProfileData != null) { users.add(userProfileData) }
                         }
 
                         invitingUsersRequests--

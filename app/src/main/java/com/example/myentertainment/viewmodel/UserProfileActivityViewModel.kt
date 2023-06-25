@@ -2,51 +2,29 @@ package com.example.myentertainment.viewmodel
 
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
-import com.example.myentertainment.`object`.StoragePathObject
 import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.data.Invitation
-import com.example.myentertainment.data.UserProfile
-import com.google.firebase.auth.FirebaseAuth
+import com.example.myentertainment.data.UserProfileData
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.storage.StorageException
-import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.collections.HashMap
 
-class UserProfileActivityViewModel : ViewModel() {
+class UserProfileActivityViewModel : UserProfileViewModel() {
 
     init {
         BaseApplication.baseApplicationComponent.inject(this)
     }
 
     @Inject
-    lateinit var databaseAuth: FirebaseAuth
-
-    @Inject
-    @Named("usersReference")
-    lateinit var usersReference: DatabaseReference
-
-    @Inject
     @Named("invitationsReference")
     lateinit var invitationsReference: DatabaseReference
 
-    @Inject
-    lateinit var storageReference: StorageReference
-
-    val user = databaseAuth.uid.toString()
-
-    val loading = MutableLiveData<Boolean>()
-    val userProfile = MutableLiveData<UserProfile?>()
     val validationResult = MutableLiveData<ValidationResult>()
     val updatingUserProfileDataSuccessful = MutableLiveData<Boolean>()
-    val updatingProfilePictureSuccessful = MutableLiveData<Boolean>()
     val sendingInvitationSuccessful = MutableLiveData<Boolean>()
-    val profilePicture = MutableLiveData<Uri?>()
     val friendshipStatus = MutableLiveData<FriendshipStatus>()
 
 
@@ -91,21 +69,6 @@ class UserProfileActivityViewModel : ViewModel() {
         }
     }
 
-    fun getUserProfileData(userId: String?) {
-        loading.value = true
-        val id = userId ?: user
-
-        usersReference.child(id).get().addOnCompleteListener() { task ->
-            if (task.isSuccessful) {
-                userProfile.value = task.result?.getValue(UserProfile::class.java)
-                getProfilePictureUrl(id)
-            } else {
-                loading.value = false
-                userProfile.value = null
-            }
-        }
-    }
-
     fun removeProfilePicture() {
         loading.value = true
         profilePictureReference(user).delete().addOnCompleteListener() { task ->
@@ -129,7 +92,7 @@ class UserProfileActivityViewModel : ViewModel() {
         }
     }
 
-    fun updateUserProfileData(userProfileData: UserProfile) {
+    fun updateUserProfileData(userProfileData: UserProfileData) {
         loading.value = true
 
         if (validation(userProfileData)) {
@@ -152,37 +115,6 @@ class UserProfileActivityViewModel : ViewModel() {
         }
     }
 
-    private fun getProfilePictureUrl(id: String) {
-        profilePictureReference(id).downloadUrl
-            .addOnSuccessListener {
-                loading.value = false
-                profilePicture.value = it
-
-            }.addOnFailureListener {
-                loading.value = false
-                val errorCode = (it as StorageException).errorCode
-
-                if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
-                    profilePicture.value = null
-                } else {
-                    updatingProfilePictureSuccessful.value = false
-                }
-            }
-    }
-
-    private fun profilePictureReference(id: String): StorageReference {
-        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + id
-        return storageReference.child(path)
-    }
-
-    private fun validation(userProfileData: UserProfile): Boolean {
-        return if (userProfileData.username.isNullOrEmpty()) {
-            loading.value = false
-            validationResult.value = ValidationResult.EMPTY_VALUES
-            false
-        } else true
-    }
-
     private fun parseInvitation(invitation: HashMap<String, Invitation>): Invitation {
         var id = ""
         var invitingUserId = ""
@@ -196,6 +128,14 @@ class UserProfileActivityViewModel : ViewModel() {
         }
 
         return Invitation(id, invitingUserId)
+    }
+
+    private fun validation(userProfileData: UserProfileData): Boolean {
+        return if (userProfileData.username.isNullOrEmpty()) {
+            loading.value = false
+            validationResult.value = ValidationResult.EMPTY_VALUES
+            false
+        } else true
     }
 
 }
