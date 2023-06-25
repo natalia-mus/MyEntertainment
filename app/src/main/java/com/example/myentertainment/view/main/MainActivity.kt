@@ -23,10 +23,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
-    private val moviesFragment = MoviesFragment()
-    private val booksFragment = BooksFragment()
-    private val gamesFragment = GamesFragment()
-    private val musicFragment = MusicFragment()
+    private val moviesFragment by lazy { MoviesFragment() }
+    private val booksFragment by lazy { BooksFragment() }
+    private val gamesFragment by lazy { GamesFragment() }
+    private val musicFragment by lazy { MusicFragment() }
 
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var currentFragment: String
