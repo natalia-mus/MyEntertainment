@@ -2,12 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/userTile"
+    android:id="@+id/user"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/userTile_image"
+        android:id="@+id/user_image"
         android:layout_width="130dp"
         android:layout_height="130dp"
         android:layout_margin="20dp"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/userTile_username"
+        android:id="@+id/user_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
@@ -29,11 +29,11 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userTile_image"
+        app:layout_constraintTop_toBottomOf="@+id/user_image"
         tools:text="jane" />
 
     <TextView
-        android:id="@+id/userTile_realName"
+        android:id="@+id/user_realName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
@@ -44,11 +44,11 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userTile_username"
+        app:layout_constraintTop_toBottomOf="@+id/user_username"
         tools:text="Jane Doe" />
 
     <TextView
-        android:id="@+id/userTile_location"
+        android:id="@+id/user_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
@@ -60,7 +60,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userTile_realName"
+        app:layout_constraintTop_toBottomOf="@id/user_realName"
         tools:text="Chicago, USA" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

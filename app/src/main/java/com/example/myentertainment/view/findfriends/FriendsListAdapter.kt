@@ -56,11 +56,11 @@ class FriendsListAdapter(
 }
 
 class FriendsListViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-    val userTile: ConstraintLayout = view.findViewById(R.id.userTile)
-    val image: ImageView = view.findViewById(R.id.userTile_image)
-    val username: TextView = view.findViewById(R.id.userTile_username)
-    val realName: TextView = view.findViewById(R.id.userTile_realName)
-    val location: TextView = view.findViewById(R.id.userTile_location)
+    val userTile: ConstraintLayout = view.findViewById(R.id.user)
+    val image: ImageView = view.findViewById(R.id.user_image)
+    val username: TextView = view.findViewById(R.id.user_username)
+    val realName: TextView = view.findViewById(R.id.user_realName)
+    val location: TextView = view.findViewById(R.id.user_location)
 
     fun customView(context: Context) {
         image.layoutParams.width = LayoutDimensionsUtil.calcWidth(context, Dimensions.USER_TILE_PROFILE_PICTURE_SIZE)
