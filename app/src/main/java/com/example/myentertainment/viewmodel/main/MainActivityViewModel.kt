@@ -66,7 +66,7 @@ class MainActivityViewModel : UserProfileViewModel() {
                         invitingUsersRequests--
                         if (invitingUsersRequests == 0) {
                             invitingUsers.value = users
-                            getProfilePictures()
+                            //getProfilePictures()
                         }
                     }
                 }

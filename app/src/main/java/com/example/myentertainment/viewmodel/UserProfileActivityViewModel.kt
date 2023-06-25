@@ -29,13 +29,11 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
 
 
     fun changeProfilePicture(file: ByteArray) {
-        loading.value = true
         val uploadTask = profilePictureReference(user).putBytes(file)
         changeProfilePicture(uploadTask)
     }
 
     fun changeProfilePicture(file: Uri) {
-        loading.value = true
         val uploadTask = profilePictureReference(user).putFile(file)
         changeProfilePicture(uploadTask)
     }
@@ -70,35 +68,28 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     }
 
     fun removeProfilePicture() {
-        loading.value = true
         profilePictureReference(user).delete().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 getProfilePictureUrl(user)
             } else {
-                loading.value = false
                 updatingProfilePictureSuccessful.value = false
             }
         }
     }
 
     fun sendInvitation(invitedUserId: String) {
-        loading.value = true
         val invitationId = UUID.randomUUID().toString()
         val invitation = Invitation(invitationId, user)
 
         invitationsReference.child(invitedUserId).child(invitationId).setValue(invitation).addOnCompleteListener() { task ->
-            loading.value = false
             sendingInvitationSuccessful.value = task.isSuccessful
         }
     }
 
     fun updateUserProfileData(userProfileData: UserProfileData) {
-        loading.value = true
-
         if (validation(userProfileData)) {
             val data = hashMapOf<String, Any>(user to userProfileData)
             usersReference.updateChildren(data).addOnCompleteListener() { task ->
-                loading.value = false
                 updatingUserProfileDataSuccessful.value = task.isSuccessful
             }
         }
@@ -109,7 +100,6 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
             if (task.isSuccessful) {
                 getProfilePictureUrl(user)
             } else {
-                loading.value = false
                 updatingProfilePictureSuccessful.value = false
             }
         }
@@ -132,7 +122,6 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
 
     private fun validation(userProfileData: UserProfileData): Boolean {
         return if (userProfileData.username.isNullOrEmpty()) {
-            loading.value = false
             validationResult.value = ValidationResult.EMPTY_VALUES
             false
         } else true

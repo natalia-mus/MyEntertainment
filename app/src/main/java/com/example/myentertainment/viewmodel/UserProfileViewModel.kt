@@ -31,7 +31,6 @@ open class UserProfileViewModel : ViewModel() {
     lateinit var usersReference: DatabaseReference
 
 
-    val loading = MutableLiveData<Boolean>()
     val updatingProfilePictureSuccessful = MutableLiveData<Boolean>()
     val user = databaseAuth.uid.toString()
     val userProfile = MutableLiveData<UserProfile>()
@@ -45,7 +44,6 @@ open class UserProfileViewModel : ViewModel() {
     }
 
     fun getUserProfileData(userId: String?, getUserProfilePicture: Boolean = false) {
-        loading.value = true
         val id = userId ?: user
 
         usersReference.child(id).get().addOnCompleteListener() { task ->
@@ -58,25 +56,18 @@ open class UserProfileViewModel : ViewModel() {
                 }
 
             } else {
-                loading.value = false
                 userProfileData.value = null
             }
         }
     }
 
-    private fun setUserProfileValue() {
-        userProfile.value = UserProfile(userProfileData.value, profilePicture.value)
-    }
-
     fun getProfilePictureUrl(id: String) {
         profilePictureReference(id).downloadUrl
             .addOnSuccessListener {
-                loading.value = false
                 profilePicture.value = it
                 setUserProfileValue()
 
             }.addOnFailureListener {
-                loading.value = false
                 val errorCode = (it as StorageException).errorCode
 
                 if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
@@ -91,5 +82,9 @@ open class UserProfileViewModel : ViewModel() {
     fun profilePictureReference(id: String): StorageReference {
         val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + id
         return storageReference.child(path)
+    }
+
+    private fun setUserProfileValue() {
+        userProfile.value = UserProfile(userProfileData.value, profilePicture.value)
     }
 }

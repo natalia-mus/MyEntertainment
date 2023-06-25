@@ -28,21 +28,21 @@ class InvitationDialog(context: Context, private val invitations: ArrayList<Invi
     }
 
     private fun nextInvitation() {
-        if (currentInvitationIndex == invitations.lastIndex - 1) {
-            currentInvitationIndex = 0
-        } else {
-            currentInvitationIndex++
-        }
-
-        val invitation = invitations[currentInvitationIndex]
-        val user = invitation.invitingUserId?.let { getInvitingUser(it) }
-
-        if (user != null) {
-            username.text = user.username
-            invitingUserUsername.text = user.username
-            invitingUserRealName.text = user.realName
-            invitingUserLocation.text = user.city + ", " + user.country
-        }
+//        if (currentInvitationIndex == invitations.lastIndex - 1) {
+//            currentInvitationIndex = 0
+//        } else {
+//            currentInvitationIndex++
+//        }
+//
+//        val invitation = invitations[currentInvitationIndex]
+//        val user = invitation.invitingUserId?.let { getInvitingUser(it) }
+//
+//        if (user != null) {
+//            username.text = user.username
+//            invitingUserUsername.text = user.username
+//            invitingUserRealName.text = user.realName
+//            invitingUserLocation.text = user.city + ", " + user.country
+//        }
     }
 
 }

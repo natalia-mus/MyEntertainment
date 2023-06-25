@@ -72,7 +72,7 @@ class UserProfileActivity : AppCompatActivity() {
         yrs = resources.getString(R.string.yrs)
         viewModel = ViewModelProvider(this).get(UserProfileActivityViewModel::class.java)
         setObservers()
-        getUserProfileData(intent)
+        getUserProfile(intent)
         handleFriendshipStatus(FriendshipStatus.READY_TO_INVITE)    // temporary
 
         showUID()
@@ -88,12 +88,14 @@ class UserProfileActivity : AppCompatActivity() {
                     if (file != null) {
                         val outputStream = ByteArrayOutputStream()
                         file.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                        handleLoadingStatus(true)
                         viewModel.changeProfilePicture(outputStream.toByteArray())
                     }
                 }
                 Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE -> {
                     if (data != null && data.data != null) {
                         val file = data.data!!
+                        handleLoadingStatus(true)
                         viewModel.changeProfilePicture(file)
                     }
                 }
@@ -139,15 +141,13 @@ class UserProfileActivity : AppCompatActivity() {
             }
 
         if (viewModel.userProfile.value?.userProfilePicture == null) {
-            photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove).visibility =
-                View.GONE
+            photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove).visibility = View.GONE
 
         } else {
-            photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove)
-                .setOnClickListener() {
-                    removeProfilePicture()
-                    photoSourcePanel.dismiss()
-                }
+            photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove).setOnClickListener() {
+                removeProfilePicture()
+                photoSourcePanel.dismiss()
+            }
         }
 
         photoSourcePanel.setContentView(photoSourcePanelView)
@@ -173,10 +173,12 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun getFriendshipStatus() {
+        handleLoadingStatus(true)
         viewModel.getFriendshipStatus(userId)
     }
 
-    private fun getUserProfileData(intent: Intent) {
+    private fun getUserProfile(intent: Intent) {
+        handleLoadingStatus(true)
         if (intent.hasExtra(Constants.USER_ID)) {
             userId = intent.getStringExtra(Constants.USER_ID)
             currentUser = false
@@ -186,6 +188,7 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun handleDatabaseTaskExecutionResult(successful: Boolean) {
+        handleLoadingStatus(false)
         if (!successful) {
             Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
         }
@@ -229,25 +232,31 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun handleSendingInvitationResult(successful: Boolean) {
+        handleLoadingStatus(false)
         if (!successful) {
             Toast.makeText(this, getString(R.string.invitation_sending_error), Toast.LENGTH_LONG).show()
         }
     }
 
     private fun handleUpdatingUserProfileDataResult(successful: Boolean) {
+        handleLoadingStatus(false)
         if (successful) {
             Utils.hideKeyboard(this)
             Toast.makeText(this, getString(R.string.user_profile_data_updated), Toast.LENGTH_LONG).show()
+            handleLoadingStatus(true)
             viewModel.getUserProfile(null)
+
         } else handleDatabaseTaskExecutionResult(false)
     }
 
     private fun handleUserProfile(userProfile: UserProfile) {
+        handleLoadingStatus(false)
         updateView(userProfile.userProfileData)
         refreshProfilePicture(userProfile.userProfilePicture)
     }
 
     private fun handleValidationResult(validationResult: ValidationResult) {
+        handleLoadingStatus(false)
         if (validationResult == ValidationResult.EMPTY_VALUES) {
             Toast.makeText(this, getString(R.string.username_can_not_be_empty), Toast.LENGTH_LONG).show()
         }
@@ -358,6 +367,7 @@ class UserProfileActivity : AppCompatActivity() {
 
         removePanelView.findViewById<LinearLayout>(R.id.panelRemove_confirmationButton).setOnClickListener() {
             removePanel.dismiss()
+            handleLoadingStatus(true)
             viewModel.removeProfilePicture()
         }
 
@@ -371,7 +381,10 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun sendInvitation() {
-        userId?.let { viewModel.sendInvitation(it) }
+        userId?.let {
+            handleLoadingStatus(true)
+            viewModel.sendInvitation(it)
+        }
     }
 
     /**
@@ -394,7 +407,6 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun setObservers() {
-        viewModel.loading.observe(this) { handleLoadingStatus(it) }
         viewModel.userProfile.observe(this) { handleUserProfile(it) }
         viewModel.validationResult.observe(this) { handleValidationResult(it) }
         viewModel.updatingUserProfileDataSuccessful.observe(this) { handleUpdatingUserProfileDataResult(it) }
@@ -535,7 +547,9 @@ class UserProfileActivity : AppCompatActivity() {
             val email = email.text.toString()
 
             val userProfileData = UserProfileData(viewModel.user, username, realName, city, country, newBirthDate, email)
+            handleLoadingStatus(true)
             viewModel.updateUserProfileData(userProfileData)
+
         } else {
             switchViewMode(false)
         }
