@@ -140,7 +140,7 @@ class UserProfileActivity : AppCompatActivity() {
                 photoSourcePanel.dismiss()
             }
 
-        if (viewModel.userProfile.value?.userProfilePicture == null) {
+        if (viewModel.userProfiles.value?.get(0)?.userProfilePicture == null) {
             photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove).visibility = View.GONE
 
         } else {
@@ -249,7 +249,8 @@ class UserProfileActivity : AppCompatActivity() {
         } else handleDatabaseTaskExecutionResult(false)
     }
 
-    private fun handleUserProfile(userProfile: UserProfile) {
+    private fun handleUserProfile(userProfiles: ArrayList<UserProfile>) {
+        val userProfile = userProfiles[0]
         handleLoadingStatus(false)
         updateView(userProfile.userProfileData)
         refreshProfilePicture(userProfile.userProfilePicture)
@@ -407,7 +408,7 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun setObservers() {
-        viewModel.userProfile.observe(this) { handleUserProfile(it) }
+        viewModel.userProfiles.observe(this) { handleUserProfile(it) }
         viewModel.validationResult.observe(this) { handleValidationResult(it) }
         viewModel.updatingUserProfileDataSuccessful.observe(this) { handleUpdatingUserProfileDataResult(it) }
         viewModel.updatingProfilePictureSuccessful.observe(this) { handleDatabaseTaskExecutionResult(it) }

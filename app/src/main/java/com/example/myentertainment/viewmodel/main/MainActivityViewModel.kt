@@ -3,7 +3,6 @@ package com.example.myentertainment.viewmodel.main
 import androidx.lifecycle.MutableLiveData
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.data.Invitation
-import com.example.myentertainment.data.UserProfileData
 import com.example.myentertainment.viewmodel.UserProfileViewModel
 import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
@@ -20,10 +19,6 @@ class MainActivityViewModel : UserProfileViewModel() {
     lateinit var invitationsReference: DatabaseReference
 
     val invitations = MutableLiveData<ArrayList<Invitation>>()
-    val invitingUsers = MutableLiveData<ArrayList<UserProfileData>>()
-
-    private var invitingUsersRequests = 0
-    private var profilePicturesRequests = 0
 
 
     fun getInvitations() {
@@ -51,52 +46,15 @@ class MainActivityViewModel : UserProfileViewModel() {
         val invitations = invitations.value
 
         if (invitations != null) {
-            val users = ArrayList<UserProfileData>()
-
+            val userIds = ArrayList<String?>()
             for (invitation in invitations) {
                 val userId = invitation.invitingUserId
-                if (userId != null) {
-                    invitingUsersRequests++
-                    usersReference.child(userId).get().addOnCompleteListener() { task ->
-                        if (task.isSuccessful && task.result != null) {
-                            val userProfileData = task.result!!.getValue(UserProfileData::class.java)
-                            if (userProfileData != null) { users.add(userProfileData) }
-                        }
-
-                        invitingUsersRequests--
-                        if (invitingUsersRequests == 0) {
-                            invitingUsers.value = users
-                            //getProfilePictures()
-                        }
-                    }
-                }
+                userIds.add(userId)
             }
+
+            getUserProfiles(userIds)
         }
     }
-
-//    private fun getProfilePictures() {
-//        val pictures = java.util.HashMap<String, Uri>()
-//        val usersSet = invitingUsers.value
-//        if (usersSet != null) {
-//            for (user in usersSet) {
-//                profilePicturesRequests++
-//                profilePictureReference(user.userId!!).downloadUrl.addOnCompleteListener() { task ->
-//                    if (task.isSuccessful && task.result != null) {
-//                        pictures.put(user.userId, task.result!!)
-//                    }
-//
-//                    profilePicturesRequests--
-//                    if (profilePicturesRequests == 0) {
-//                        profilePictures.value = pictures
-//                        status.value = if (users.value?.isNotEmpty() == true) SearchUsersStatus.SUCCESS else SearchUsersStatus.NO_RESULTS
-//                        loading.value = false
-//                    }
-//                }
-//
-//            }
-//
-//        }
-//    }
 
     fun signOut() {
         databaseAuth.signOut()

@@ -33,30 +33,39 @@ open class UserProfileViewModel : ViewModel() {
 
     val updatingProfilePictureSuccessful = MutableLiveData<Boolean>()
     val user = databaseAuth.uid.toString()
-    val userProfile = MutableLiveData<UserProfile>()
+    val userProfiles = MutableLiveData<ArrayList<UserProfile>>()
 
-    private val userProfileData = MutableLiveData<UserProfileData?>()
-    private val profilePicture = MutableLiveData<Uri?>()
+    private var userProfileData: UserProfileData? = null
+    private var profilePicture: Uri? = null
+    private val userProfilesArray = ArrayList<UserProfile>()
+
+    private var requests = 0
 
 
     fun getUserProfile(userId: String?) {
-        getUserProfileData(userId, true)
+        getUserProfileData(userId)
     }
 
-    fun getUserProfileData(userId: String?, getUserProfilePicture: Boolean = false) {
-        val id = userId ?: user
+    fun getUserProfileData(userId: String?) {
+        val userIds = ArrayList<String?>()
+        userIds.add(userId)
+        getUserProfiles(userIds)
+    }
 
-        usersReference.child(id).get().addOnCompleteListener() { task ->
-            if (task.isSuccessful) {
-                userProfileData.value = task.result?.getValue(UserProfileData::class.java)
-                if (getUserProfilePicture) {
+    fun getUserProfiles(userIds: ArrayList<String?>) {
+        for (userId in userIds) {
+            requests++
+            val id = userId ?: user
+
+            usersReference.child(id).get().addOnCompleteListener() { task ->
+                if (task.isSuccessful) {
+                    userProfileData = task.result?.getValue(UserProfileData::class.java)
                     getProfilePictureUrl(id)
-                } else {
-                    setUserProfileValue()
-                }
 
-            } else {
-                userProfileData.value = null
+                } else {
+                    requests--
+                    userProfileData = null
+                }
             }
         }
     }
@@ -64,14 +73,16 @@ open class UserProfileViewModel : ViewModel() {
     fun getProfilePictureUrl(id: String) {
         profilePictureReference(id).downloadUrl
             .addOnSuccessListener {
-                profilePicture.value = it
+                if (requests > 0) requests--
+                profilePicture = it
                 setUserProfileValue()
 
             }.addOnFailureListener {
                 val errorCode = (it as StorageException).errorCode
 
                 if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
-                    profilePicture.value = null
+                    if (requests > 0) requests--
+                    profilePicture = null
                     setUserProfileValue()
                 } else {
                     updatingProfilePictureSuccessful.value = false
@@ -85,6 +96,12 @@ open class UserProfileViewModel : ViewModel() {
     }
 
     private fun setUserProfileValue() {
-        userProfile.value = UserProfile(userProfileData.value, profilePicture.value)
+        if (userProfileData != null && profilePicture != null) {
+            userProfilesArray.add(UserProfile(userProfileData, profilePicture))
+
+            if (requests == 0) {
+                userProfiles.value = userProfilesArray
+            }
+        }
     }
 }
