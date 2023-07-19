@@ -35,10 +35,10 @@ open class UserProfileViewModel : ViewModel() {
     val user = databaseAuth.uid.toString()
     val userProfiles = MutableLiveData<ArrayList<UserProfile>>()
 
+    protected val userProfilesArray = ArrayList<UserProfile>()
+
     private var userProfileData: UserProfileData? = null
     private var profilePicture: Uri? = null
-    private val userProfilesArray = ArrayList<UserProfile>()
-
     private var requests = 0
 
 
@@ -96,7 +96,7 @@ open class UserProfileViewModel : ViewModel() {
     }
 
     private fun setUserProfileValue() {
-        if (userProfileData != null && profilePicture != null) {
+        if (userProfileData != null || profilePicture != null) {
             userProfilesArray.add(UserProfile(userProfileData, profilePicture))
 
             if (requests == 0) {

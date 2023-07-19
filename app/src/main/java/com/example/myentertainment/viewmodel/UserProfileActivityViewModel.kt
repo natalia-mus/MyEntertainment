@@ -44,24 +44,24 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
 
             // check if friendship status is pending:
             invitationsReference.child(userId).get().addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        if (task.result != null && task.result!!.value != null) {
-                            val pendingInvitations = task.result!!.value as HashMap<String, Any>
+                if (task.isSuccessful) {
+                    if (task.result != null && task.result!!.value != null) {
+                        val pendingInvitations = task.result!!.value as HashMap<String, Any>
 
-                            for (item in pendingInvitations) {
-                                val invitationObject = item.value as HashMap<String, Invitation>
-                                val invitation = parseInvitation(invitationObject)
-                                if (invitation.invitingUserId == user) {
-                                    friendshipStatus.value = FriendshipStatus.PENDING
-                                    break
-                                }
+                        for (item in pendingInvitations) {
+                            val invitationObject = item.value as HashMap<String, Invitation>
+                            val invitation = parseInvitation(invitationObject)
+                            if (invitation.invitingUserId == user) {
+                                friendshipStatus.value = FriendshipStatus.PENDING
+                                break
                             }
                         }
-
-                    } else {
-                        // TODO
                     }
+
+                } else {
+                    // TODO
                 }
+            }
 
             // TODO - check if current user exists in table "friends"
         }
@@ -96,6 +96,7 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     }
 
     private fun changeProfilePicture(uploadTask: UploadTask) {
+        userProfilesArray.clear()
         uploadTask.addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 getProfilePictureUrl(user)
