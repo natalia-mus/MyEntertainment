@@ -35,7 +35,6 @@ class FriendsListAdapter(
         val user = users[position].userProfileData
 
         if (user != null) {
-
             val image = users[position].userProfilePicture
             if (image != null) {
                 Glide.with(context)

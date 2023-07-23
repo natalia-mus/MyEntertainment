@@ -69,7 +69,7 @@ class FindFriendsActivity : AppCompatActivity(), UserTileClickListener {
     }
 
     private fun showResults() {
-        val users = viewModel.userProfiles.value
+        val users = viewModel.filteredUserProfiles.value
 
         if (users != null) {
             usersList.layoutManager = GridLayoutManager(this, 2)

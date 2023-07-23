@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.StorageReference
+import java.util.HashMap
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -191,6 +192,7 @@ open class UserProfileViewModel : ViewModel() {
 
             if (requests == 0) {
                 userProfiles.value = userProfilesArray
+                onUserProfilesChanged()
             }
         }
     }

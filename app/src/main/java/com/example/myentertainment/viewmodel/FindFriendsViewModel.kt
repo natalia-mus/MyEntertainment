@@ -1,19 +1,9 @@
 package com.example.myentertainment.viewmodel
 
-import android.net.Uri
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
-import com.example.myentertainment.`object`.StoragePathObject
-import com.example.myentertainment.data.Date
 import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.data.UserProfileData
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.storage.StorageReference
-import java.util.*
-import javax.inject.Inject
-import javax.inject.Named
-import kotlin.collections.ArrayList
 
 class FindFriendsViewModel : UserProfileViewModel() {
 
@@ -28,6 +18,7 @@ class FindFriendsViewModel : UserProfileViewModel() {
     private var phrase = ""
 
     fun findFriends(phrase: String) {
+        loading.value = true
         this.phrase = phrase
         getAllUsers()
     }
@@ -47,6 +38,13 @@ class FindFriendsViewModel : UserProfileViewModel() {
         }
 
         filteredUserProfiles.value = filtered
+        loading.value = false
+
+        if (filtered.isEmpty()) {
+            status.value = SearchUsersStatus.NO_RESULTS
+        } else {
+            status.value = SearchUsersStatus.SUCCESS
+        }
     }
 
     private fun containsPhrase(item: UserProfileData, phrase: String): Boolean {
