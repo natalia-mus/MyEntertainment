@@ -1,9 +1,19 @@
 package com.example.myentertainment.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
+import com.example.myentertainment.`object`.StoragePathObject
+import com.example.myentertainment.data.Date
 import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.data.UserProfileData
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.storage.StorageReference
+import java.util.*
+import javax.inject.Inject
+import javax.inject.Named
+import kotlin.collections.ArrayList
 
 class FindFriendsViewModel : UserProfileViewModel() {
 
@@ -13,6 +23,7 @@ class FindFriendsViewModel : UserProfileViewModel() {
 
     val loading = MutableLiveData<Boolean>()
     val status = MutableLiveData<SearchUsersStatus>()
+    val filteredUserProfiles = MutableLiveData<ArrayList<UserProfile>>()
 
     private var phrase = ""
 
@@ -22,6 +33,7 @@ class FindFriendsViewModel : UserProfileViewModel() {
     }
 
     override fun onUserProfilesChanged() {
+        filteredUserProfiles.value?.clear()
         val filtered = ArrayList<UserProfile>()
 
         if (userProfiles.value != null) {
@@ -33,6 +45,8 @@ class FindFriendsViewModel : UserProfileViewModel() {
                 }
             }
         }
+
+        filteredUserProfiles.value = filtered
     }
 
     private fun containsPhrase(item: UserProfileData, phrase: String): Boolean {

@@ -1,7 +1,6 @@
 package com.example.myentertainment.view.findfriends
 
 import android.content.Context
-import android.net.Uri
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -14,13 +13,12 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.bumptech.glide.Glide
 import com.example.myentertainment.LayoutDimensionsUtil
 import com.example.myentertainment.R
-import com.example.myentertainment.data.UserProfileData
+import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.viewmodel.Dimensions
 
 class FriendsListAdapter(
     private val context: Context,
-    private val users: ArrayList<UserProfileData>,
-    private val profilePictures: HashMap<String, Uri>,
+    private val users: ArrayList<UserProfile>,
     private val userTileClickListener: UserTileClickListener
 ) : Adapter<FriendsListViewHolder>() {
 
@@ -34,23 +32,25 @@ class FriendsListAdapter(
     override fun getItemCount() = users.size
 
     override fun onBindViewHolder(holder: FriendsListViewHolder, position: Int) {
-        val user = users[position]
+        val user = users[position].userProfileData
 
-        if (profilePictures.containsKey(user.userId)) {
-            val image = profilePictures[user.userId]
+        if (user != null) {
 
-            Glide.with(context)
-                .load(image)
-                .circleCrop()
-                .into(holder.image)
-        }
+            val image = users[position].userProfilePicture
+            if (image != null) {
+                Glide.with(context)
+                    .load(image)
+                    .circleCrop()
+                    .into(holder.image)
+            }
 
-        holder.username.text = user.username
-        holder.realName.text = user.realName
-        holder.location.text = user.city + ", " + user.country
+            holder.username.text = user.username
+            holder.realName.text = user.realName
+            holder.location.text = user.city + ", " + user.country
 
-        holder.userTile.setOnClickListener {
-            userTileClickListener.onUserTileClicked(user.userId)
+            holder.userTile.setOnClickListener {
+                userTileClickListener.onUserTileClicked(user.userId)
+            }
         }
     }
 }

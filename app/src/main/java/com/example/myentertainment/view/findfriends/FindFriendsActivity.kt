@@ -69,12 +69,11 @@ class FindFriendsActivity : AppCompatActivity(), UserTileClickListener {
     }
 
     private fun showResults() {
-        val users = viewModel.users.value
-        val profilePictures = viewModel.profilePictures.value
+        val users = viewModel.userProfiles.value
 
-        if (users != null && profilePictures != null) {
+        if (users != null) {
             usersList.layoutManager = GridLayoutManager(this, 2)
-            val adapter = FriendsListAdapter(this, users, profilePictures, this)
+            val adapter = FriendsListAdapter(this, users, this)
             usersList.adapter = adapter
 
             usersList.visibility = View.VISIBLE
