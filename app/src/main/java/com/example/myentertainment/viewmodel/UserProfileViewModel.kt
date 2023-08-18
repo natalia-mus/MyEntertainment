@@ -42,61 +42,51 @@ open class UserProfileViewModel : ViewModel() {
     private var userProfileData: UserProfileData? = null
     private var profilePicture: Uri? = null
     private var requests = 0
+    private var userIdsToFetch = ArrayList<String>()
 
 
     fun getAllUsers() {
-        userProfilesArray.clear()
+        val userIds = ArrayList<String?>()
+
         usersReference.get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
-                if (task.result != null) {
-                    val allUsers = task.result!!.value as HashMap<String, Any>
-
-                    for (item in allUsers) {
-                        val user = item.value as HashMap<String, UserProfileData>
-                        val userProfile = parseUserProfileObject(user)
-
-//                        if (containsPhrase(userProfile, phrase)) {
-//                            filtered.add(userProfile)
-//                        }
-
-                        //userProfilesArray.add(UserProfile(userProfile, null))
-
-                        userProfileData = userProfile
-                        getProfilePictureUrl(userProfile.userId.toString())
-                    }
-
-//                    userProfiles.value = userProfilesArray
-//                    users.value = filtered
-//                    getProfilePictures()
-
-                } else {
-//                    loading.value = false
-//                    users.value?.clear()
-//                    status.value = SearchUsersStatus.NO_RESULTS
+                val ids = task.result?.value as HashMap<String, UserProfileData>
+                for (id in ids.keys) {
+                    userIds.add(id)
                 }
 
-            } else {
-//                loading.value = false
-//                users.value?.clear()
-//                status.value = SearchUsersStatus.ERROR
+                setUserIdsToFetch(userIds)
+                getUserProfileData()
+
             }
         }
     }
 
     fun getUserProfile(userId: String?) {
-        getUserProfileData(userId)
-    }
-
-    fun getUserProfileData(userId: String?) {
         val userIds = ArrayList<String?>()
-        userIds.add(userId)
+        val id = userId ?: user
+        userIds.add(id)
         getUserProfiles(userIds)
     }
 
+    private fun setUserIdsToFetch(userIds: ArrayList<String?>) {
+        for (id in userIds) {
+            if (id != null) {
+                userIdsToFetch.add(id)
+            }
+        }
+    }
+
     protected fun getUserProfiles(userIds: ArrayList<String?>) {
-        for (userId in userIds) {
+        userProfilesArray.clear()
+        setUserIdsToFetch(userIds)
+        getUserProfileData()
+    }
+
+    protected fun getUserProfileData() {
+        if (userIdsToFetch.isNotEmpty()) {
+            val id = userIdsToFetch[0]
             requests++
-            val id = userId ?: user
 
             usersReference.child(id).get().addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
@@ -190,9 +180,16 @@ open class UserProfileViewModel : ViewModel() {
         if (userProfileData != null || profilePicture != null) {
             userProfilesArray.add(UserProfile(userProfileData, profilePicture))
 
-            if (requests == 0) {
+            if (userProfileData!!.userId != null) {
+                userIdsToFetch.remove(userProfileData!!.userId)
+            }
+
+            if (userIdsToFetch.isEmpty()) {
                 userProfiles.value = userProfilesArray
                 onUserProfilesChanged()
+
+            } else {
+                getUserProfileData()
             }
         }
     }
