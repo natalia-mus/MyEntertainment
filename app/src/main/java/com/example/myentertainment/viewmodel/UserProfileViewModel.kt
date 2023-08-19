@@ -40,10 +40,10 @@ open class UserProfileViewModel : ViewModel() {
 
     protected val userProfilesArray = ArrayList<UserProfile>()
 
-    private var userProfileData: UserProfileData? = null
     private var profilePicture: Uri? = null
     private var requests = 0
     private var userIdsToFetch = ArrayList<String>()
+    private var userProfileData: UserProfileData? = null
 
 
     fun getAllUsers() {
@@ -70,38 +70,6 @@ open class UserProfileViewModel : ViewModel() {
         val id = userId ?: user
         userIds.add(id)
         getUserProfiles(userIds)
-    }
-
-    private fun setUserIdsToFetch(userIds: ArrayList<String?>) {
-        for (id in userIds) {
-            if (id != null) {
-                userIdsToFetch.add(id)
-            }
-        }
-    }
-
-    protected fun getUserProfiles(userIds: ArrayList<String?>) {
-        userProfilesArray.clear()
-        setUserIdsToFetch(userIds)
-        getUserProfileData()
-    }
-
-    protected fun getUserProfileData() {
-        if (userIdsToFetch.isNotEmpty()) {
-            val id = userIdsToFetch[0]
-            requests++
-
-            usersReference.child(id).get().addOnCompleteListener() { task ->
-                if (task.isSuccessful) {
-                    userProfileData = task.result?.getValue(UserProfileData::class.java)
-                    getProfilePictureUrl(id)
-
-                } else {
-                    requests--
-                    userProfileData = null
-                }
-            }
-        }
     }
 
     protected fun getProfilePictureUrl(id: String) {
@@ -148,14 +116,56 @@ open class UserProfileViewModel : ViewModel() {
         }
     }
 
-    protected fun profilePictureReference(id: String): StorageReference {
-        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + id
-        return storageReference.child(path)
+    protected fun getUserProfileData() {
+        if (userIdsToFetch.isNotEmpty()) {
+            val id = userIdsToFetch[0]
+            requests++
+
+            usersReference.child(id).get().addOnCompleteListener() { task ->
+                if (task.isSuccessful) {
+                    userProfileData = task.result?.getValue(UserProfileData::class.java)
+                    getProfilePictureUrl(id)
+
+                } else {
+                    requests--
+                    userProfileData = null
+                }
+            }
+        }
+    }
+
+    protected fun getUserProfiles(userIds: ArrayList<String?>) {
+        userProfilesArray.clear()
+        setUserIdsToFetch(userIds)
+        getUserProfileData()
+    }
+
+    /**
+     * Joins profile picture with profile data
+     */
+    private fun joinUserProfilePicture() {
+        if (userProfileData != null) {
+            userProfilesArray.add(UserProfile(userProfileData, profilePicture))
+            allUsers.value?.remove(userProfileData)
+
+            if (allUsers.value?.isEmpty() == true) {
+                userProfiles.value = userProfilesArray
+
+                onUserProfilesChanged()
+            } else {
+                getProfilePictureUrls()
+            }
+        }
     }
 
     protected open fun onAllUsersChanged() {}
 
     protected open fun onUserProfilesChanged() {}
+
+    protected fun profilePictureReference(id: String): StorageReference {
+        val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + id
+        return storageReference.child(path)
+    }
 
     private fun parseUserProfileObject(user: HashMap<String, UserProfileData>): UserProfileData {
         var userId = ""
@@ -205,6 +215,14 @@ open class UserProfileViewModel : ViewModel() {
         return UserProfileData(userId, userName, realName, city, country, birthDate, email)
     }
 
+    private fun setUserIdsToFetch(userIds: ArrayList<String?>) {
+        for (id in userIds) {
+            if (id != null) {
+                userIdsToFetch.add(id)
+            }
+        }
+    }
+
     private fun setUserProfileValue() {
         if (userProfileData != null || profilePicture != null) {
             userProfilesArray.add(UserProfile(userProfileData, profilePicture))
@@ -219,24 +237,6 @@ open class UserProfileViewModel : ViewModel() {
 
             } else {
                 getUserProfileData()
-            }
-        }
-    }
-
-    /**
-     * Joins profile picture with profile data
-     */
-    private fun joinUserProfilePicture() {
-        if (userProfileData != null) {
-            userProfilesArray.add(UserProfile(userProfileData, profilePicture))
-            allUsers.value?.remove(userProfileData)
-
-            if (allUsers.value?.isEmpty() == true) {
-                userProfiles.value = userProfilesArray
-
-                onUserProfilesChanged()
-            } else {
-                getProfilePictureUrls()
             }
         }
     }
