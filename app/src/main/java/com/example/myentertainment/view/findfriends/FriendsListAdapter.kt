@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.bumptech.glide.Glide
@@ -36,12 +37,11 @@ class FriendsListAdapter(
 
         if (user != null) {
             val image = users[position].userProfilePicture
-            if (image != null) {
-                Glide.with(context)
-                    .load(image)
-                    .circleCrop()
-                    .into(holder.image)
-            }
+            Glide.with(context)
+                .load(image)
+                .circleCrop()
+                .placeholder(ResourcesCompat.getDrawable(context.resources, R.drawable.placeholder_user, null))
+                .into(holder.image)
 
             holder.username.text = user.username
             holder.realName.text = user.realName

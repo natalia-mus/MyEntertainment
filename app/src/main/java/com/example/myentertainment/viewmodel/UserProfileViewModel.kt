@@ -33,6 +33,7 @@ open class UserProfileViewModel : ViewModel() {
     lateinit var usersReference: DatabaseReference
 
 
+    val allUsers = MutableLiveData<ArrayList<UserProfileData>>()
     val updatingProfilePictureSuccessful = MutableLiveData<Boolean>()
     val user = databaseAuth.uid.toString()
     val userProfiles = MutableLiveData<ArrayList<UserProfile>>()
@@ -46,18 +47,20 @@ open class UserProfileViewModel : ViewModel() {
 
 
     fun getAllUsers() {
-        val userIds = ArrayList<String?>()
+        val users = ArrayList<UserProfileData>()
 
         usersReference.get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
-                val ids = task.result?.value as HashMap<String, UserProfileData>
-                for (id in ids.keys) {
-                    userIds.add(id)
+                val allUsersMap = task.result?.value as HashMap<String, UserProfileData>
+
+                for (item in allUsersMap) {
+                    val user = item.value as HashMap<String, UserProfileData>
+                    val userProfile = parseUserProfileObject(user)
+                    users.add(userProfile)
                 }
 
-                setUserIdsToFetch(userIds)
-                getUserProfileData()
-
+                allUsers.value = users
+                onAllUsersChanged()
             }
         }
     }
@@ -121,10 +124,36 @@ open class UserProfileViewModel : ViewModel() {
             }
     }
 
+    protected fun getProfilePictureUrls() {
+        if (allUsers.value != null) {
+            userProfileData = allUsers.value!![0]
+            if (userProfileData != null) {
+                val id = userProfileData!!.userId!!
+                profilePictureReference(id).downloadUrl
+                    .addOnSuccessListener {
+                        profilePicture = it
+                        joinUserProfilePicture()
+
+                    }.addOnFailureListener {
+                        val errorCode = (it as StorageException).errorCode
+
+                        if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                            profilePicture = null
+                            joinUserProfilePicture()
+                        } else {
+                            updatingProfilePictureSuccessful.value = false
+                        }
+                    }
+            }
+        }
+    }
+
     protected fun profilePictureReference(id: String): StorageReference {
         val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + id
         return storageReference.child(path)
     }
+
+    protected open fun onAllUsersChanged() {}
 
     protected open fun onUserProfilesChanged() {}
 
@@ -190,6 +219,24 @@ open class UserProfileViewModel : ViewModel() {
 
             } else {
                 getUserProfileData()
+            }
+        }
+    }
+
+    /**
+     * Joins profile picture with profile data
+     */
+    private fun joinUserProfilePicture() {
+        if (userProfileData != null) {
+            userProfilesArray.add(UserProfile(userProfileData, profilePicture))
+            allUsers.value?.remove(userProfileData)
+
+            if (allUsers.value?.isEmpty() == true) {
+                userProfiles.value = userProfilesArray
+
+                onUserProfilesChanged()
+            } else {
+                getProfilePictureUrls()
             }
         }
     }
