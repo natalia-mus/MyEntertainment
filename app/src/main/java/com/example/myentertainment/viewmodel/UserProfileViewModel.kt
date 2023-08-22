@@ -93,7 +93,7 @@ open class UserProfileViewModel : ViewModel() {
     }
 
     protected fun getProfilePictureUrls() {
-        if (allUsers.value != null) {
+        if (allUsers.value != null && allUsers.value!!.isNotEmpty()) {
             userProfileData = allUsers.value!![0]
             if (userProfileData != null) {
                 val id = userProfileData!!.userId!!

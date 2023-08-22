@@ -27,23 +27,29 @@ class FindFriendsViewModel : UserProfileViewModel() {
         val filtered = ArrayList<UserProfileData>()
 
         if (allUsers.value != null) {
-            for (user in allUsers.value!!) {
-                if (containsPhrase(user, phrase)) {
-                    filtered.add(user)
+            for (item in allUsers.value!!) {
+                if (containsPhrase(item, phrase) && item.userId != user) {
+                    filtered.add(item)
                 }
             }
         }
 
-        allUsers.value = filtered
-        userProfilesArray.clear()
-        getProfilePictureUrls()
+        if (filtered.isNotEmpty()) {
+            allUsers.value = filtered
+            userProfilesArray.clear()
+            getProfilePictureUrls()
+
+        } else {
+            userProfiles.value?.clear()
+            onUserProfilesChanged()
+        }
     }
 
     override fun onUserProfilesChanged() {
         filteredUserProfiles.value = userProfiles.value
         loading.value = false
 
-        if (filteredUserProfiles.value?.isEmpty() == true) {
+        if (filteredUserProfiles.value == null || filteredUserProfiles.value?.isEmpty() == true) {
             status.value = SearchUsersStatus.NO_RESULTS
         } else {
             status.value = SearchUsersStatus.SUCCESS
