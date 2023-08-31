@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
-import com.example.myentertainment.data.Invitation
+import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.view.AboutActivity
 import com.example.myentertainment.view.ProblemReportActivity
 import com.example.myentertainment.view.UserProfileActivity
@@ -30,9 +30,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var currentFragment: String
-
     private lateinit var bottomNavigation: BottomNavigationView
     private lateinit var addButton: FloatingActionButton
+    private lateinit var invitationDialog: InvitationDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,12 +146,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setObservers() {
-        viewModel.invitations.observe(this) { showInvitations(it) }
+        viewModel.userProfiles.observe(this) { showInvitations(it) }
     }
 
-    private fun showInvitations(invitations: ArrayList<Invitation>) {
-        val invitationDialog = InvitationDialog(this, invitations)
-        invitationDialog.show()
+    private fun showInvitations(invitingUsers: ArrayList<UserProfile>) {
+        val invitations = viewModel.invitations.value
+        if (invitations != null) {
+            invitationDialog = InvitationDialog(this, invitations, invitingUsers)
+            invitationDialog.show()
+        }
     }
 
 }
