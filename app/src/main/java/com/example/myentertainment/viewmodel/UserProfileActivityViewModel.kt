@@ -24,6 +24,7 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
 
     val validationResult = MutableLiveData<ValidationResult>()
     val updatingUserProfileDataSuccessful = MutableLiveData<Boolean>()
+    val updatingProfilePictureSuccessful = MutableLiveData<Boolean>()
     val sendingInvitationSuccessful = MutableLiveData<Boolean>()
     val friendshipStatus = MutableLiveData<FriendshipStatus>()
 
@@ -65,6 +66,10 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
 
             // TODO - check if current user exists in table "friends"
         }
+    }
+
+    override fun onGettingProfilePictureFailed() {
+        updatingProfilePictureSuccessful.value = false
     }
 
     fun removeProfilePicture() {

@@ -34,7 +34,6 @@ open class UserProfileViewModel : ViewModel() {
 
 
     val allUsers = MutableLiveData<ArrayList<UserProfileData>>()
-    val updatingProfilePictureSuccessful = MutableLiveData<Boolean>()
     val user = databaseAuth.uid.toString()
     val userProfiles = MutableLiveData<ArrayList<UserProfile>>()
 
@@ -87,7 +86,7 @@ open class UserProfileViewModel : ViewModel() {
                     profilePicture = null
                     setUserProfileValue()
                 } else {
-                    updatingProfilePictureSuccessful.value = false
+                    onGettingProfilePictureFailed()
                 }
             }
     }
@@ -109,7 +108,7 @@ open class UserProfileViewModel : ViewModel() {
                             profilePicture = null
                             joinUserProfilePicture()
                         } else {
-                            updatingProfilePictureSuccessful.value = false
+                            onGettingProfilePictureFailed()
                         }
                     }
             }
@@ -159,6 +158,8 @@ open class UserProfileViewModel : ViewModel() {
     }
 
     protected open fun onAllUsersChanged() {}
+
+    protected open fun onGettingProfilePictureFailed() {}
 
     protected open fun onUserProfilesChanged() {}
 
