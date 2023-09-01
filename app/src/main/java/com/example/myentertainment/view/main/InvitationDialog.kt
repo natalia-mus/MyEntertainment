@@ -5,7 +5,9 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
@@ -29,15 +31,17 @@ class InvitationDialog(
     private val acceptButton: Button by lazy { findViewById(R.id.invitation_acceptButton) }
     private val declineButton: Button by lazy { findViewById(R.id.invitation_declineButton) }
     private val laterButton: Button by lazy { findViewById(R.id.invitation_laterButton) }
+    private val nextButton: ImageButton by lazy { findViewById(R.id.invitation_nextButton) }
+    private val previousButton: ImageButton by lazy { findViewById(R.id.invitation_previousButton) }
 
-    private var currentInvitationIndex = -1
+    private var currentInvitationIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.invitation)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         setOnClickListeners()
-        nextInvitation()
+        setInvitationData()
     }
 
     private fun getInvitingUser(invitingUserId: String?): UserProfile? {
@@ -54,11 +58,27 @@ class InvitationDialog(
     }
 
     private fun nextInvitation() {
-        if (currentInvitationIndex == invitations.lastIndex - 1) {
+        if (currentInvitationIndex == invitations.lastIndex) {
             currentInvitationIndex = 0
         } else {
             currentInvitationIndex++
         }
+
+        setInvitationData()
+    }
+
+    private fun previousInvitation() {
+        if (currentInvitationIndex == 0) {
+            currentInvitationIndex = invitations.lastIndex
+        } else {
+            currentInvitationIndex--
+        }
+
+        setInvitationData()
+    }
+
+    private fun setInvitationData() {
+        setNavigationButtonsVisibility()
 
         val invitation = invitations[currentInvitationIndex]
         val user = getInvitingUser(invitation.invitingUserId)
@@ -80,6 +100,17 @@ class InvitationDialog(
         }
     }
 
+    private fun setNavigationButtonsVisibility() {
+        if (invitations.size > 1) {
+            nextButton.visibility = View.VISIBLE
+            previousButton.visibility = View.VISIBLE
+
+        } else {
+            nextButton.visibility = View.GONE
+            previousButton.visibility = View.GONE
+        }
+    }
+
     private fun setOnClickListeners() {
         acceptButton.setOnClickListener() {
             invitationDialogListener.onAcceptClick()
@@ -91,6 +122,14 @@ class InvitationDialog(
 
         laterButton.setOnClickListener() {
             invitationDialogListener.onLaterClick()
+        }
+
+        nextButton.setOnClickListener() {
+            nextInvitation()
+        }
+
+        previousButton.setOnClickListener() {
+            previousInvitation()
         }
     }
 

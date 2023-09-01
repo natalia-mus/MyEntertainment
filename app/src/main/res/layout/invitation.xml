@@ -30,18 +30,51 @@
         app:layout_constraintStart_toEndOf="@+id/invitation_invitingUsername"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <include
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/invitation_userSection"
-        layout="@layout/user"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@id/invitation_buttonsSection"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/invitation_message"
-        tools:layout_editor_absoluteX="14dp" />
+        app:layout_constraintTop_toBottomOf="@+id/invitation_message">
+
+        <ImageButton
+            android:id="@+id/invitation_previousButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@drawable/round_button_background"
+            android:backgroundTint="@color/blue_light"
+            android:src="@drawable/ic_left"
+            android:translationZ="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/invitation_nextButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@drawable/round_button_background"
+            android:backgroundTint="@color/blue_light"
+            android:src="@drawable/ic_right"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            layout="@layout/user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteX="14dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/invitation_buttonsSection"
