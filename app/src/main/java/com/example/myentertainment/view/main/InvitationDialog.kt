@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
@@ -13,13 +14,21 @@ import com.example.myentertainment.R
 import com.example.myentertainment.data.Invitation
 import com.example.myentertainment.data.UserProfile
 
-class InvitationDialog(context: Context, private val invitations: ArrayList<Invitation>, private val invitingUsers: ArrayList<UserProfile>) : Dialog(context) {
+class InvitationDialog(
+    context: Context,
+    private val invitations: ArrayList<Invitation>,
+    private val invitingUsers: ArrayList<UserProfile>,
+    private val invitationDialogListener: InvitationDialogListener
+) : Dialog(context) {
 
     private val username: TextView by lazy { findViewById(R.id.invitation_invitingUsername) }
     private val invitingUserProfilePicture: ImageView by lazy { findViewById(R.id.user_image) }
     private val invitingUserUsername: TextView by lazy { findViewById(R.id.user_username) }
     private val invitingUserRealName: TextView by lazy { findViewById(R.id.user_realName) }
     private val invitingUserLocation: TextView by lazy { findViewById(R.id.user_location) }
+    private val acceptButton: Button by lazy { findViewById(R.id.invitation_acceptButton) }
+    private val declineButton: Button by lazy { findViewById(R.id.invitation_declineButton) }
+    private val laterButton: Button by lazy { findViewById(R.id.invitation_laterButton) }
 
     private var currentInvitationIndex = -1
 
@@ -27,6 +36,7 @@ class InvitationDialog(context: Context, private val invitations: ArrayList<Invi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.invitation)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        setOnClickListeners()
         nextInvitation()
     }
 
@@ -70,4 +80,25 @@ class InvitationDialog(context: Context, private val invitations: ArrayList<Invi
         }
     }
 
+    private fun setOnClickListeners() {
+        acceptButton.setOnClickListener() {
+            invitationDialogListener.onAcceptClick()
+        }
+
+        declineButton.setOnClickListener() {
+            invitationDialogListener.onDeclineClick()
+        }
+
+        laterButton.setOnClickListener() {
+            invitationDialogListener.onLaterClick()
+        }
+    }
+
+}
+
+interface InvitationDialogListener{
+
+    fun onAcceptClick()
+    fun onDeclineClick()
+    fun onLaterClick()
 }

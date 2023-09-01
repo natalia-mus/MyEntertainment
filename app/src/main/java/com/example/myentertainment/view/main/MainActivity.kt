@@ -21,7 +21,7 @@ import com.example.myentertainment.viewmodel.main.MainActivityViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), InvitationDialogListener {
 
     private val moviesFragment by lazy { MoviesFragment() }
     private val booksFragment by lazy { BooksFragment() }
@@ -32,7 +32,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var currentFragment: String
     private lateinit var bottomNavigation: BottomNavigationView
     private lateinit var addButton: FloatingActionButton
-    private lateinit var invitationDialog: InvitationDialog
+
+    private var invitationDialog: InvitationDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,10 +45,23 @@ class MainActivity : AppCompatActivity() {
         getInvitations()
     }
 
+    override fun onAcceptClick() {
+        // todo
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.main_menu, menu)
         return true
+    }
+
+    override fun onDeclineClick() {
+        // todo
+    }
+
+    override fun onLaterClick() {
+        invitationDialog?.dismiss()
+        invitationDialog = null
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -152,8 +166,8 @@ class MainActivity : AppCompatActivity() {
     private fun showInvitations(invitingUsers: ArrayList<UserProfile>) {
         val invitations = viewModel.invitations.value
         if (invitations != null) {
-            invitationDialog = InvitationDialog(this, invitations, invitingUsers)
-            invitationDialog.show()
+            invitationDialog = InvitationDialog(this, invitations, invitingUsers, this)
+            invitationDialog!!.show()
         }
     }
 
