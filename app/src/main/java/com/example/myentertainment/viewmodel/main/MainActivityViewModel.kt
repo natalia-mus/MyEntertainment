@@ -21,6 +21,10 @@ class MainActivityViewModel : UserProfileViewModel() {
     val invitations = MutableLiveData<ArrayList<Invitation>>()
 
 
+    fun declineInvitation(invitationId: String) {
+        invitationsReference.child(user).child(invitationId).removeValue()
+    }
+
     fun getInvitations() {
         invitationsReference.child(user).get().addOnCompleteListener { task ->
             if (task.isSuccessful) {

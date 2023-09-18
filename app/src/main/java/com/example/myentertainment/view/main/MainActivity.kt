@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), InvitationDialogListener {
         getInvitations()
     }
 
-    override fun onAcceptClick() {
+    override fun onAcceptClick(invitationId: String) {
         // todo
     }
 
@@ -55,13 +55,12 @@ class MainActivity : AppCompatActivity(), InvitationDialogListener {
         return true
     }
 
-    override fun onDeclineClick() {
-        // todo
+    override fun onDeclineClick(invitationId: String) {
+        viewModel.declineInvitation(invitationId)
     }
 
     override fun onLaterClick() {
         invitationDialog?.dismiss()
-        invitationDialog = null
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

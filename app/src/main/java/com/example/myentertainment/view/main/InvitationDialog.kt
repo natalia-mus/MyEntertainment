@@ -44,6 +44,21 @@ class InvitationDialog(
         setInvitationData()
     }
 
+    private fun decline(invitation: Invitation) {
+        invitationDialogListener.onDeclineClick(invitation.id!!)
+        invitations.remove(invitation)
+
+        if (invitations.isNotEmpty()) {
+            if (currentInvitationIndex > invitations.lastIndex) {
+                nextInvitation()
+            } else {
+                setInvitationData()
+            }
+        } else {
+            dismiss()
+        }
+    }
+
     private fun getInvitingUser(invitingUserId: String?): UserProfile? {
         var invitingUser: UserProfile? = null
         if (invitingUserId != null && invitingUserId.isNotEmpty()) {
@@ -58,7 +73,7 @@ class InvitationDialog(
     }
 
     private fun nextInvitation() {
-        if (currentInvitationIndex == invitations.lastIndex) {
+        if (currentInvitationIndex >= invitations.lastIndex) {
             currentInvitationIndex = 0
         } else {
             currentInvitationIndex++
@@ -97,6 +112,16 @@ class InvitationDialog(
                     .placeholder(ResourcesCompat.getDrawable(context.resources, R.drawable.placeholder_user, null))
                     .into(invitingUserProfilePicture)
             }
+
+            if (invitation.id != null) {
+                acceptButton.setOnClickListener() {
+                    invitationDialogListener.onAcceptClick(invitation.id!!)
+                }
+
+                declineButton.setOnClickListener() {
+                    decline(invitation)
+                }
+            }
         }
     }
 
@@ -112,14 +137,6 @@ class InvitationDialog(
     }
 
     private fun setOnClickListeners() {
-        acceptButton.setOnClickListener() {
-            invitationDialogListener.onAcceptClick()
-        }
-
-        declineButton.setOnClickListener() {
-            invitationDialogListener.onDeclineClick()
-        }
-
         laterButton.setOnClickListener() {
             invitationDialogListener.onLaterClick()
         }
@@ -137,7 +154,7 @@ class InvitationDialog(
 
 interface InvitationDialogListener{
 
-    fun onAcceptClick()
-    fun onDeclineClick()
+    fun onAcceptClick(invitationId: String)
+    fun onDeclineClick(invitationId: String)
     fun onLaterClick()
 }
