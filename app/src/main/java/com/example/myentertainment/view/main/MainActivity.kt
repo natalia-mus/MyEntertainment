@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
+import com.example.myentertainment.data.Invitation
 import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.view.AboutActivity
 import com.example.myentertainment.view.ProblemReportActivity
@@ -45,8 +46,8 @@ class MainActivity : AppCompatActivity(), InvitationDialogListener {
         getInvitations()
     }
 
-    override fun onAcceptClick(invitationId: String) {
-        // todo
+    override fun onAcceptClick(invitation: Invitation) {
+        viewModel.acceptInvitation(invitation)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -44,19 +44,14 @@ class InvitationDialog(
         setInvitationData()
     }
 
+    private fun accept(invitation: Invitation) {
+        invitationDialogListener.onAcceptClick(invitation)
+        removeInvitation(invitation)
+    }
+
     private fun decline(invitation: Invitation) {
         invitationDialogListener.onDeclineClick(invitation.id!!)
-        invitations.remove(invitation)
-
-        if (invitations.isNotEmpty()) {
-            if (currentInvitationIndex > invitations.lastIndex) {
-                nextInvitation()
-            } else {
-                setInvitationData()
-            }
-        } else {
-            dismiss()
-        }
+        removeInvitation(invitation)
     }
 
     private fun getInvitingUser(invitingUserId: String?): UserProfile? {
@@ -92,6 +87,20 @@ class InvitationDialog(
         setInvitationData()
     }
 
+    private fun removeInvitation(invitation: Invitation) {
+        invitations.remove(invitation)
+
+        if (invitations.isNotEmpty()) {
+            if (currentInvitationIndex > invitations.lastIndex) {
+                nextInvitation()
+            } else {
+                setInvitationData()
+            }
+        } else {
+            dismiss()
+        }
+    }
+
     private fun setInvitationData() {
         setNavigationButtonsVisibility()
 
@@ -115,7 +124,7 @@ class InvitationDialog(
 
             if (invitation.id != null) {
                 acceptButton.setOnClickListener() {
-                    invitationDialogListener.onAcceptClick(invitation.id!!)
+                    accept(invitation)
                 }
 
                 declineButton.setOnClickListener() {
@@ -154,7 +163,7 @@ class InvitationDialog(
 
 interface InvitationDialogListener{
 
-    fun onAcceptClick(invitationId: String)
+    fun onAcceptClick(invitation: Invitation)
     fun onDeclineClick(invitationId: String)
     fun onLaterClick()
 }

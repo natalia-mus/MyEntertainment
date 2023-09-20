@@ -5,6 +5,7 @@ import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.data.Invitation
 import com.example.myentertainment.viewmodel.UserProfileViewModel
 import com.google.firebase.database.DatabaseReference
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -15,14 +16,27 @@ class MainActivityViewModel : UserProfileViewModel() {
     }
 
     @Inject
+    @Named("friendsReference")
+    lateinit var friendsReference: DatabaseReference
+
+    @Inject
     @Named("invitationsReference")
     lateinit var invitationsReference: DatabaseReference
 
     val invitations = MutableLiveData<ArrayList<Invitation>>()
 
 
+    fun acceptInvitation(invitation: Invitation) {
+        if (invitation.invitingUserId != null) {
+            friendsReference.child(user).child(UUID.randomUUID().toString()).setValue(invitation.invitingUserId)
+            friendsReference.child(invitation.invitingUserId!!).child(UUID.randomUUID().toString()).setValue(user)
+        }
+
+        removeInvitation(invitation.id!!)
+    }
+
     fun declineInvitation(invitationId: String) {
-        invitationsReference.child(user).child(invitationId).removeValue()
+        removeInvitation(invitationId)
     }
 
     fun getInvitations() {
@@ -79,14 +93,8 @@ class MainActivityViewModel : UserProfileViewModel() {
         return Invitation(id, invitingUserId)
     }
 
-//    private fun parseUserProfile(userProfile: Any?): UserProfile? {
-//        var result = null
-//
-//        if (userProfile != null) {
-//            if (userProfile)
-//        }
-//
-//        return result
-//    }
+    private fun removeInvitation(invitationId: String) {
+        invitationsReference.child(user).child(invitationId).removeValue()
+    }
 
 }
