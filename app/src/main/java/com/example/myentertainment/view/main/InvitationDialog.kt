@@ -111,16 +111,14 @@ class InvitationDialog(
             username.text = user.userProfileData!!.username
             invitingUserUsername.text = user.userProfileData.username
             invitingUserRealName.text = user.userProfileData.realName
-            invitingUserLocation.text = user.userProfileData.city + ", " + user.userProfileData.country
+            invitingUserLocation.text = user.userProfileData.getLocation()
 
-            if (user.userProfilePicture != null) {
-                val image = user.userProfilePicture
-                Glide.with(context)
-                    .load(image)
-                    .circleCrop()
-                    .placeholder(ResourcesCompat.getDrawable(context.resources, R.drawable.placeholder_user, null))
-                    .into(invitingUserProfilePicture)
-            }
+            val image = user.userProfilePicture
+            Glide.with(context)
+                .load(image)
+                .circleCrop()
+                .placeholder(ResourcesCompat.getDrawable(context.resources, R.drawable.placeholder_user, null))
+                .into(invitingUserProfilePicture)
 
             if (invitation.id != null) {
                 acceptButton.setOnClickListener() {

@@ -45,7 +45,7 @@ class FriendsListAdapter(
 
             holder.username.text = user.username
             holder.realName.text = user.realName
-            holder.location.text = user.city + ", " + user.country
+            holder.location.text = user.getLocation()
 
             holder.userTile.setOnClickListener {
                 userTileClickListener.onUserTileClicked(user.userId)

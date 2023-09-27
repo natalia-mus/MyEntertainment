@@ -8,4 +8,7 @@ data class UserProfileData(
     val country: String? = null,
     val birthDate: Date? = null,
     val email: String? = null
-)
+) {
+
+    fun getLocation() = "$city, $country"
+}
