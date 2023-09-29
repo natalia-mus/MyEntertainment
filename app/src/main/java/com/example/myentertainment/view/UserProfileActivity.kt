@@ -73,7 +73,6 @@ class UserProfileActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(UserProfileActivityViewModel::class.java)
         setObservers()
         getUserProfile(intent)
-        handleFriendshipStatus(FriendshipStatus.READY_TO_INVITE)    // temporary
 
         showUID()
     }
@@ -172,19 +171,14 @@ class UserProfileActivity : AppCompatActivity() {
         // TODO
     }
 
-    private fun getFriendshipStatus() {
-        handleLoadingStatus(true)
-        viewModel.getFriendshipStatus(userId)
-    }
-
     private fun getUserProfile(intent: Intent) {
         handleLoadingStatus(true)
         if (intent.hasExtra(Constants.USER_ID)) {
             userId = intent.getStringExtra(Constants.USER_ID)
             currentUser = false
         }
-        //viewModel.getFriendshipStatus(userId)
         viewModel.getUserProfile(userId)
+        viewModel.getFriendshipStatus(userId)
     }
 
     private fun handleDatabaseTaskExecutionResult(successful: Boolean) {
@@ -413,7 +407,7 @@ class UserProfileActivity : AppCompatActivity() {
         viewModel.updatingUserProfileDataSuccessful.observe(this) { handleUpdatingUserProfileDataResult(it) }
         viewModel.updatingProfilePictureSuccessful.observe(this) { handleDatabaseTaskExecutionResult(it) }
         viewModel.sendingInvitationSuccessful.observe(this) { handleSendingInvitationResult(it) }
-        //viewModel.friendshipStatus.observe(this) { handleFriendshipStatus(it) }       // temporary
+        viewModel.friendshipStatus.observe(this) { handleFriendshipStatus(it) }
     }
 
     private fun showDatePickerDialog() {
@@ -463,7 +457,7 @@ class UserProfileActivity : AppCompatActivity() {
         if (userId != null) {
             uidLabel.text = userId
         } else {
-            uidLabel.text = viewModel.user
+            uidLabel.text = viewModel.currentUser
         }
     }
 
@@ -547,7 +541,7 @@ class UserProfileActivity : AppCompatActivity() {
             val country = countryEditable.text.toString()
             val email = email.text.toString()
 
-            val userProfileData = UserProfileData(viewModel.user, username, realName, city, country, newBirthDate, email)
+            val userProfileData = UserProfileData(viewModel.currentUser, username, realName, city, country, newBirthDate, email)
             handleLoadingStatus(true)
             viewModel.updateUserProfileData(userProfileData)
 

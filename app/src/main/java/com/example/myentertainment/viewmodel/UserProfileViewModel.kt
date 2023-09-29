@@ -34,12 +34,7 @@ open class UserProfileViewModel : ViewModel() {
 
 
     val allUsers = MutableLiveData<ArrayList<UserProfileData>>()
-
-    /**
-     * Current user
-     */
-    val user = databaseAuth.uid.toString()
-
+    val currentUser = databaseAuth.uid.toString()
     val userProfiles = MutableLiveData<ArrayList<UserProfile>>()
 
     protected val userProfilesArray = ArrayList<UserProfile>()
@@ -71,7 +66,7 @@ open class UserProfileViewModel : ViewModel() {
 
     fun getUserProfile(userId: String?) {
         val userIds = ArrayList<String?>()
-        val id = userId ?: user
+        val id = userId ?: currentUser
         userIds.add(id)
         getUserProfiles(userIds)
     }

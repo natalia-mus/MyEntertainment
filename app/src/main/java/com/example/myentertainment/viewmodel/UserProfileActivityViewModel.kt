@@ -19,6 +19,10 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     }
 
     @Inject
+    @Named("friendsReference")
+    lateinit var friendsReference: DatabaseReference
+
+    @Inject
     @Named("invitationsReference")
     lateinit var invitationsReference: DatabaseReference
 
@@ -30,42 +34,45 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
 
 
     fun changeProfilePicture(file: ByteArray) {
-        val uploadTask = profilePictureReference(user).putBytes(file)
+        val uploadTask = profilePictureReference(currentUser).putBytes(file)
         changeProfilePicture(uploadTask)
     }
 
     fun changeProfilePicture(file: Uri) {
-        val uploadTask = profilePictureReference(user).putFile(file)
+        val uploadTask = profilePictureReference(currentUser).putFile(file)
         changeProfilePicture(uploadTask)
     }
 
     fun getFriendshipStatus(userId: String?) {
-        friendshipStatus.value = FriendshipStatus.UNKNOWN
-        if (userId != null && userId != user) {
+        var status = FriendshipStatus.UNKNOWN
+
+        if (userId != null && userId != currentUser) {
 
             // check if friendship status is pending:
-            invitationsReference.child(userId).get().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    if (task.result != null && task.result!!.value != null) {
-                        val pendingInvitations = task.result!!.value as HashMap<String, Any>
-
-                        for (item in pendingInvitations) {
-                            val invitationObject = item.value as HashMap<String, Invitation>
-                            val invitation = parseInvitation(invitationObject)
-                            if (invitation.invitingUserId == user) {
-                                friendshipStatus.value = FriendshipStatus.PENDING
-                                break
-                            }
-                        }
-                    }
+            invitationsReference.child(currentUser).child(userId).get().addOnCompleteListener { task ->
+                if (task.isSuccessful && task.result?.value != null) {
+                    status = FriendshipStatus.PENDING
 
                 } else {
-                    // TODO
+                    // check if user exists in table "friends"
+                    friendsReference.child(currentUser).child(userId).get().addOnCompleteListener { task ->
+                        status = if (task.isSuccessful) {
+                            if (task.result?.value != null) {
+                                FriendshipStatus.READY_TO_UNFRIEND
+                            } else {
+                                FriendshipStatus.READY_TO_INVITE
+                            }
+
+                        } else {
+                            FriendshipStatus.UNKNOWN
+                        }
+
+                    }
                 }
             }
-
-            // TODO - check if current user exists in table "friends"
         }
+
+        friendshipStatus.value = status
     }
 
     override fun onGettingProfilePictureFailed() {
@@ -73,9 +80,9 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     }
 
     fun removeProfilePicture() {
-        profilePictureReference(user).delete().addOnCompleteListener() { task ->
+        profilePictureReference(currentUser).delete().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
-                getProfilePictureUrl(user)
+                getProfilePictureUrl(currentUser)
             } else {
                 updatingProfilePictureSuccessful.value = false
             }
@@ -83,17 +90,16 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     }
 
     fun sendInvitation(invitedUserId: String) {
-        val invitationId = UUID.randomUUID().toString()
-        val invitation = Invitation(invitationId, user)
+        val invitation = Invitation(currentUser)
 
-        invitationsReference.child(invitedUserId).child(invitationId).setValue(invitation).addOnCompleteListener() { task ->
+        invitationsReference.child(invitedUserId).child(currentUser).setValue(invitation).addOnCompleteListener() { task ->
             sendingInvitationSuccessful.value = task.isSuccessful
         }
     }
 
     fun updateUserProfileData(userProfileData: UserProfileData) {
         if (validation(userProfileData)) {
-            val data = hashMapOf<String, Any>(user to userProfileData)
+            val data = hashMapOf<String, Any>(currentUser to userProfileData)
             usersReference.updateChildren(data).addOnCompleteListener() { task ->
                 updatingUserProfileDataSuccessful.value = task.isSuccessful
             }
@@ -104,26 +110,11 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
         userProfilesArray.clear()
         uploadTask.addOnCompleteListener() { task ->
             if (task.isSuccessful) {
-                getProfilePictureUrl(user)
+                getProfilePictureUrl(currentUser)
             } else {
                 updatingProfilePictureSuccessful.value = false
             }
         }
-    }
-
-    private fun parseInvitation(invitation: HashMap<String, Invitation>): Invitation {
-        var id = ""
-        var invitingUserId = ""
-
-        if (invitation.containsKey("id")) {
-            id = invitation["id"].toString()
-        }
-
-        if (invitation.containsKey("invitingUserId")) {
-            invitingUserId = invitation["invitingUserId"].toString()
-        }
-
-        return Invitation(id, invitingUserId)
     }
 
     private fun validation(userProfileData: UserProfileData): Boolean {

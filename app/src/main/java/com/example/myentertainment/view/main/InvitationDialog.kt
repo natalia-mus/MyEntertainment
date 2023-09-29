@@ -50,7 +50,7 @@ class InvitationDialog(
     }
 
     private fun decline(invitation: Invitation) {
-        invitationDialogListener.onDeclineClick(invitation.id!!)
+        invitationDialogListener.onDeclineClick(invitation.invitingUserId!!)
         removeInvitation(invitation)
     }
 
@@ -120,7 +120,7 @@ class InvitationDialog(
                 .placeholder(ResourcesCompat.getDrawable(context.resources, R.drawable.placeholder_user, null))
                 .into(invitingUserProfilePicture)
 
-            if (invitation.id != null) {
+            if (invitation.invitingUserId != null) {
                 acceptButton.setOnClickListener() {
                     accept(invitation)
                 }

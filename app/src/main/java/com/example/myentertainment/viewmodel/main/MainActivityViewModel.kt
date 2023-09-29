@@ -28,11 +28,11 @@ class MainActivityViewModel : UserProfileViewModel() {
 
     fun acceptInvitation(invitation: Invitation) {
         if (invitation.invitingUserId != null) {
-            friendsReference.child(user).child(UUID.randomUUID().toString()).setValue(invitation.invitingUserId)
-            friendsReference.child(invitation.invitingUserId!!).child(UUID.randomUUID().toString()).setValue(user)
+            friendsReference.child(currentUser).child(invitation.invitingUserId.toString()).setValue(invitation.invitingUserId)
+            friendsReference.child(invitation.invitingUserId!!).child(currentUser).setValue(currentUser)
         }
 
-        removeInvitation(invitation.id!!)
+        removeInvitation(invitation.invitingUserId!!)
     }
 
     fun declineInvitation(invitationId: String) {
@@ -40,7 +40,7 @@ class MainActivityViewModel : UserProfileViewModel() {
     }
 
     fun getInvitations() {
-        invitationsReference.child(user).get().addOnCompleteListener { task ->
+        invitationsReference.child(currentUser).get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 if (task.result != null && task.result!!.value != null) {
                     val result = ArrayList<Invitation>()
@@ -79,22 +79,17 @@ class MainActivityViewModel : UserProfileViewModel() {
     }
 
     private fun parseInvitation(invitation: HashMap<String, Invitation>): Invitation {
-        var id = ""
         var invitingUserId = ""
-
-        if (invitation.containsKey("id")) {
-            id = invitation["id"].toString()
-        }
 
         if (invitation.containsKey("invitingUserId")) {
             invitingUserId = invitation["invitingUserId"].toString()
         }
 
-        return Invitation(id, invitingUserId)
+        return Invitation(invitingUserId)
     }
 
     private fun removeInvitation(invitationId: String) {
-        invitationsReference.child(user).child(invitationId).removeValue()
+        invitationsReference.child(currentUser).child(invitationId).removeValue()
     }
 
 }

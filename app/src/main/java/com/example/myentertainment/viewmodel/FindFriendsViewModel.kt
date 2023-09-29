@@ -28,7 +28,7 @@ class FindFriendsViewModel : UserProfileViewModel() {
 
         if (allUsers.value != null) {
             for (item in allUsers.value!!) {
-                if (containsPhrase(item, phrase) && item.userId != user) {
+                if (containsPhrase(item, phrase) && item.userId != currentUser) {
                     filtered.add(item)
                 }
             }
