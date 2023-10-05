@@ -44,35 +44,31 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     }
 
     fun getFriendshipStatus(userId: String?) {
-        var status = FriendshipStatus.UNKNOWN
-
         if (userId != null && userId != currentUser) {
 
-            // check if friendship status is pending:
+            // check if invitation is pending:
             invitationsReference.child(currentUser).child(userId).get().addOnCompleteListener { task ->
                 if (task.isSuccessful && task.result?.value != null) {
-                    status = FriendshipStatus.PENDING
+                    friendshipStatus.value = FriendshipStatus.PENDING
 
                 } else {
                     // check if user exists in table "friends"
                     friendsReference.child(currentUser).child(userId).get().addOnCompleteListener { task ->
-                        status = if (task.isSuccessful) {
+                        if (task.isSuccessful) {
                             if (task.result?.value != null) {
-                                FriendshipStatus.READY_TO_UNFRIEND
+                                friendshipStatus.value = FriendshipStatus.READY_TO_REMOVE
                             } else {
-                                FriendshipStatus.READY_TO_INVITE
+                                friendshipStatus.value = FriendshipStatus.READY_TO_INVITE
                             }
-
                         } else {
-                            FriendshipStatus.UNKNOWN
+                            friendshipStatus.value = FriendshipStatus.UNKNOWN
                         }
-
                     }
                 }
             }
+        } else {
+            friendshipStatus.value = FriendshipStatus.UNKNOWN
         }
-
-        friendshipStatus.value = status
     }
 
     override fun onGettingProfilePictureFailed() {
@@ -128,5 +124,5 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
 
 
 enum class FriendshipStatus {
-    UNKNOWN, PENDING, READY_TO_INVITE, READY_TO_UNFRIEND
+    UNKNOWN, PENDING, READY_TO_INVITE, READY_TO_REMOVE
 }

@@ -193,6 +193,8 @@ class UserProfileActivity : AppCompatActivity() {
             FriendshipStatus.PENDING -> {
                 // button "delete invitation"
                 friendshipButton.visibility = View.VISIBLE
+                friendshipButton.background.setTint(resources.getColor(R.color.orange, null))
+                friendshipButton.setImageResource(R.drawable.ic_delete)
                 friendshipButton.setOnClickListener() {
                     deleteInvitation()
                 }
@@ -200,15 +202,19 @@ class UserProfileActivity : AppCompatActivity() {
             FriendshipStatus.READY_TO_INVITE -> {
                 // button "send invitation"
                 friendshipButton.visibility = View.VISIBLE
+                friendshipButton.background.setTint(resources.getColor(R.color.green, null))
+                friendshipButton.setImageResource(R.drawable.ic_add_friend)
                 friendshipButton.setOnClickListener() {
                     sendInvitation()
                 }
             }
-            FriendshipStatus.READY_TO_UNFRIEND -> {
-                // button "unfriend"
+            FriendshipStatus.READY_TO_REMOVE -> {
+                // button "remove friend"
                 friendshipButton.visibility = View.VISIBLE
+                friendshipButton.background.setTint(resources.getColor(R.color.red, null))
+                friendshipButton.setImageResource(R.drawable.ic_remove_friend)
                 friendshipButton.setOnClickListener() {
-                    unfriend()
+                    removeFriend()
                 }
             }
             FriendshipStatus.UNKNOWN -> {
@@ -529,7 +535,7 @@ class UserProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun unfriend() {
+    private fun removeFriend() {
         // TODO
     }
 
