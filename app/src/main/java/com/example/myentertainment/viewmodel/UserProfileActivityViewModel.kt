@@ -47,13 +47,13 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
         if (userId != null && userId != currentUser) {
 
             // check if invitation is pending:
-            invitationsReference.child(currentUser).child(userId).get().addOnCompleteListener { task ->
+            invitationsReference.child(userId).child(currentUser).get().addOnCompleteListener { task ->
                 if (task.isSuccessful && task.result?.value != null) {
                     friendshipStatus.value = FriendshipStatus.PENDING
 
                 } else {
                     // check if user exists in table "friends"
-                    friendsReference.child(currentUser).child(userId).get().addOnCompleteListener { task ->
+                    friendsReference.child(userId).child(currentUser).get().addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             if (task.result?.value != null) {
                                 friendshipStatus.value = FriendshipStatus.READY_TO_REMOVE
@@ -75,6 +75,20 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
         updatingProfilePictureSuccessful.value = false
     }
 
+    fun removeFriend(friendId: String) {
+        friendsReference.child(currentUser).child(friendId).removeValue().addOnSuccessListener {
+            friendsReference.child(friendId).child(currentUser).removeValue().addOnSuccessListener {
+                friendshipStatus.value = FriendshipStatus.READY_TO_INVITE
+            }
+        }
+    }
+
+    fun removeInvitation(invitedUserId: String) {
+        invitationsReference.child(invitedUserId).child(currentUser).removeValue().addOnSuccessListener {
+            friendshipStatus.value = FriendshipStatus.READY_TO_INVITE
+        }
+    }
+
     fun removeProfilePicture() {
         profilePictureReference(currentUser).delete().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
@@ -90,6 +104,9 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
 
         invitationsReference.child(invitedUserId).child(currentUser).setValue(invitation).addOnCompleteListener() { task ->
             sendingInvitationSuccessful.value = task.isSuccessful
+            if (task.isSuccessful) {
+                friendshipStatus.value = FriendshipStatus.PENDING
+            }
         }
     }
 

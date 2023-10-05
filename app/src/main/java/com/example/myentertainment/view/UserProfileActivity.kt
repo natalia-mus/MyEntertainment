@@ -167,8 +167,8 @@ class UserProfileActivity : AppCompatActivity() {
                 areValuesDifferent(this.country.text.toString(), country)
     }
 
-    private fun deleteInvitation() {
-        // TODO
+    private fun removeInvitation() {
+        userId?.let { viewModel.removeInvitation(it) }
     }
 
     private fun getUserProfile(intent: Intent) {
@@ -196,7 +196,7 @@ class UserProfileActivity : AppCompatActivity() {
                 friendshipButton.background.setTint(resources.getColor(R.color.orange, null))
                 friendshipButton.setImageResource(R.drawable.ic_delete)
                 friendshipButton.setOnClickListener() {
-                    deleteInvitation()
+                    removeInvitation()
                 }
             }
             FriendshipStatus.READY_TO_INVITE -> {
@@ -536,7 +536,7 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun removeFriend() {
-        // TODO
+        userId?.let { viewModel.removeFriend(it) }
     }
 
     private fun updateUserProfileData() {
