@@ -191,9 +191,9 @@ class UserProfileActivity : AppCompatActivity() {
     private fun handleFriendshipStatus(friendshipStatus: FriendshipStatus) {
         when (friendshipStatus) {
             FriendshipStatus.PENDING -> {
-                // button "delete invitation"
+                // button "remove invitation"
                 friendshipButton.visibility = View.VISIBLE
-                friendshipButton.background.setTint(resources.getColor(R.color.orange, null))
+                friendshipButton.setBackgroundResource(R.drawable.remove_invitation_button_background)
                 friendshipButton.setImageResource(R.drawable.ic_delete)
                 friendshipButton.setOnClickListener() {
                     removeInvitation()
@@ -202,7 +202,7 @@ class UserProfileActivity : AppCompatActivity() {
             FriendshipStatus.READY_TO_INVITE -> {
                 // button "send invitation"
                 friendshipButton.visibility = View.VISIBLE
-                friendshipButton.background.setTint(resources.getColor(R.color.green, null))
+                friendshipButton.setBackgroundResource(R.drawable.add_friend_button_background)
                 friendshipButton.setImageResource(R.drawable.ic_add_friend)
                 friendshipButton.setOnClickListener() {
                     sendInvitation()
@@ -211,7 +211,7 @@ class UserProfileActivity : AppCompatActivity() {
             FriendshipStatus.READY_TO_REMOVE -> {
                 // button "remove friend"
                 friendshipButton.visibility = View.VISIBLE
-                friendshipButton.background.setTint(resources.getColor(R.color.red, null))
+                friendshipButton.setBackgroundResource(R.drawable.remove_friend_button_background)
                 friendshipButton.setImageResource(R.drawable.ic_remove_friend)
                 friendshipButton.setOnClickListener() {
                     removeFriend()
