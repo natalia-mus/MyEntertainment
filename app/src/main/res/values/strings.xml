@@ -47,7 +47,6 @@
     <string name="github">Go to GitHub repository</string>
     <string name="incompatible_passwords">Passwords are incompatible</string>
     <string name="invitation_message">sent you an invitation to friends group</string>
-    <string name="invitation_sending_error">An error occurred. Invitation could not be send</string>
     <string name="later">later</string>
     <string name="movie_add">add movie</string>
     <string name="movie_added">Movie added</string>

@@ -35,7 +35,7 @@ import java.io.ByteArrayOutputStream
 class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var viewModel: UserProfileActivityViewModel
-    private lateinit var yrs: String
+    private val yrs: String by lazy { resources.getString(R.string.yrs) }
 
     private var currentUser = true
     private var changesToSave = false
@@ -69,7 +69,6 @@ class UserProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
 
-        yrs = resources.getString(R.string.yrs)
         viewModel = ViewModelProvider(this).get(UserProfileActivityViewModel::class.java)
         setObservers()
         getUserProfile(intent)
@@ -109,6 +108,13 @@ class UserProfileActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == Constants.REQUEST_CODE_PERMISSION_CAMERA && grantResults[0] == PackageManager.PERMISSION_GRANTED) openCamera()
+    }
+
+    private fun acceptInvitation() {
+        userId?.let {
+            handleLoadingStatus(true)
+            viewModel.acceptInvitation(it)
+        }
     }
 
     private fun areValuesDifferent(originalValue: String, newValue: String): Boolean {
@@ -217,6 +223,15 @@ class UserProfileActivity : AppCompatActivity() {
                     removeFriend()
                 }
             }
+            FriendshipStatus.READY_TO_ACCEPT -> {
+                // button "accept invitation"
+                friendshipButton.visibility = View.VISIBLE
+                friendshipButton.setBackgroundResource(R.drawable.background_transparent)
+                friendshipButton.setImageResource(R.drawable.ic_add_friend)
+                friendshipButton.setOnClickListener() {
+                    acceptInvitation()
+                }
+            }
             FriendshipStatus.UNKNOWN -> {
                 friendshipButton.visibility = View.GONE
             }
@@ -231,10 +246,10 @@ class UserProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleSendingInvitationResult(successful: Boolean) {
+    private fun handleChangingFriendshipStatus(successful: Boolean) {
         handleLoadingStatus(false)
         if (!successful) {
-            Toast.makeText(this, getString(R.string.invitation_sending_error), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.error_try_again), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -412,7 +427,7 @@ class UserProfileActivity : AppCompatActivity() {
         viewModel.validationResult.observe(this) { handleValidationResult(it) }
         viewModel.updatingUserProfileDataSuccessful.observe(this) { handleUpdatingUserProfileDataResult(it) }
         viewModel.updatingProfilePictureSuccessful.observe(this) { handleDatabaseTaskExecutionResult(it) }
-        viewModel.sendingInvitationSuccessful.observe(this) { handleSendingInvitationResult(it) }
+        viewModel.changingFriendshipStatusSuccessful.observe(this) { handleChangingFriendshipStatus(it) }
         viewModel.friendshipStatus.observe(this) { handleFriendshipStatus(it) }
     }
 

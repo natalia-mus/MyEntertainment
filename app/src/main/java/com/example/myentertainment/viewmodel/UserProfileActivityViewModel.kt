@@ -29,9 +29,30 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     val validationResult = MutableLiveData<ValidationResult>()
     val updatingUserProfileDataSuccessful = MutableLiveData<Boolean>()
     val updatingProfilePictureSuccessful = MutableLiveData<Boolean>()
-    val sendingInvitationSuccessful = MutableLiveData<Boolean>()
+    val changingFriendshipStatusSuccessful = MutableLiveData<Boolean>()
     val friendshipStatus = MutableLiveData<FriendshipStatus>()
 
+
+    fun acceptInvitation(invitingUserId: String) {
+        friendsReference.child(currentUser).child(invitingUserId).setValue(invitingUserId).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                friendsReference.child(invitingUserId).child(currentUser).setValue(currentUser).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        invitationsReference.child(currentUser).child(invitingUserId).removeValue().addOnCompleteListener { task ->
+                            changingFriendshipStatusSuccessful.value = task.isSuccessful
+                            if (task.isSuccessful) {
+                                friendshipStatus.value = FriendshipStatus.READY_TO_REMOVE
+                            }
+                        }
+                    } else {
+                        changingFriendshipStatusSuccessful.value = false
+                    }
+                }
+            } else {
+                changingFriendshipStatusSuccessful.value = false
+            }
+        }
+    }
 
     fun changeProfilePicture(file: ByteArray) {
         val uploadTask = profilePictureReference(currentUser).putBytes(file)
@@ -52,16 +73,23 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
                     friendshipStatus.value = FriendshipStatus.PENDING
 
                 } else {
-                    // check if user exists in table "friends"
-                    friendsReference.child(userId).child(currentUser).get().addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            if (task.result?.value != null) {
-                                friendshipStatus.value = FriendshipStatus.READY_TO_REMOVE
-                            } else {
-                                friendshipStatus.value = FriendshipStatus.READY_TO_INVITE
-                            }
+                    invitationsReference.child(currentUser).child(userId).get().addOnCompleteListener { task ->
+                        if (task.isSuccessful && task.result?.value != null) {
+                            friendshipStatus.value = FriendshipStatus.READY_TO_ACCEPT
                         } else {
-                            friendshipStatus.value = FriendshipStatus.UNKNOWN
+
+                            // check if user exists in table "friends"
+                            friendsReference.child(userId).child(currentUser).get().addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    if (task.result?.value != null) {
+                                        friendshipStatus.value = FriendshipStatus.READY_TO_REMOVE
+                                    } else {
+                                        friendshipStatus.value = FriendshipStatus.READY_TO_INVITE
+                                    }
+                                } else {
+                                    friendshipStatus.value = FriendshipStatus.UNKNOWN
+                                }
+                            }
                         }
                     }
                 }
@@ -76,16 +104,26 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     }
 
     fun removeFriend(friendId: String) {
-        friendsReference.child(currentUser).child(friendId).removeValue().addOnSuccessListener {
-            friendsReference.child(friendId).child(currentUser).removeValue().addOnSuccessListener {
-                friendshipStatus.value = FriendshipStatus.READY_TO_INVITE
+        friendsReference.child(currentUser).child(friendId).removeValue().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                friendsReference.child(friendId).child(currentUser).removeValue().addOnCompleteListener { task ->
+                    changingFriendshipStatusSuccessful.value = task.isSuccessful
+                    if (task.isSuccessful) {
+                        friendshipStatus.value = FriendshipStatus.READY_TO_INVITE
+                    }
+                }
+            } else {
+                changingFriendshipStatusSuccessful.value = false
             }
         }
     }
 
     fun removeInvitation(invitedUserId: String) {
-        invitationsReference.child(invitedUserId).child(currentUser).removeValue().addOnSuccessListener {
-            friendshipStatus.value = FriendshipStatus.READY_TO_INVITE
+        invitationsReference.child(invitedUserId).child(currentUser).removeValue().addOnCompleteListener { task ->
+            changingFriendshipStatusSuccessful.value = task.isSuccessful
+            if (task.isSuccessful) {
+                friendshipStatus.value = FriendshipStatus.READY_TO_INVITE
+            }
         }
     }
 
@@ -102,8 +140,8 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     fun sendInvitation(invitedUserId: String) {
         val invitation = Invitation(currentUser)
 
-        invitationsReference.child(invitedUserId).child(currentUser).setValue(invitation).addOnCompleteListener() { task ->
-            sendingInvitationSuccessful.value = task.isSuccessful
+        invitationsReference.child(invitedUserId).child(currentUser).setValue(invitation).addOnCompleteListener { task ->
+            changingFriendshipStatusSuccessful.value = task.isSuccessful
             if (task.isSuccessful) {
                 friendshipStatus.value = FriendshipStatus.PENDING
             }
@@ -141,5 +179,5 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
 
 
 enum class FriendshipStatus {
-    UNKNOWN, PENDING, READY_TO_INVITE, READY_TO_REMOVE
+    UNKNOWN, PENDING, READY_TO_INVITE, READY_TO_ACCEPT, READY_TO_REMOVE
 }
