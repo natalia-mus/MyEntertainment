@@ -63,6 +63,7 @@
     <string name="music_no_title">Please, enter song title</string>
     <string name="music_title">song title</string>
     <string name="new_password">new password</string>
+    <string name="no">no</string>
     <string name="no_books">you have no books</string>
     <string name="no_games">you have no games</string>
     <string name="no_go_back">no, go back</string>
@@ -79,6 +80,8 @@
     <string name="release_year">release year</string>
     <string name="release_year_label">release year:</string>
     <string name="remove_birthdate_message">Are you sure you want to remove your birth date?</string>
+    <string name="remove_friend_question">Are you sure you want to remove this friend?</string>
+    <string name="remove_invitation_question">Do you want to remove this invitation?</string>
     <string name="remove_profile_picture">Remove profile picture</string>
     <string name="remove_profile_picture_message">Are you sure you want to remove your profile picture?</string>
     <string name="report">Report</string>
@@ -101,6 +104,7 @@
     <string name="user_profile_data_updated">User profile data has been updated</string>
     <string name="username">username</string>
     <string name="username_can_not_be_empty">Username can not be empty</string>
+    <string name="yes">yes</string>
     <string name="yes_remove">yes, remove</string>
     <string name="your_email_address_is_invalid">Your e-mail address is invalid</string>
     <string name="yrs">yrs</string>

@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -64,6 +65,14 @@ class UserProfileActivity : AppCompatActivity() {
     private val changePassword: TextView by lazy { findViewById(R.id.userProfile_changePassword) }
     private val loadingSection: ConstraintLayout by lazy { findViewById(R.id.userProfile_loadingSection) }
     private val buttonsSection: LinearLayout by lazy { findViewById(R.id.userProfile_buttonsSection) }
+
+    private val onRemoveFriendClickListener = OnClickListener {
+        removeFriend()
+    }
+
+    private val onRemoveInvitationClickListener = OnClickListener {
+        removeInvitation()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -202,7 +211,7 @@ class UserProfileActivity : AppCompatActivity() {
                 friendshipButton.setBackgroundResource(R.drawable.remove_invitation_button_background)
                 friendshipButton.setImageResource(R.drawable.ic_delete)
                 friendshipButton.setOnClickListener() {
-                    removeInvitation()
+                    QuestionDialog.createAndShow(this, resources.getString(R.string.remove_invitation_question), onRemoveInvitationClickListener)
                 }
             }
             FriendshipStatus.READY_TO_INVITE -> {
@@ -220,7 +229,7 @@ class UserProfileActivity : AppCompatActivity() {
                 friendshipButton.setBackgroundResource(R.drawable.remove_friend_button_background)
                 friendshipButton.setImageResource(R.drawable.ic_remove_friend)
                 friendshipButton.setOnClickListener() {
-                    removeFriend()
+                    QuestionDialog.createAndShow(this, resources.getString(R.string.remove_friend_question), onRemoveFriendClickListener)
                 }
             }
             FriendshipStatus.READY_TO_ACCEPT -> {
