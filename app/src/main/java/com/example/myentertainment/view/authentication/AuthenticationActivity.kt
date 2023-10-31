@@ -59,6 +59,8 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
     private fun hideOptions(menu: Menu) {
         menu.findItem(R.id.menuItem_userProfile).isVisible = false
         menu.findItem(R.id.menuItem_signOut).isVisible = false
+        menu.findItem(R.id.menuItem_myFriends).isVisible = false
+        menu.findItem(R.id.menuItem_findFriends).isVisible = false
     }
 
 }

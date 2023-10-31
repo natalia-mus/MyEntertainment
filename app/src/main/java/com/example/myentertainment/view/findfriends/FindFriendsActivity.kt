@@ -28,6 +28,9 @@ class FindFriendsActivity : AppCompatActivity(), UserTileClickListener {
     private lateinit var noResultsInfo: TextView
     private lateinit var usersList: RecyclerView
 
+    private var userId: String? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find_friends)
@@ -35,6 +38,8 @@ class FindFriendsActivity : AppCompatActivity(), UserTileClickListener {
         viewModel = ViewModelProvider(this).get(FindFriendsViewModel::class.java)
         initView()
         setObservers()
+        setUserId()
+        getFriends()
     }
 
     override fun onUserTileClicked(userId: String?) {
@@ -48,6 +53,12 @@ class FindFriendsActivity : AppCompatActivity(), UserTileClickListener {
     private fun findFriends() {
         val phrase = searchField.text.toString()
         viewModel.findFriends(phrase)
+    }
+
+    private fun getFriends() {
+        if (userId != null) {
+            viewModel.getFriends(userId!!)
+        }
     }
 
     private fun initView() {
@@ -68,8 +79,14 @@ class FindFriendsActivity : AppCompatActivity(), UserTileClickListener {
         viewModel.status.observe(this) { updateStatusInfo(it) }
     }
 
+    private fun setUserId() {
+        if (intent.hasExtra(Constants.USER_ID)) {
+            userId = intent.getStringExtra(Constants.USER_ID).toString()
+        }
+    }
+
     private fun showResults() {
-        val users = viewModel.filteredUserProfiles.value
+        val users = viewModel.resultUserProfiles.value
 
         if (users != null) {
             usersList.layoutManager = GridLayoutManager(this, 2)

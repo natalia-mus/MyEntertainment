@@ -81,6 +81,11 @@ class MainActivity : AppCompatActivity(), InvitationDialogListener {
                 val intent = Intent(this, AboutActivity::class.java)
                 startActivity(intent)
             }
+            R.id.menuItem_myFriends -> {
+                val intent = Intent(this, FindFriendsActivity::class.java)
+                intent.putExtra(Constants.USER_ID, viewModel.currentUser)
+                startActivity(intent)
+            }
             R.id.menuItem_findFriends -> {
                 val intent = Intent(this, FindFriendsActivity::class.java)
                 startActivity(intent)

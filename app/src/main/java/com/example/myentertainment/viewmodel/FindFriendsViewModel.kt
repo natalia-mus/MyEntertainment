@@ -2,8 +2,12 @@ package com.example.myentertainment.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.example.myentertainment.BaseApplication
+import com.example.myentertainment.data.Date
 import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.data.UserProfileData
+import com.google.firebase.database.DatabaseReference
+import javax.inject.Inject
+import javax.inject.Named
 
 class FindFriendsViewModel : UserProfileViewModel() {
 
@@ -11,9 +15,13 @@ class FindFriendsViewModel : UserProfileViewModel() {
         BaseApplication.baseApplicationComponent.inject(this)
     }
 
+    @Inject
+    @Named("friendsReference")
+    lateinit var friendsReference: DatabaseReference
+
     val loading = MutableLiveData<Boolean>()
     val status = MutableLiveData<SearchUsersStatus>()
-    val filteredUserProfiles = MutableLiveData<ArrayList<UserProfile>>()
+    val resultUserProfiles = MutableLiveData<ArrayList<UserProfile>>()
 
     private var phrase = ""
 
@@ -21,6 +29,23 @@ class FindFriendsViewModel : UserProfileViewModel() {
         loading.value = true
         this.phrase = phrase
         getAllUsers()
+    }
+
+    fun getFriends(userId: String) {
+        loading.value = true
+
+        friendsReference.child(userId).get().addOnCompleteListener() { task ->
+            if (task.isSuccessful) {
+                val friendsMap = task.result?.value as HashMap<String, String>
+
+                val friendsIds = ArrayList<String?>()
+                for (id in friendsMap.values) {
+                    friendsIds.add(id)
+                }
+
+                getUserProfiles(friendsIds)
+            }
+        }
     }
 
     override fun onAllUsersChanged() {
@@ -46,10 +71,10 @@ class FindFriendsViewModel : UserProfileViewModel() {
     }
 
     override fun onUserProfilesChanged() {
-        filteredUserProfiles.value = userProfiles.value
+        resultUserProfiles.value = userProfiles.value
         loading.value = false
 
-        if (filteredUserProfiles.value == null || filteredUserProfiles.value?.isEmpty() == true) {
+        if (resultUserProfiles.value == null || resultUserProfiles.value?.isEmpty() == true) {
             status.value = SearchUsersStatus.NO_RESULTS
         } else {
             status.value = SearchUsersStatus.SUCCESS
