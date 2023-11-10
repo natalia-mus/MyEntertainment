@@ -52,7 +52,7 @@ class FindFriendsActivity : AppCompatActivity(), UserTileClickListener {
 
     private fun findFriends() {
         val phrase = searchField.text.toString()
-        viewModel.findFriends(phrase)
+        viewModel.findFriends(phrase, userId)
     }
 
     private fun getFriends() {
@@ -86,7 +86,7 @@ class FindFriendsActivity : AppCompatActivity(), UserTileClickListener {
     }
 
     private fun showResults() {
-        val users = viewModel.resultUserProfiles.value
+        val users = viewModel.userProfiles.value
 
         if (users != null) {
             usersList.layoutManager = GridLayoutManager(this, 2)
@@ -106,6 +106,7 @@ class FindFriendsActivity : AppCompatActivity(), UserTileClickListener {
     }
 
     private fun updateStatusInfo(status: SearchUsersStatus) {
+        loadingSection.visibility = View.GONE
         when (status) {
             SearchUsersStatus.SUCCESS -> {
                 noResultsInfo.visibility = View.GONE
