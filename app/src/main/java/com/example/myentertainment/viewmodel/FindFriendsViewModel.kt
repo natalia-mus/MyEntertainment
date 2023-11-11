@@ -72,20 +72,21 @@ class FindFriendsViewModel : UserProfileViewModel() {
     }
 
     private fun filter(filterAllUsers: Boolean) {
-        if (filterAllUsers && allUsers.value != null) {
+        if (filterAllUsers && userProfilesData.value != null) {
             val filtered = ArrayList<UserProfileData>()
-            for (item in allUsers.value!!) {
+            for (item in userProfilesData.value!!) {
                 if (containsPhrase(item, phrase) && item.userId != currentUser) {
                     filtered.add(item)
                 }
             }
 
             if (filtered.isNotEmpty()) {
-                allUsers.value = filtered
+                userProfilesData.value = filtered
                 userProfilesArray.clear()
                 getProfilePictureUrls()
 
             } else {
+                userProfiles.value?.clear()
                 onUserProfilesChanged()
             }
 
