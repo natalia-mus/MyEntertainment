@@ -8,7 +8,7 @@ import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
 import javax.inject.Named
 
-class FindFriendsViewModel : UserProfileViewModel() {
+class FriendsViewModel : UserProfileViewModel() {
 
     init {
         BaseApplication.baseApplicationComponent.inject(this)

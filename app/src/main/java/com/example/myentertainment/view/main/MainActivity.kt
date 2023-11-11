@@ -17,7 +17,7 @@ import com.example.myentertainment.view.ProblemReportActivity
 import com.example.myentertainment.view.UserProfileActivity
 import com.example.myentertainment.view.add.AddActivity
 import com.example.myentertainment.view.authentication.AuthenticationActivity
-import com.example.myentertainment.view.findfriends.FindFriendsActivity
+import com.example.myentertainment.view.findfriends.FriendsActivity
 import com.example.myentertainment.viewmodel.main.MainActivityViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -82,12 +82,12 @@ class MainActivity : AppCompatActivity(), InvitationDialogListener {
                 startActivity(intent)
             }
             R.id.menuItem_myFriends -> {
-                val intent = Intent(this, FindFriendsActivity::class.java)
+                val intent = Intent(this, FriendsActivity::class.java)
                 intent.putExtra(Constants.USER_ID, viewModel.currentUser)
                 startActivity(intent)
             }
             R.id.menuItem_findFriends -> {
-                val intent = Intent(this, FindFriendsActivity::class.java)
+                val intent = Intent(this, FriendsActivity::class.java)
                 startActivity(intent)
             }
             R.id.menuItem_reportAProblem -> {

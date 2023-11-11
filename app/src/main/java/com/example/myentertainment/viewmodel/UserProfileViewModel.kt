@@ -61,8 +61,8 @@ open class UserProfileViewModel : ViewModel() {
                         users.add(userProfile)
                     }
 
-                    userProfilesDataCache = users
                     userProfilesData.value = users
+                    userProfilesDataCache = ArrayList(users)
                     onAllUsersChanged()
                 }
             }
@@ -81,7 +81,7 @@ open class UserProfileViewModel : ViewModel() {
     }
 
     protected fun getProfilePictureUrl(id: String) {
-        profilePictureReference(id).downloadUrl
+        getProfilePictureReference(id).downloadUrl
             .addOnSuccessListener {
                 if (requests > 0) requests--
                 profilePicture = it
@@ -114,7 +114,7 @@ open class UserProfileViewModel : ViewModel() {
 
                 } else {
                     val id = userProfileData!!.userId!!
-                    profilePictureReference(id).downloadUrl
+                    getProfilePictureReference(id).downloadUrl
                         .addOnSuccessListener {
                             profilePicture = it
                             joinUserProfilePicture()
@@ -164,7 +164,7 @@ open class UserProfileViewModel : ViewModel() {
 
     protected open fun onUserProfilesChanged() {}
 
-    protected fun profilePictureReference(id: String): StorageReference {
+    protected fun getProfilePictureReference(id: String): StorageReference {
         val path = StoragePathObject.PATH_PROFILE_PICTURES + "/" + id
         return storageReference.child(path)
     }

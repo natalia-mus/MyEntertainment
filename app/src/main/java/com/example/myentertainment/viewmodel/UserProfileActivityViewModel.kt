@@ -55,12 +55,12 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     }
 
     fun changeProfilePicture(file: ByteArray) {
-        val uploadTask = profilePictureReference(currentUser).putBytes(file)
+        val uploadTask = getProfilePictureReference(currentUser).putBytes(file)
         changeProfilePicture(uploadTask)
     }
 
     fun changeProfilePicture(file: Uri) {
-        val uploadTask = profilePictureReference(currentUser).putFile(file)
+        val uploadTask = getProfilePictureReference(currentUser).putFile(file)
         changeProfilePicture(uploadTask)
     }
 
@@ -128,7 +128,7 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     }
 
     fun removeProfilePicture() {
-        profilePictureReference(currentUser).delete().addOnCompleteListener() { task ->
+        getProfilePictureReference(currentUser).delete().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 getProfilePictureUrl(currentUser)
             } else {

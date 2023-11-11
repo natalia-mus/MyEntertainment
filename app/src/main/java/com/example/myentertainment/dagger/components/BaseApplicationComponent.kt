@@ -35,7 +35,7 @@ interface BaseApplicationComponent {
     fun inject(viewModel: MusicFragmentViewModel)
     fun inject(viewModel: ProblemReportViewModel)
     fun inject(viewModel: AboutViewModel)
-    fun inject(viewModel: FindFriendsViewModel)
+    fun inject(viewModel: FriendsViewModel)
     fun inject(viewModel: UserProfileViewModel)
 
     fun inject(databaseRebuilder: DatabaseRebuilder)

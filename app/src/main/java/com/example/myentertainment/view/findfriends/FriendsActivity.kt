@@ -15,12 +15,12 @@ import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.Utils
 import com.example.myentertainment.view.UserProfileActivity
-import com.example.myentertainment.viewmodel.FindFriendsViewModel
+import com.example.myentertainment.viewmodel.FriendsViewModel
 import com.example.myentertainment.viewmodel.SearchUsersStatus
 
-class FindFriendsActivity : AppCompatActivity(), UserTileClickListener {
+class FriendsActivity : AppCompatActivity(), UserTileClickListener {
 
-    private lateinit var viewModel: FindFriendsViewModel
+    private lateinit var viewModel: FriendsViewModel
 
     private lateinit var searchField: TextView
     private lateinit var searchButton: ImageButton
@@ -35,7 +35,7 @@ class FindFriendsActivity : AppCompatActivity(), UserTileClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find_friends)
 
-        viewModel = ViewModelProvider(this).get(FindFriendsViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(FriendsViewModel::class.java)
         initView()
         setObservers()
         setUserId()
