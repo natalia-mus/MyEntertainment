@@ -38,7 +38,7 @@
             android:name=".view.AboutActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.findfriends.FriendsActivity"
+            android:name=".view.friends.FriendsActivity"
             android:screenOrientation="portrait" />
     </application>
 

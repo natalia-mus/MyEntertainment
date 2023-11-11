@@ -1,4 +1,4 @@
-package com.example.myentertainment.view.findfriends
+package com.example.myentertainment.view.friends
 
 import android.content.Context
 import android.util.TypedValue

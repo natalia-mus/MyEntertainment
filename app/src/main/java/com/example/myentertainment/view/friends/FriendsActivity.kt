@@ -1,4 +1,4 @@
-package com.example.myentertainment.view.findfriends
+package com.example.myentertainment.view.friends
 
 import android.content.Intent
 import android.os.Bundle
