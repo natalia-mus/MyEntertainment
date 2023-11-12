@@ -31,6 +31,7 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     val updatingProfilePictureSuccessful = MutableLiveData<Boolean>()
     val changingFriendshipStatusSuccessful = MutableLiveData<Boolean>()
     val friendshipStatus = MutableLiveData<FriendshipStatus>()
+    val friendsCount = MutableLiveData<Int>()
 
 
     fun acceptInvitation(invitingUserId: String) {
@@ -62,6 +63,14 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     fun changeProfilePicture(file: Uri) {
         val uploadTask = getProfilePictureReference(currentUser).putFile(file)
         changeProfilePicture(uploadTask)
+    }
+
+    fun getFriendsCount(userId: String?) {
+        val id = userId ?: currentUser
+
+        friendsReference.child(id).get().addOnSuccessListener {
+            friendsCount.value = it.childrenCount.toInt()
+        }
     }
 
     fun getFriendshipStatus(userId: String?) {

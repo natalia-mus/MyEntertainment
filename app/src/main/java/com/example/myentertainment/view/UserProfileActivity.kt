@@ -51,6 +51,8 @@ class UserProfileActivity : AppCompatActivity() {
     private val city: TextView by lazy { findViewById(R.id.userProfile_city) }
     private val country: TextView by lazy { findViewById(R.id.userProfile_country) }
     private val birthDate: TextView by lazy { findViewById(R.id.userProfile_birthDate) }
+    private val friendsSection: RelativeLayout by lazy { findViewById(R.id.userProfile_friendsSection) }
+    private val friends: TextView by lazy { findViewById(R.id.userProfile_friends) }
     private val age: TextView by lazy { findViewById(R.id.userProfile_age) }
     private val removeBirthDate: ImageView by lazy { findViewById(R.id.userProfile_removeBirthDate) }
     private val email: TextView by lazy { findViewById(R.id.userProfile_email) }
@@ -193,6 +195,7 @@ class UserProfileActivity : AppCompatActivity() {
             currentUser = false
         }
         viewModel.getUserProfile(userId)
+        viewModel.getFriendsCount(userId)
         viewModel.getFriendshipStatus(userId)
     }
 
@@ -201,6 +204,10 @@ class UserProfileActivity : AppCompatActivity() {
         if (!successful) {
             Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun handleFriendsCount(friendsCount: Int) {
+        friends.text = friendsCount.toString()
     }
 
     private fun handleFriendshipStatus(friendshipStatus: FriendshipStatus) {
@@ -438,6 +445,7 @@ class UserProfileActivity : AppCompatActivity() {
         viewModel.updatingProfilePictureSuccessful.observe(this) { handleDatabaseTaskExecutionResult(it) }
         viewModel.changingFriendshipStatusSuccessful.observe(this) { handleChangingFriendshipStatus(it) }
         viewModel.friendshipStatus.observe(this) { handleFriendshipStatus(it) }
+        viewModel.friendsCount.observe(this) { handleFriendsCount(it) }
     }
 
     private fun showDatePickerDialog() {
@@ -500,6 +508,7 @@ class UserProfileActivity : AppCompatActivity() {
             city.visibility = View.GONE
             country.visibility = View.GONE
             age.visibility = View.GONE
+            friendsSection.visibility = View.GONE
             usernameEditable.visibility = View.VISIBLE
             realNameEditable.visibility = View.VISIBLE
             cityEditable.visibility = View.VISIBLE
@@ -528,6 +537,7 @@ class UserProfileActivity : AppCompatActivity() {
             city.visibility = View.VISIBLE
             country.visibility = View.VISIBLE
             birthDate.visibility = View.VISIBLE
+            friendsSection.visibility = View.VISIBLE
             removeBirthDate.visibility = View.GONE
             usernameEditable.visibility = View.GONE
             realNameEditable.visibility = View.GONE

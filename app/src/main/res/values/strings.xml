@@ -34,6 +34,7 @@
     <string name="failed_to_sign_in">Failed to sign in</string>
     <string name="find_friends">Find friends</string>
     <string name="find_friends_hint">real name or username</string>
+    <string name="friends">friends:</string>
     <string name="gallery">GALLERY</string>
     <string name="game_add">add game</string>
     <string name="game_added">Game added</string>

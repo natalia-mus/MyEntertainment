@@ -306,6 +306,33 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/userProfile_friendsSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:id="@+id/userProfile_friends_label"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/friends"
+                        android:textColor="@color/default_text_color"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/userProfile_friends"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/userProfile_friends_label"
+                        android:textColor="@color/default_text_color"
+                        android:textSize="18dp"
+                        tools:text="53" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingVertical="8dp">
