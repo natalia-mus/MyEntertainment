@@ -41,14 +41,20 @@ class FriendsViewModel : UserProfileViewModel() {
 
         friendsReference.child(userId).get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
-                val friendsMap = task.result?.value as HashMap<String, String>
+                val value = task.result?.value
+                if (value != null) {
+                    val friendsMap = task.result?.value as HashMap<String, String>
 
-                val friendsIds = ArrayList<String?>()
-                for (id in friendsMap.values) {
-                    friendsIds.add(id)
+                    val friendsIds = ArrayList<String?>()
+                    for (id in friendsMap.values) {
+                        friendsIds.add(id)
+                    }
+
+                    getUserProfiles(friendsIds)
+
+                } else {
+                    onUserProfilesChanged()
                 }
-
-                getUserProfiles(friendsIds)
             }
         }
     }

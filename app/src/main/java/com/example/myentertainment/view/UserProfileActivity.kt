@@ -242,7 +242,7 @@ class UserProfileActivity : AppCompatActivity() {
             FriendshipStatus.READY_TO_ACCEPT -> {
                 // button "accept invitation"
                 friendshipButton.visibility = View.VISIBLE
-                friendshipButton.setBackgroundResource(R.drawable.background_transparent)
+                friendshipButton.setBackgroundResource(R.drawable.accept_invitation_button_background)
                 friendshipButton.setImageResource(R.drawable.ic_add_friend)
                 friendshipButton.setOnClickListener() {
                     acceptInvitation()
