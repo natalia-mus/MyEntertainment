@@ -71,7 +71,7 @@
     <string name="no_go_back">no, go back</string>
     <string name="no_movies">you have no movies</string>
     <string name="no_music">you have no songs</string>
-    <string name="no_results_info">no results</string>
+    <string name="no_results">no results</string>
     <string name="none">-</string>
     <string name="password">password</string>
     <string name="password_too_short">Your password should be at least 6 characters long</string>
@@ -108,6 +108,7 @@
     <string name="username_can_not_be_empty">Username can not be empty</string>
     <string name="yes">yes</string>
     <string name="yes_remove">yes, remove</string>
+    <string name="you_have_no_friends_yet">you have no friends yet</string>
     <string name="your_email_address_is_invalid">Your e-mail address is invalid</string>
     <string name="yrs">yrs</string>
 </resources>

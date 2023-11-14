@@ -22,6 +22,7 @@ class FriendsActivity : AppCompatActivity(), UserTileClickListener {
 
     private lateinit var viewModel: FriendsViewModel
 
+    private lateinit var searchSection: ConstraintLayout
     private lateinit var searchField: TextView
     private lateinit var searchButton: ImageButton
     private lateinit var loadingSection: ConstraintLayout
@@ -62,6 +63,7 @@ class FriendsActivity : AppCompatActivity(), UserTileClickListener {
     }
 
     private fun initView() {
+        searchSection = findViewById(R.id.findFriends_searchSection)
         searchField = findViewById(R.id.findFriends_searchField)
         searchButton = findViewById(R.id.findFriends_searchButton)
         loadingSection = findViewById(R.id.findFriends_loadingSection)
@@ -115,6 +117,14 @@ class FriendsActivity : AppCompatActivity(), UserTileClickListener {
             SearchUsersStatus.NO_RESULTS -> {
                 usersList.visibility = View.GONE
                 noResultsInfo.visibility = View.VISIBLE
+
+                if (userId == viewModel.currentUser) {
+                    noResultsInfo.text = resources.getString(R.string.you_have_no_friends_yet)
+                    searchSection.visibility = View.GONE
+
+                } else {
+                    noResultsInfo.text = resources.getString(R.string.no_results)
+                }
             }
             SearchUsersStatus.ERROR -> {
                 usersList.visibility = View.GONE
