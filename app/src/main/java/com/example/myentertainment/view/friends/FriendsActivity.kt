@@ -30,6 +30,7 @@ class FriendsActivity : AppCompatActivity(), UserTileClickListener {
     private lateinit var usersList: RecyclerView
 
     private var userId: String? = null
+    private var friendsListChanged = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +42,12 @@ class FriendsActivity : AppCompatActivity(), UserTileClickListener {
         setObservers()
         setUserId()
         getFriends()
+        setFriendsListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshFriendsList()
     }
 
     override fun onUserTileClicked(userId: String?) {
@@ -76,9 +83,21 @@ class FriendsActivity : AppCompatActivity(), UserTileClickListener {
         }
     }
 
+    private fun refreshFriendsList() {
+        if (friendsListChanged) {
+            getFriends()
+            viewModel.onFriendsListRefreshed()
+        }
+    }
+
+    private fun setFriendsListener() {
+        viewModel.setFriendsListener(this.userId)
+    }
+
     private fun setObservers() {
         viewModel.loading.observe(this) { updateLoadingSection(it) }
         viewModel.status.observe(this) { updateStatusInfo(it) }
+        viewModel.friendsListChanged.observe(this) { updateFriendsListChanged(it) }
     }
 
     private fun setUserId() {
@@ -97,6 +116,10 @@ class FriendsActivity : AppCompatActivity(), UserTileClickListener {
 
             usersList.visibility = View.VISIBLE
         }
+    }
+
+    private fun updateFriendsListChanged(changed: Boolean) {
+        friendsListChanged = changed
     }
 
     private fun updateLoadingSection(loading: Boolean) {

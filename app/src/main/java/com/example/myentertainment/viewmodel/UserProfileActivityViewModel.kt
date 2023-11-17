@@ -43,6 +43,7 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
                             changingFriendshipStatusSuccessful.value = task.isSuccessful
                             if (task.isSuccessful) {
                                 friendshipStatus.value = FriendshipStatus.READY_TO_REMOVE
+                                getFriendsCount(invitingUserId)
                             }
                         }
                     } else {
@@ -119,6 +120,7 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
                     changingFriendshipStatusSuccessful.value = task.isSuccessful
                     if (task.isSuccessful) {
                         friendshipStatus.value = FriendshipStatus.READY_TO_INVITE
+                        getFriendsCount(friendId)
                     }
                 }
             } else {

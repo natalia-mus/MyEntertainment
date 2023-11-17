@@ -4,6 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.data.UserProfileData
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
 import javax.inject.Named
@@ -20,10 +23,17 @@ class FriendsViewModel : UserProfileViewModel() {
 
     val loading = MutableLiveData<Boolean>()
     val status = MutableLiveData<SearchUsersStatus>()
+    val friendsListChanged = MutableLiveData<Boolean>()
 
     private var friends = MutableLiveData<ArrayList<UserProfile>>()
 
     private var phrase = ""
+
+    /**
+     * Should setFriendsListener() set listener - only once, when setFriendsListener() first time executed
+     */
+    private var setFriendsListener = true
+
 
     fun findFriends(phrase: String, userId: String? = null) {
         loading.value = true
@@ -63,6 +73,10 @@ class FriendsViewModel : UserProfileViewModel() {
         filter(true)
     }
 
+    fun onFriendsListRefreshed() {
+        friendsListChanged.value = false
+    }
+
     override fun onUserProfilesChanged() {
         loading.value = false
 
@@ -70,6 +84,32 @@ class FriendsViewModel : UserProfileViewModel() {
             status.value = SearchUsersStatus.NO_RESULTS
         } else {
             status.value = SearchUsersStatus.SUCCESS
+        }
+    }
+
+    /**
+     * Listens if user removed a friend or if another user accepted his invitation -
+     * - if so, list of friends needs to be refreshed when back to My Friends
+     */
+    fun setFriendsListener(userId: String?) {
+        if (userId == currentUser && setFriendsListener) {
+            setFriendsListener = false
+
+            friendsReference.child(currentUser).addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    friendsListChanged.value = true
+                }
+
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                    friendsListChanged.value = true
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
         }
     }
 
