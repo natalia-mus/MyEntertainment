@@ -81,23 +81,32 @@ open class UserProfileViewModel : ViewModel() {
     }
 
     protected fun getProfilePictureUrl(id: String) {
-        getProfilePictureReference(id).downloadUrl
-            .addOnSuccessListener {
-                if (requests > 0) requests--
-                profilePicture = it
-                setUserProfileValue()
+        val userProfileFromCache = getUserProfileFromCache(id)
+        if (userProfileFromCache != null) {
+            if (requests > 0) requests--
+            userProfileData = userProfileFromCache.userProfileData
+            profilePicture = userProfileFromCache.userProfilePicture
+            setUserProfileValue()
 
-            }.addOnFailureListener {
-                val errorCode = (it as StorageException).errorCode
-
-                if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
+        } else {
+            getProfilePictureReference(id).downloadUrl
+                .addOnSuccessListener {
                     if (requests > 0) requests--
-                    profilePicture = null
+                    profilePicture = it
                     setUserProfileValue()
-                } else {
-                    onGettingProfilePictureFailed()
+
+                }.addOnFailureListener {
+                    val errorCode = (it as StorageException).errorCode
+
+                    if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                        if (requests > 0) requests--
+                        profilePicture = null
+                        setUserProfileValue()
+                    } else {
+                        onGettingProfilePictureFailed()
+                    }
                 }
-            }
+        }
     }
 
     protected fun getProfilePictureUrls() {
@@ -139,14 +148,24 @@ open class UserProfileViewModel : ViewModel() {
             val id = userIdsToFetch[0]
             requests++
 
-            usersReference.child(id).get().addOnCompleteListener() { task ->
-                if (task.isSuccessful) {
-                    userProfileData = task.result?.getValue(UserProfileData::class.java)
-                    getProfilePictureUrl(id)
+            val userProfileDataFromCache = getUserProfileDataFromCache(id)
+            if (userProfileDataFromCache != null) {
+                userProfileData = userProfileDataFromCache
+                getProfilePictureUrl(id)
 
-                } else {
-                    requests--
-                    userProfileData = null
+            } else {
+                usersReference.child(id).get().addOnCompleteListener() { task ->
+                    if (task.isSuccessful) {
+                        userProfileData = task.result?.getValue(UserProfileData::class.java)
+                        if (userProfileData != null) {
+                            userProfilesDataCache.add(userProfileData!!)
+                        }
+                        getProfilePictureUrl(id)
+
+                    } else {
+                        requests--
+                        userProfileData = null
+                    }
                 }
             }
         }
@@ -191,13 +210,28 @@ open class UserProfileViewModel : ViewModel() {
         }
     }
 
-    private fun getUserProfileFromCache(userProfileData: UserProfileData): UserProfile? {
-        for (element in userProfilesCache) {
-            if (element.userProfileData == userProfileData) {
+    private fun getUserProfileDataFromCache(userId: String): UserProfileData? {
+        for (element in userProfilesDataCache) {
+            if (element.userId == userId) {
                 return element
             }
         }
         return null
+    }
+
+    private fun getUserProfileFromCache(userId: String?): UserProfile? {
+        if (userId != null) {
+            for (element in userProfilesCache) {
+                if (element.userProfileData?.userId == userId) {
+                    return element
+                }
+            }
+        }
+        return null
+    }
+
+    private fun getUserProfileFromCache(userProfileData: UserProfileData): UserProfile? {
+        return getUserProfileFromCache(userProfileData.userId)
     }
 
     private fun parseUserProfileObject(user: HashMap<String, UserProfileData>): UserProfileData {
@@ -266,6 +300,7 @@ open class UserProfileViewModel : ViewModel() {
 
             if (userIdsToFetch.isEmpty()) {
                 userProfiles.value = userProfilesArray
+                userProfilesCache = ArrayList(userProfilesArray)
                 onUserProfilesChanged()
 
             } else {

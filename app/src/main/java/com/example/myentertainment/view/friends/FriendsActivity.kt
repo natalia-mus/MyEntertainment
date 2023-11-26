@@ -91,7 +91,7 @@ class FriendsActivity : AppCompatActivity(), UserTileClickListener {
     }
 
     private fun setFriendsListener() {
-        viewModel.setFriendsListener(this.userId)
+        viewModel.setFriendsListener(userId)
     }
 
     private fun setObservers() {
