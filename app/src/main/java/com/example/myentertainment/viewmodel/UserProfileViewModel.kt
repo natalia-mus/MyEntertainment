@@ -114,7 +114,7 @@ open class UserProfileViewModel : ViewModel() {
             userProfileData = userProfilesData.value!![0]
 
             if (userProfileData != null) {
-                val cachedUserProfile = getUserProfileFromCache(userProfileData!!)
+                val cachedUserProfile = getUserProfileFromCache(userProfileData!!.userId)
 
                 if (cachedUserProfile != null) {
                     userProfilesArray.add(cachedUserProfile)
@@ -228,10 +228,6 @@ open class UserProfileViewModel : ViewModel() {
             }
         }
         return null
-    }
-
-    private fun getUserProfileFromCache(userProfileData: UserProfileData): UserProfile? {
-        return getUserProfileFromCache(userProfileData.userId)
     }
 
     private fun parseUserProfileObject(user: HashMap<String, UserProfileData>): UserProfileData {

@@ -35,7 +35,7 @@ class FriendsActivity : AppCompatActivity(), UserTileClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_find_friends)
+        setContentView(R.layout.activity_friends)
 
         viewModel = ViewModelProvider(this).get(FriendsViewModel::class.java)
         initView()
@@ -58,6 +58,11 @@ class FriendsActivity : AppCompatActivity(), UserTileClickListener {
         startActivity(intent)
     }
 
+    private fun enableSearchSection(enable: Boolean) {
+        searchField.isEnabled = enable
+        searchButton.isEnabled = enable
+    }
+
     private fun findFriends() {
         val phrase = searchField.text.toString()
         viewModel.findFriends(phrase, userId)
@@ -70,12 +75,12 @@ class FriendsActivity : AppCompatActivity(), UserTileClickListener {
     }
 
     private fun initView() {
-        searchSection = findViewById(R.id.findFriends_searchSection)
-        searchField = findViewById(R.id.findFriends_searchField)
-        searchButton = findViewById(R.id.findFriends_searchButton)
-        loadingSection = findViewById(R.id.findFriends_loadingSection)
-        noResultsInfo = findViewById(R.id.findFriends_noResultsInfo)
-        usersList = findViewById(R.id.findFriends_list)
+        searchSection = findViewById(R.id.friends_searchSection)
+        searchField = findViewById(R.id.friends_searchField)
+        searchButton = findViewById(R.id.friends_searchButton)
+        loadingSection = findViewById(R.id.friends_loadingSection)
+        noResultsInfo = findViewById(R.id.friends_noResultsInfo)
+        usersList = findViewById(R.id.friends_list)
 
         searchButton.setOnClickListener {
             findFriends()
@@ -125,8 +130,10 @@ class FriendsActivity : AppCompatActivity(), UserTileClickListener {
     private fun updateLoadingSection(loading: Boolean) {
         if (loading) {
             loadingSection.visibility = View.VISIBLE
+            enableSearchSection(false)
         } else {
             loadingSection.visibility = View.GONE
+            enableSearchSection(true)
         }
     }
 
