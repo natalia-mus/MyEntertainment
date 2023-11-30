@@ -63,7 +63,8 @@ class FriendsViewModel : UserProfileViewModel() {
                     getUserProfiles(friendsIds)
 
                 } else {
-                    onUserProfilesChanged()
+                    loading.value = false
+                    status.value = SearchUsersStatus.NO_FRIENDS
                 }
             }
         }
@@ -165,5 +166,5 @@ class FriendsViewModel : UserProfileViewModel() {
 
 
 enum class SearchUsersStatus {
-    SUCCESS, NO_RESULTS, ERROR
+    SUCCESS, NO_RESULTS, NO_FRIENDS, ERROR
 }

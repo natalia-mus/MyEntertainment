@@ -130,6 +130,7 @@ class FriendsActivity : AppCompatActivity(), UserTileClickListener {
     private fun updateLoadingSection(loading: Boolean) {
         if (loading) {
             loadingSection.visibility = View.VISIBLE
+            noResultsInfo.visibility = View.GONE
             enableSearchSection(false)
         } else {
             loadingSection.visibility = View.GONE
@@ -146,15 +147,13 @@ class FriendsActivity : AppCompatActivity(), UserTileClickListener {
             }
             SearchUsersStatus.NO_RESULTS -> {
                 usersList.visibility = View.GONE
+                noResultsInfo.text = resources.getString(R.string.no_results)
                 noResultsInfo.visibility = View.VISIBLE
-
-                if (userId == viewModel.currentUser) {
-                    noResultsInfo.text = resources.getString(R.string.you_have_no_friends_yet)
-                    searchSection.visibility = View.GONE
-
-                } else {
-                    noResultsInfo.text = resources.getString(R.string.no_results)
-                }
+            }
+            SearchUsersStatus.NO_FRIENDS -> {
+                noResultsInfo.text = resources.getString(R.string.you_have_no_friends_yet)
+                noResultsInfo.visibility = View.VISIBLE
+                searchSection.visibility = View.GONE
             }
             SearchUsersStatus.ERROR -> {
                 usersList.visibility = View.GONE
