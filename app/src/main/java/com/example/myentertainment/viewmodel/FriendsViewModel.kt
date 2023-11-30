@@ -122,7 +122,7 @@ class FriendsViewModel : UserProfileViewModel() {
         if (filterAllUsers && userProfilesData.value != null) {
             val filtered = ArrayList<UserProfileData>()
             for (item in userProfilesData.value!!) {
-                if (containsPhrase(item, phrase) && item.userId != currentUser) {
+                if (item.userId != currentUser && phrase.isNotEmpty() && containsPhrase(item, phrase)) {
                     filtered.add(item)
                 }
             }
@@ -139,7 +139,7 @@ class FriendsViewModel : UserProfileViewModel() {
 
 
         } else {
-            if (friends.value == null) {
+            if (friends.value == null || friends.value?.size == 0) {
                 friends.value = userProfiles.value
             }
 
@@ -155,7 +155,7 @@ class FriendsViewModel : UserProfileViewModel() {
                 onUserProfilesChanged()
 
             } else {
-                userProfiles.value?.clear()
+                userProfiles.value = filtered
                 onUserProfilesChanged()
             }
         }
