@@ -25,8 +25,8 @@ class FriendsViewModel : UserProfileViewModel() {
     val status = MutableLiveData<SearchUsersStatus>()
     val friendsListChanged = MutableLiveData<Boolean>()
 
+    private var filterFriendsList = false
     private var friends = MutableLiveData<ArrayList<UserProfile>>()
-
     private var phrase = ""
 
     /**
@@ -76,15 +76,23 @@ class FriendsViewModel : UserProfileViewModel() {
 
     fun onFriendsListRefreshed() {
         friendsListChanged.value = false
+        filterFriendsList = true
     }
 
     override fun onUserProfilesChanged() {
-        loading.value = false
+        if (filterFriendsList) {
+            // filter by recently given phrase when refreshing friends list
+            filterFriendsList = false
+            filter(false)
 
-        if (userProfiles.value == null || userProfiles.value?.isEmpty() == true) {
-            status.value = SearchUsersStatus.NO_RESULTS
         } else {
-            status.value = SearchUsersStatus.SUCCESS
+            loading.value = false
+
+            if (userProfiles.value == null || userProfiles.value?.isEmpty() == true) {
+                status.value = SearchUsersStatus.NO_RESULTS
+            } else {
+                status.value = SearchUsersStatus.SUCCESS
+            }
         }
     }
 
