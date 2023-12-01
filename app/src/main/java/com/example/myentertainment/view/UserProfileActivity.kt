@@ -28,6 +28,7 @@ import com.example.myentertainment.data.Date
 import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.data.UserProfileData
 import com.example.myentertainment.view.authentication.AuthenticationActivity
+import com.example.myentertainment.view.friends.FriendsActivity
 import com.example.myentertainment.viewmodel.FriendshipStatus
 import com.example.myentertainment.viewmodel.UserProfileActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -81,6 +82,7 @@ class UserProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user_profile)
 
         viewModel = ViewModelProvider(this).get(UserProfileActivityViewModel::class.java)
+        setView()
         setObservers()
         getUserProfile(intent)
 
@@ -199,6 +201,12 @@ class UserProfileActivity : AppCompatActivity() {
         viewModel.getFriendshipStatus(userId)
     }
 
+    private fun goToFriendsList() {
+        val intent = Intent(this, FriendsActivity::class.java)
+        intent.putExtra(Constants.USER_ID, userId ?: viewModel.currentUser)
+        startActivity(intent)
+    }
+
     private fun handleDatabaseTaskExecutionResult(successful: Boolean) {
         handleLoadingStatus(false)
         if (!successful) {
@@ -208,6 +216,7 @@ class UserProfileActivity : AppCompatActivity() {
 
     private fun handleFriendsCount(friendsCount: Int) {
         friends.text = friendsCount.toString()
+        friends.isEnabled = friendsCount > 0
     }
 
     private fun handleFriendshipStatus(friendshipStatus: FriendshipStatus) {
@@ -446,6 +455,12 @@ class UserProfileActivity : AppCompatActivity() {
         viewModel.changingFriendshipStatusSuccessful.observe(this) { handleChangingFriendshipStatus(it) }
         viewModel.friendshipStatus.observe(this) { handleFriendshipStatus(it) }
         viewModel.friendsCount.observe(this) { handleFriendsCount(it) }
+    }
+
+    private fun setView() {
+        friends.setOnClickListener {
+            goToFriendsList()
+        }
     }
 
     private fun showDatePickerDialog() {
