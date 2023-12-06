@@ -17,3 +17,9 @@ Project was built according to MVVM architecture pattern. It uses Dagger2 for de
 ### <b> update: </b>
  
 Now deleting and editing items is possible. In order to delete item user needs to tap and hold one. After single tap on selected item, user will be able to edit it.
+
+<br/><br/>
+
+## Author
+
+[Natalia Muskała](https://github.com/natalia-mus)

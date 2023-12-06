@@ -53,7 +53,7 @@ class DatabaseRebuilder {
         }
     }
 
-    fun rebuild() {
+    fun rebuildEntertainment() {
         // fetching all records from rebuilding path
         usersReference.get().addOnSuccessListener {
             val userObjectsSet = it.value as HashMap<String, HashMap<String, Any>>
@@ -119,4 +119,19 @@ class DatabaseRebuilder {
 
         }
     }
+
+
+    fun rebuildUsers() {
+        // fetching all records from rebuilding path
+        usersReference.get().addOnSuccessListener {
+            val userObjectsSet = it.value as HashMap<String, HashMap<String, Any>>
+
+            for (userObject in userObjectsSet) {
+                val userId = userObject.key
+                val userProfile = userObject.value["user_profile_data"]
+                usersReference.child(userId).setValue(userProfile)
+            }
+        }
+    }
+
 }
