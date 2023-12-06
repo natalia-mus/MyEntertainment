@@ -36,6 +36,20 @@ class FirebaseModule {
 
     @Singleton
     @Provides
+    @Named("friendsReference")
+    fun provideFriendsReference(): DatabaseReference {
+        return FirebaseDatabase.getInstance().getReference(UNLIMITED).child("friends")
+    }
+
+    @Singleton
+    @Provides
+    @Named("invitationsReference")
+    fun provideInvitationsReference(): DatabaseReference {
+        return FirebaseDatabase.getInstance().getReference(UNLIMITED).child("invitations")
+    }
+
+    @Singleton
+    @Provides
     fun provideFirebaseAuth(): FirebaseAuth {
         return Firebase.auth
     }

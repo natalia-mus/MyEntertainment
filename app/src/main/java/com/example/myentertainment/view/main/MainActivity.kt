@@ -10,40 +10,58 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
+import com.example.myentertainment.data.Invitation
+import com.example.myentertainment.data.UserProfile
 import com.example.myentertainment.view.AboutActivity
-import com.example.myentertainment.view.add.AddActivity
-import com.example.myentertainment.view.authentication.AuthenticationActivity
 import com.example.myentertainment.view.ProblemReportActivity
 import com.example.myentertainment.view.UserProfileActivity
+import com.example.myentertainment.view.add.AddActivity
+import com.example.myentertainment.view.authentication.AuthenticationActivity
+import com.example.myentertainment.view.friends.FriendsActivity
 import com.example.myentertainment.viewmodel.main.MainActivityViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), InvitationDialogListener {
+
+    private val moviesFragment by lazy { MoviesFragment() }
+    private val booksFragment by lazy { BooksFragment() }
+    private val gamesFragment by lazy { GamesFragment() }
+    private val musicFragment by lazy { MusicFragment() }
 
     private lateinit var viewModel: MainActivityViewModel
-    private val moviesFragment = MoviesFragment()
-    private val booksFragment = BooksFragment()
-    private val gamesFragment = GamesFragment()
-    private val musicFragment = MusicFragment()
-
     private lateinit var currentFragment: String
-
     private lateinit var bottomNavigation: BottomNavigationView
     private lateinit var addButton: FloatingActionButton
+
+    private var invitationDialog: InvitationDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         initView()
+        setObservers()
         checkCategory()
+        getInvitations()
+    }
+
+    override fun onAcceptClick(invitation: Invitation) {
+        viewModel.acceptInvitation(invitation)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.main_menu, menu)
         return true
+    }
+
+    override fun onDeclineClick(invitationId: String) {
+        viewModel.declineInvitation(invitationId)
+    }
+
+    override fun onLaterClick() {
+        invitationDialog?.dismiss()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -59,12 +77,21 @@ class MainActivity : AppCompatActivity() {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
-            R.id.menuItem_reportAProblem -> {
-                val intent = Intent(this, ProblemReportActivity::class.java)
-                startActivity(intent)
-            }
             R.id.menuItem_about -> {
                 val intent = Intent(this, AboutActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.menuItem_myFriends -> {
+                val intent = Intent(this, FriendsActivity::class.java)
+                intent.putExtra(Constants.USER_ID, viewModel.currentUser)
+                startActivity(intent)
+            }
+            R.id.menuItem_findFriends -> {
+                val intent = Intent(this, FriendsActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.menuItem_reportAProblem -> {
+                val intent = Intent(this, ProblemReportActivity::class.java)
                 startActivity(intent)
             }
         }
@@ -112,6 +139,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun getInvitations() {
+        viewModel.getInvitations()
+    }
+
     private fun initView() {
         bottomNavigation = findViewById(R.id.bottomNavigation_bar)
         addButton = findViewById(R.id.mainActivity_add)
@@ -130,6 +161,18 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, AddActivity::class.java)
             intent.putExtra(Constants.CATEGORY, currentFragment)
             startActivity(intent)
+        }
+    }
+
+    private fun setObservers() {
+        viewModel.userProfiles.observe(this) { showInvitations(it) }
+    }
+
+    private fun showInvitations(invitingUsers: ArrayList<UserProfile>) {
+        val invitations = viewModel.invitations.value
+        if (invitations != null) {
+            invitationDialog = InvitationDialog(this, invitations, invitingUsers, this)
+            invitationDialog!!.show()
         }
     }
 

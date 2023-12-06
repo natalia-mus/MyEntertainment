@@ -1,6 +1,5 @@
 package com.example.myentertainment.view
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,8 +10,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -23,52 +22,71 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
+import com.example.myentertainment.Utils
 import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.data.Date
 import com.example.myentertainment.data.UserProfile
+import com.example.myentertainment.data.UserProfileData
 import com.example.myentertainment.view.authentication.AuthenticationActivity
-import com.example.myentertainment.viewmodel.userprofile.UserProfileActivityViewModel
+import com.example.myentertainment.view.friends.FriendsActivity
+import com.example.myentertainment.viewmodel.FriendshipStatus
+import com.example.myentertainment.viewmodel.UserProfileActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.ByteArrayOutputStream
 
 class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var viewModel: UserProfileActivityViewModel
+    private val yrs: String by lazy { resources.getString(R.string.yrs) }
+
+    private var currentUser = true
     private var changesToSave = false
-
-    private lateinit var photo: ImageView
-    private lateinit var username: TextView
-    private lateinit var realName: TextView
-    private lateinit var city: TextView
-    private lateinit var country: TextView
-    private lateinit var birthDate: TextView
-    private lateinit var age: TextView
-    private lateinit var removeBirthDate: ImageView
-    private lateinit var email: TextView
-    private lateinit var editButton: ImageButton
-    private lateinit var saveButton: Button
-    private lateinit var cancelButton: Button
-    private lateinit var usernameEditable: EditText
-    private lateinit var realNameEditable: EditText
-    private lateinit var cityEditable: EditText
-    private lateinit var countryEditable: EditText
-    private lateinit var changePassword: TextView
-    private lateinit var loadingSection: ConstraintLayout
-    private lateinit var buttonsSection: LinearLayout
-
     private var newBirthDate: Date? = null
     private var currentBirthDate: Date? = null
-    private lateinit var yrs: String
+    private var viewPreparedForContext = false
+    private var userId: String? = null
+
+    private val photo: ImageView by lazy { findViewById(R.id.userProfile_photo) }
+    private val username: TextView by lazy { findViewById(R.id.userProfile_username) }
+    private val realName: TextView by lazy { findViewById(R.id.userProfile_realName) }
+    private val city: TextView by lazy { findViewById(R.id.userProfile_city) }
+    private val country: TextView by lazy { findViewById(R.id.userProfile_country) }
+    private val birthDate: TextView by lazy { findViewById(R.id.userProfile_birthDate) }
+    private val friendsSection: RelativeLayout by lazy { findViewById(R.id.userProfile_friendsSection) }
+    private val friends: TextView by lazy { findViewById(R.id.userProfile_friends) }
+    private val age: TextView by lazy { findViewById(R.id.userProfile_age) }
+    private val removeBirthDate: ImageView by lazy { findViewById(R.id.userProfile_removeBirthDate) }
+    private val email: TextView by lazy { findViewById(R.id.userProfile_email) }
+    private val editButton: ImageButton by lazy { findViewById(R.id.userProfile_buttonEdit) }
+    private val saveButton: Button by lazy { findViewById(R.id.userProfile_buttonSave) }
+    private val cancelButton: Button by lazy { findViewById(R.id.userProfile_buttonCancel) }
+    private val friendshipButton: ImageButton by lazy { findViewById(R.id.userProfile_buttonFriendship) }
+    private val usernameEditable: EditText by lazy { findViewById(R.id.userProfile_username_editable) }
+    private val realNameEditable: EditText by lazy { findViewById(R.id.userProfile_realName_editable) }
+    private val cityEditable: EditText by lazy { findViewById(R.id.userProfile_city_editable) }
+    private val countryEditable: EditText by lazy { findViewById(R.id.userProfile_country_editable) }
+    private val changePassword: TextView by lazy { findViewById(R.id.userProfile_changePassword) }
+    private val loadingSection: ConstraintLayout by lazy { findViewById(R.id.userProfile_loadingSection) }
+    private val buttonsSection: LinearLayout by lazy { findViewById(R.id.userProfile_buttonsSection) }
+
+    private val onRemoveFriendClickListener = OnClickListener {
+        removeFriend()
+    }
+
+    private val onRemoveInvitationClickListener = OnClickListener {
+        removeInvitation()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
 
-        yrs = resources.getString(R.string.yrs)
         viewModel = ViewModelProvider(this).get(UserProfileActivityViewModel::class.java)
+        setView()
         setObservers()
-        initView()
-        viewModel.getUserProfileData()
+        getUserProfile(intent)
+
+        showUID()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -81,12 +99,14 @@ class UserProfileActivity : AppCompatActivity() {
                     if (file != null) {
                         val outputStream = ByteArrayOutputStream()
                         file.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                        handleLoadingStatus(true)
                         viewModel.changeProfilePicture(outputStream.toByteArray())
                     }
                 }
                 Constants.REQUEST_CODE_CAPTURE_GALLERY_IMAGE -> {
                     if (data != null && data.data != null) {
                         val file = data.data!!
+                        handleLoadingStatus(true)
                         viewModel.changeProfilePicture(file)
                     }
                 }
@@ -101,6 +121,13 @@ class UserProfileActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == Constants.REQUEST_CODE_PERMISSION_CAMERA && grantResults[0] == PackageManager.PERMISSION_GRANTED) openCamera()
+    }
+
+    private fun acceptInvitation() {
+        userId?.let {
+            handleLoadingStatus(true)
+            viewModel.acceptInvitation(it)
+        }
     }
 
     private fun areValuesDifferent(originalValue: String, newValue: String): Boolean {
@@ -131,16 +158,14 @@ class UserProfileActivity : AppCompatActivity() {
                 photoSourcePanel.dismiss()
             }
 
-        if (viewModel.profilePicture.value == null) {
-            photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove).visibility =
-                View.GONE
+        if (viewModel.userProfiles.value?.get(0)?.userProfilePicture == null) {
+            photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove).visibility = View.GONE
 
         } else {
-            photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove)
-                .setOnClickListener() {
-                    removeProfilePicture()
-                    photoSourcePanel.dismiss()
-                }
+            photoSourcePanelView.findViewById<LinearLayout>(R.id.panelPhotoSource_remove).setOnClickListener() {
+                removeProfilePicture()
+                photoSourcePanel.dismiss()
+            }
         }
 
         photoSourcePanel.setContentView(photoSourcePanelView)
@@ -161,17 +186,84 @@ class UserProfileActivity : AppCompatActivity() {
                 areValuesDifferent(this.country.text.toString(), country)
     }
 
+    private fun removeInvitation() {
+        userId?.let { viewModel.removeInvitation(it) }
+    }
+
+    private fun getUserProfile(intent: Intent) {
+        handleLoadingStatus(true)
+        if (intent.hasExtra(Constants.USER_ID)) {
+            userId = intent.getStringExtra(Constants.USER_ID)
+            currentUser = false
+        }
+        viewModel.getUserProfile(userId)
+        viewModel.getFriendsCount(userId)
+        viewModel.getFriendshipStatus(userId)
+    }
+
+    private fun goToFriendsList() {
+        val intent = Intent(this, FriendsActivity::class.java)
+        intent.putExtra(Constants.USER_ID, userId ?: viewModel.currentUser)
+        startActivity(intent)
+    }
+
     private fun handleDatabaseTaskExecutionResult(successful: Boolean) {
+        handleLoadingStatus(false)
         if (!successful) {
-            Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG)
-                .show()
+            Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun handleFriendsCount(friendsCount: Int) {
+        friends.text = friendsCount.toString()
+        friends.isEnabled = friendsCount > 0
+    }
+
+    private fun handleFriendshipStatus(friendshipStatus: FriendshipStatus) {
+        when (friendshipStatus) {
+            FriendshipStatus.PENDING -> {
+                // button "remove invitation"
+                friendshipButton.visibility = View.VISIBLE
+                friendshipButton.setBackgroundResource(R.drawable.remove_invitation_button_background)
+                friendshipButton.setImageResource(R.drawable.ic_delete)
+                friendshipButton.setOnClickListener() {
+                    QuestionDialog.createAndShow(this, resources.getString(R.string.remove_invitation_question), onRemoveInvitationClickListener)
+                }
+            }
+            FriendshipStatus.READY_TO_INVITE -> {
+                // button "send invitation"
+                friendshipButton.visibility = View.VISIBLE
+                friendshipButton.setBackgroundResource(R.drawable.add_friend_button_background)
+                friendshipButton.setImageResource(R.drawable.ic_add_friend)
+                friendshipButton.setOnClickListener() {
+                    sendInvitation()
+                }
+            }
+            FriendshipStatus.READY_TO_REMOVE -> {
+                // button "remove friend"
+                friendshipButton.visibility = View.VISIBLE
+                friendshipButton.setBackgroundResource(R.drawable.remove_friend_button_background)
+                friendshipButton.setImageResource(R.drawable.ic_remove_friend)
+                friendshipButton.setOnClickListener() {
+                    QuestionDialog.createAndShow(this, resources.getString(R.string.remove_friend_question), onRemoveFriendClickListener)
+                }
+            }
+            FriendshipStatus.READY_TO_ACCEPT -> {
+                // button "accept invitation"
+                friendshipButton.visibility = View.VISIBLE
+                friendshipButton.setBackgroundResource(R.drawable.accept_invitation_button_background)
+                friendshipButton.setImageResource(R.drawable.ic_add_friend)
+                friendshipButton.setOnClickListener() {
+                    acceptInvitation()
+                }
+            }
+            FriendshipStatus.UNKNOWN -> {
+                friendshipButton.visibility = View.GONE
+            }
         }
     }
 
     private fun handleLoadingStatus(loading: Boolean) {
-        if (!this::loadingSection.isInitialized) {
-            loadingSection = findViewById(R.id.userProfile_loadingSection)
-        }
         if (loading) {
             loadingSection.visibility = View.VISIBLE
         } else {
@@ -179,69 +271,35 @@ class UserProfileActivity : AppCompatActivity() {
         }
     }
 
+    private fun handleChangingFriendshipStatus(successful: Boolean) {
+        handleLoadingStatus(false)
+        if (!successful) {
+            Toast.makeText(this, getString(R.string.error_try_again), Toast.LENGTH_LONG).show()
+        }
+    }
+
     private fun handleUpdatingUserProfileDataResult(successful: Boolean) {
+        handleLoadingStatus(false)
         if (successful) {
-            Toast.makeText(this, getString(R.string.user_profile_data_updated), Toast.LENGTH_LONG)
-                .show()
-            hideKeyboard()
-            viewModel.getUserProfileData()
+            Utils.hideKeyboard(this)
+            Toast.makeText(this, getString(R.string.user_profile_data_updated), Toast.LENGTH_LONG).show()
+            handleLoadingStatus(true)
+            viewModel.getUserProfile(null)
+
         } else handleDatabaseTaskExecutionResult(false)
     }
 
+    private fun handleUserProfile(userProfiles: ArrayList<UserProfile>) {
+        val userProfile = userProfiles[0]
+        handleLoadingStatus(false)
+        updateView(userProfile.userProfileData)
+        refreshProfilePicture(userProfile.userProfilePicture)
+    }
+
     private fun handleValidationResult(validationResult: ValidationResult) {
+        handleLoadingStatus(false)
         if (validationResult == ValidationResult.EMPTY_VALUES) {
-            Toast.makeText(this, getString(R.string.username_can_not_be_empty), Toast.LENGTH_LONG)
-                .show()
-        }
-    }
-
-    private fun hideKeyboard() {
-        val inputMethodManager =
-            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        val view = findViewById<View>(android.R.id.content).rootView
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-
-    private fun initView() {
-        photo = findViewById(R.id.userProfile_photo)
-        username = findViewById(R.id.userProfile_username)
-        realName = findViewById(R.id.userProfile_realName)
-        city = findViewById(R.id.userProfile_city)
-        country = findViewById(R.id.userProfile_country)
-        birthDate = findViewById(R.id.userProfile_birthDate)
-        age = findViewById(R.id.userProfile_age)
-        removeBirthDate = findViewById(R.id.userProfile_removeBirthDate)
-        email = findViewById(R.id.userProfile_email)
-        editButton = findViewById(R.id.userProfile_buttonEdit)
-        saveButton = findViewById(R.id.userProfile_buttonSave)
-        cancelButton = findViewById(R.id.userProfile_buttonCancel)
-        buttonsSection = findViewById(R.id.userProfile_buttonsSection)
-        usernameEditable = findViewById(R.id.userProfile_username_editable)
-        realNameEditable = findViewById(R.id.userProfile_realName_editable)
-        cityEditable = findViewById(R.id.userProfile_city_editable)
-        countryEditable = findViewById(R.id.userProfile_country_editable)
-        changePassword = findViewById(R.id.userProfile_changePassword)
-
-        removeBirthDate.visibility = View.GONE
-
-        photo.setOnClickListener() {
-            changeProfilePicture()
-        }
-
-        changePassword.setOnClickListener() {
-            changePassword()
-        }
-
-        editButton.setOnClickListener() {
-            switchViewMode(true)
-        }
-
-        saveButton.setOnClickListener() {
-            updateUserProfileData()
-        }
-
-        cancelButton.setOnClickListener() {
-            switchViewMode(false)
+            Toast.makeText(this, getString(R.string.username_can_not_be_empty), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -273,6 +331,42 @@ class UserProfileActivity : AppCompatActivity() {
         }
 
         setBirthdateLabel(birthDateValue)
+    }
+
+    /**
+     * Prepares view depending on opening context - current user's profile and another user's profile options differ
+     */
+    private fun prepareViewForContext() {
+        if (!viewPreparedForContext) {
+
+            if (currentUser) {
+                photo.setOnClickListener() {
+                    changeProfilePicture()
+                }
+
+                changePassword.setOnClickListener() {
+                    changePassword()
+                }
+
+                editButton.visibility = View.VISIBLE
+                editButton.setOnClickListener() {
+                    switchViewMode(true)
+                }
+
+                saveButton.setOnClickListener() {
+                    updateUserProfileData()
+                }
+
+                cancelButton.setOnClickListener() {
+                    switchViewMode(false)
+                }
+
+            } else {
+                editButton.visibility = View.GONE
+            }
+
+            viewPreparedForContext = true
+        }
     }
 
     private fun refreshProfilePicture(uri: Uri?) {
@@ -314,6 +408,7 @@ class UserProfileActivity : AppCompatActivity() {
 
         removePanelView.findViewById<LinearLayout>(R.id.panelRemove_confirmationButton).setOnClickListener() {
             removePanel.dismiss()
+            handleLoadingStatus(true)
             viewModel.removeProfilePicture()
         }
 
@@ -324,6 +419,13 @@ class UserProfileActivity : AppCompatActivity() {
 
         removePanel.setContentView(removePanelView)
         removePanel.show()
+    }
+
+    private fun sendInvitation() {
+        userId?.let {
+            handleLoadingStatus(true)
+            viewModel.sendInvitation(it)
+        }
     }
 
     /**
@@ -346,12 +448,19 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun setObservers() {
-        viewModel.loading.observe(this) { handleLoadingStatus(it) }
-        viewModel.userProfile.observe(this) { updateView(it) }
-        viewModel.profilePicture.observe(this) { refreshProfilePicture(it) }
+        viewModel.userProfiles.observe(this) { handleUserProfile(it) }
         viewModel.validationResult.observe(this) { handleValidationResult(it) }
         viewModel.updatingUserProfileDataSuccessful.observe(this) { handleUpdatingUserProfileDataResult(it) }
-        viewModel.databaseTaskExecutionSuccessful.observe(this) { handleDatabaseTaskExecutionResult(it) }
+        viewModel.updatingProfilePictureSuccessful.observe(this) { handleDatabaseTaskExecutionResult(it) }
+        viewModel.changingFriendshipStatusSuccessful.observe(this) { handleChangingFriendshipStatus(it) }
+        viewModel.friendshipStatus.observe(this) { handleFriendshipStatus(it) }
+        viewModel.friendsCount.observe(this) { handleFriendsCount(it) }
+    }
+
+    private fun setView() {
+        friends.setOnClickListener {
+            goToFriendsList()
+        }
     }
 
     private fun showDatePickerDialog() {
@@ -391,6 +500,20 @@ class UserProfileActivity : AppCompatActivity() {
         datePickerDialog.show()
     }
 
+    /**
+     * Shows user id in user profile for development purposes
+     */
+    private fun showUID() {
+        val uidLabel = findViewById<TextView>(R.id.userProfile_uid)
+        uidLabel.visibility = View.VISIBLE
+
+        if (userId != null) {
+            uidLabel.text = userId
+        } else {
+            uidLabel.text = viewModel.currentUser
+        }
+    }
+
     private fun switchViewMode(switchToEditMode: Boolean) {
         if (switchToEditMode) {
             editButton.visibility = View.GONE
@@ -400,6 +523,7 @@ class UserProfileActivity : AppCompatActivity() {
             city.visibility = View.GONE
             country.visibility = View.GONE
             age.visibility = View.GONE
+            friendsSection.visibility = View.GONE
             usernameEditable.visibility = View.VISIBLE
             realNameEditable.visibility = View.VISIBLE
             cityEditable.visibility = View.VISIBLE
@@ -428,6 +552,7 @@ class UserProfileActivity : AppCompatActivity() {
             city.visibility = View.VISIBLE
             country.visibility = View.VISIBLE
             birthDate.visibility = View.VISIBLE
+            friendsSection.visibility = View.VISIBLE
             removeBirthDate.visibility = View.GONE
             usernameEditable.visibility = View.GONE
             realNameEditable.visibility = View.GONE
@@ -459,6 +584,10 @@ class UserProfileActivity : AppCompatActivity() {
         }
     }
 
+    private fun removeFriend() {
+        userId?.let { viewModel.removeFriend(it) }
+    }
+
     private fun updateUserProfileData() {
         if (changesToSave()) {
             val username = usernameEditable.text.toString()
@@ -467,15 +596,16 @@ class UserProfileActivity : AppCompatActivity() {
             val country = countryEditable.text.toString()
             val email = email.text.toString()
 
-            val userProfileData =
-                UserProfile(username, realName, city, country, newBirthDate, email)
+            val userProfileData = UserProfileData(viewModel.currentUser, username, realName, city, country, newBirthDate, email)
+            handleLoadingStatus(true)
             viewModel.updateUserProfileData(userProfileData)
+
         } else {
             switchViewMode(false)
         }
     }
 
-    private fun updateView(userProfileData: UserProfile?) {
+    private fun updateView(userProfileData: UserProfileData?) {
         if (userProfileData != null) {
             username.text = userProfileData.username
             realName.text = userProfileData.realName
@@ -485,6 +615,7 @@ class UserProfileActivity : AppCompatActivity() {
             currentBirthDate = userProfileData.birthDate
 
             switchViewMode(false)
+            prepareViewForContext()
 
         } else {
             finish()

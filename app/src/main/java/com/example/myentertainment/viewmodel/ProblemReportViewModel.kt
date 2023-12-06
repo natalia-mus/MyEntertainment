@@ -1,4 +1,4 @@
-package com.example.myentertainment.viewmodel.problemreport
+package com.example.myentertainment.viewmodel
 
 import android.net.Uri
 import android.os.Build

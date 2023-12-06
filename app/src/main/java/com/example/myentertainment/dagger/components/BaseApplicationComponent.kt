@@ -3,7 +3,7 @@ package com.example.myentertainment.dagger.components
 import android.app.Application
 import com.example.myentertainment.DatabaseRebuilder
 import com.example.myentertainment.dagger.modules.FirebaseModule
-import com.example.myentertainment.viewmodel.AboutViewModel
+import com.example.myentertainment.viewmodel.*
 import com.example.myentertainment.viewmodel.add.AddBookFragmentViewModel
 import com.example.myentertainment.viewmodel.add.AddGameFragmentViewModel
 import com.example.myentertainment.viewmodel.add.AddMovieFragmentViewModel
@@ -12,8 +12,6 @@ import com.example.myentertainment.viewmodel.authentication.ChangePasswordViewMo
 import com.example.myentertainment.viewmodel.authentication.SignInFragmentViewModel
 import com.example.myentertainment.viewmodel.authentication.SignUpFragmentViewModel
 import com.example.myentertainment.viewmodel.main.*
-import com.example.myentertainment.viewmodel.problemreport.ProblemReportViewModel
-import com.example.myentertainment.viewmodel.userprofile.UserProfileActivityViewModel
 import dagger.Component
 import javax.inject.Singleton
 
@@ -37,6 +35,8 @@ interface BaseApplicationComponent {
     fun inject(viewModel: MusicFragmentViewModel)
     fun inject(viewModel: ProblemReportViewModel)
     fun inject(viewModel: AboutViewModel)
+    fun inject(viewModel: FriendsViewModel)
+    fun inject(viewModel: UserProfileViewModel)
 
     fun inject(databaseRebuilder: DatabaseRebuilder)
 }

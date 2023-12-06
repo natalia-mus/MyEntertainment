@@ -48,16 +48,37 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/userProfile_photo"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/userProfile_photoSection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_margin="50dp"
-                    android:src="@drawable/placeholder_user"
                     app:layout_constraintBottom_toTopOf="@+id/userProfile_namesSection"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageButton
+                        android:id="@+id/userProfile_buttonFriendship"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/round_button_background"
+                        android:elevation="1dp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:tint="@color/white" />
+
+                    <ImageView
+                        android:id="@+id/userProfile_photo"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:src="@drawable/placeholder_user"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
                     android:id="@+id/userProfile_namesSection"
@@ -66,7 +87,7 @@
                     android:layout_marginHorizontal="40dp"
                     android:gravity="center"
                     android:orientation="vertical"
-                    app:layout_constraintTop_toBottomOf="@id/userProfile_photo">
+                    app:layout_constraintTop_toBottomOf="@id/userProfile_photoSection">
 
                     <TextView
                         android:id="@+id/userProfile_username"
@@ -130,6 +151,14 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/userProfile_username_editable"
                         tools:text="Jane Doe" />
+
+                    <TextView
+                        android:id="@+id/userProfile_uid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
@@ -273,6 +302,33 @@
                         android:src="@drawable/ic_delete"
                         android:visibility="gone"
                         app:tint="@color/red" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/userProfile_friendsSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:id="@+id/userProfile_friends_label"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/friends"
+                        android:textColor="@color/default_text_color"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/userProfile_friends"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/userProfile_friends_label"
+                        android:textColor="@color/default_text_color"
+                        android:textSize="18dp"
+                        tools:text="53" />
 
                 </RelativeLayout>
 

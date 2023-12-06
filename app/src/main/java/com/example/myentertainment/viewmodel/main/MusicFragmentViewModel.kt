@@ -41,7 +41,7 @@ class MusicFragmentViewModel : ViewModel() {
                     fetchMusic()
                     itemDeleted.value = true
                 } else {
-                    Log.e("error", "error")
+                    Log.e("MusicFragmentViewModel", "error")
                 }
             }
     }

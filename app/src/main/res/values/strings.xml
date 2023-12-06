@@ -1,5 +1,6 @@
 <resources>
     <string name="about">About</string>
+    <string name="accept">accept</string>
     <string name="app_name">MyEntertainment</string>
     <string name="artist">artist</string>
     <string name="authentication_failed">"Authentication failed"</string>
@@ -20,6 +21,7 @@
     <string name="country">country:</string>
     <string name="create_one"> <u>Create one</u> </string>
     <string name="current_password">current password</string>
+    <string name="decline">decline</string>
     <string name="describe_your_problem">Describe your problem with this application. Provide us as many details as you can.</string>
     <string name="director">director</string>
     <string name="director_label">director:</string>
@@ -27,7 +29,12 @@
     <string name="email">e-mail:</string>
     <string name="email_address">e-mail address</string>
     <string name="enter_all_required_values">Enter all required values</string>
+    <string name="error">An error occurred</string>
+    <string name="error_try_again">An error occurred. Please, try again.</string>
     <string name="failed_to_sign_in">Failed to sign in</string>
+    <string name="find_friends">Find friends</string>
+    <string name="find_friends_hint">real name or username</string>
+    <string name="friends">friends:</string>
     <string name="gallery">GALLERY</string>
     <string name="game_add">add game</string>
     <string name="game_added">Game added</string>
@@ -40,6 +47,8 @@
     <string name="genre_label">genre:</string>
     <string name="github">Go to GitHub repository</string>
     <string name="incompatible_passwords">Passwords are incompatible</string>
+    <string name="invitation_message">sent you an invitation to friends group</string>
+    <string name="later">later</string>
     <string name="movie_add">add movie</string>
     <string name="movie_added">Movie added</string>
     <string name="movie_edit">edit movie</string>
@@ -54,12 +63,15 @@
     <string name="music_edited">Song edited</string>
     <string name="music_no_title">Please, enter song title</string>
     <string name="music_title">song title</string>
+    <string name="my_friends">My friends</string>
     <string name="new_password">new password</string>
+    <string name="no">no</string>
     <string name="no_books">you have no books</string>
     <string name="no_games">you have no games</string>
     <string name="no_go_back">no, go back</string>
     <string name="no_movies">you have no movies</string>
     <string name="no_music">you have no songs</string>
+    <string name="no_results">no results</string>
     <string name="none">-</string>
     <string name="password">password</string>
     <string name="password_too_short">Your password should be at least 6 characters long</string>
@@ -70,6 +82,8 @@
     <string name="release_year">release year</string>
     <string name="release_year_label">release year:</string>
     <string name="remove_birthdate_message">Are you sure you want to remove your birth date?</string>
+    <string name="remove_friend_question">Are you sure you want to remove this friend?</string>
+    <string name="remove_invitation_question">Do you want to remove this invitation?</string>
     <string name="remove_profile_picture">Remove profile picture</string>
     <string name="remove_profile_picture_message">Are you sure you want to remove your profile picture?</string>
     <string name="report">Report</string>
@@ -92,7 +106,9 @@
     <string name="user_profile_data_updated">User profile data has been updated</string>
     <string name="username">username</string>
     <string name="username_can_not_be_empty">Username can not be empty</string>
+    <string name="yes">yes</string>
     <string name="yes_remove">yes, remove</string>
+    <string name="you_have_no_friends_yet">you have no friends yet</string>
     <string name="your_email_address_is_invalid">Your e-mail address is invalid</string>
     <string name="yrs">yrs</string>
 </resources>
