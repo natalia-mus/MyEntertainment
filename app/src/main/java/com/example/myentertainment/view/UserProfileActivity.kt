@@ -86,7 +86,7 @@ class UserProfileActivity : AppCompatActivity() {
         setObservers()
         getUserProfile(intent)
 
-        showUID()
+        //showUID()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
