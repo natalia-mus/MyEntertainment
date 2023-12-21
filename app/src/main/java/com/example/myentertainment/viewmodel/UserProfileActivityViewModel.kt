@@ -141,7 +141,8 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     fun removeProfilePicture() {
         getProfilePictureReference(currentUser).delete().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
-                getProfilePictureUrl(currentUser)
+                updatingProfilePictureSuccessful.value = true
+                getProfilePictureUrl(currentUser, false)
             } else {
                 updatingProfilePictureSuccessful.value = false
             }
@@ -164,6 +165,9 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
             val data = hashMapOf<String, Any>(currentUser to userProfileData)
             usersReference.updateChildren(data).addOnCompleteListener() { task ->
                 updatingUserProfileDataSuccessful.value = task.isSuccessful
+                if (task.isSuccessful) {
+                    getUpdatedUserProfile()
+                }
             }
         }
     }
@@ -172,7 +176,8 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
         userProfilesArray.clear()
         uploadTask.addOnCompleteListener() { task ->
             if (task.isSuccessful) {
-                getProfilePictureUrl(currentUser)
+                updatingProfilePictureSuccessful.value = true
+                getProfilePictureUrl(currentUser, false)
             } else {
                 updatingProfilePictureSuccessful.value = false
             }

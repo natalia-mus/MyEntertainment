@@ -45,6 +45,7 @@ class UserProfileActivity : AppCompatActivity() {
     private var currentBirthDate: Date? = null
     private var viewPreparedForContext = false
     private var userId: String? = null
+    private var profilePictureChanged = false
 
     private val photo: ImageView by lazy { findViewById(R.id.userProfile_photo) }
     private val username: TextView by lazy { findViewById(R.id.userProfile_username) }
@@ -208,8 +209,11 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun handleDatabaseTaskExecutionResult(successful: Boolean) {
-        handleLoadingStatus(false)
-        if (!successful) {
+        if (successful) {
+            profilePictureChanged = true
+
+        } else {
+            handleLoadingStatus(false)
             Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
         }
     }
@@ -279,21 +283,16 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun handleUpdatingUserProfileDataResult(successful: Boolean) {
-        handleLoadingStatus(false)
         if (successful) {
-            Utils.hideKeyboard(this)
             Toast.makeText(this, getString(R.string.user_profile_data_updated), Toast.LENGTH_LONG).show()
-            handleLoadingStatus(true)
-            viewModel.getUserProfile(null)
-
         } else handleDatabaseTaskExecutionResult(false)
     }
 
     private fun handleUserProfile(userProfiles: ArrayList<UserProfile>) {
         val userProfile = userProfiles[0]
-        handleLoadingStatus(false)
         updateView(userProfile.userProfileData)
         refreshProfilePicture(userProfile.userProfilePicture)
+        handleLoadingStatus(false)
     }
 
     private fun handleValidationResult(validationResult: ValidationResult) {
@@ -354,6 +353,7 @@ class UserProfileActivity : AppCompatActivity() {
                 }
 
                 saveButton.setOnClickListener() {
+                    Utils.hideKeyboard(this)
                     updateUserProfileData()
                 }
 
@@ -376,6 +376,8 @@ class UserProfileActivity : AppCompatActivity() {
             .placeholder(placeholder)
             .circleCrop()
             .into(photo)
+
+        profilePictureChanged = false
     }
 
     private fun removeBirthDate() {
@@ -572,6 +574,7 @@ class UserProfileActivity : AppCompatActivity() {
             countryEditable.setText(if (country.text != "-") country.text else "")
 
             changesToSave = false
+            Utils.hideKeyboard(this)
         }
     }
 
@@ -614,7 +617,9 @@ class UserProfileActivity : AppCompatActivity() {
             email.text = userProfileData.email
             currentBirthDate = userProfileData.birthDate
 
-            switchViewMode(false)
+            if (!profilePictureChanged) {
+                switchViewMode(false)
+            }
             prepareViewForContext()
 
         } else {

@@ -80,9 +80,9 @@ open class UserProfileViewModel : ViewModel() {
         getUserProfiles(userIds)
     }
 
-    protected fun getProfilePictureUrl(id: String) {
+    protected fun getProfilePictureUrl(id: String, getFromCache: Boolean = true) {
         val userProfileFromCache = getUserProfileFromCache(id)
-        if (userProfileFromCache != null) {
+        if (getFromCache && userProfileFromCache != null) {
             if (requests > 0) requests--
             userProfileData = userProfileFromCache.userProfileData
             profilePicture = userProfileFromCache.userProfilePicture
@@ -141,6 +141,15 @@ open class UserProfileViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    /**
+     * Gets user profile after profile update - ignores cached user profile
+     */
+    protected fun getUpdatedUserProfile() {
+        userProfilesDataCache.clear()
+        userProfilesCache.clear()
+        getUserProfile(currentUser)
     }
 
     protected fun getUserProfileData() {
