@@ -152,9 +152,11 @@ class FriendsViewModel : UserProfileViewModel() {
             }
 
             val filtered = ArrayList<UserProfile>()
-            for (item in friends.value!!) {
-                if (item.userProfileData != null && containsPhrase(item.userProfileData, phrase)) {
-                    filtered.add(item)
+            if (friends.value != null) {
+                for (item in friends.value!!) {
+                    if (item.userProfileData != null && containsPhrase(item.userProfileData, phrase)) {
+                        filtered.add(item)
+                    }
                 }
             }
 

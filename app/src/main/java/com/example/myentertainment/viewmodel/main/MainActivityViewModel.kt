@@ -30,9 +30,8 @@ class MainActivityViewModel : UserProfileViewModel() {
         if (invitation.invitingUserId != null) {
             friendsReference.child(currentUser).child(invitation.invitingUserId.toString()).setValue(invitation.invitingUserId)
             friendsReference.child(invitation.invitingUserId!!).child(currentUser).setValue(currentUser)
+            removeInvitation(invitation.invitingUserId!!)
         }
-
-        removeInvitation(invitation.invitingUserId!!)
     }
 
     fun declineInvitation(invitationId: String) {

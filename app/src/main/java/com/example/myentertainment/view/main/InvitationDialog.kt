@@ -50,7 +50,7 @@ class InvitationDialog(
     }
 
     private fun decline(invitation: Invitation) {
-        invitationDialogListener.onDeclineClick(invitation.invitingUserId!!)
+        invitation.invitingUserId?.let { invitationDialogListener.onDeclineClick(it) }
         removeInvitation(invitation)
     }
 
@@ -107,8 +107,8 @@ class InvitationDialog(
         val invitation = invitations[currentInvitationIndex]
         val user = getInvitingUser(invitation.invitingUserId)
 
-        if (user != null) {
-            username.text = user.userProfileData!!.username
+        if (user?.userProfileData != null) {
+            username.text = user.userProfileData.username
             invitingUserUsername.text = user.userProfileData.username
             invitingUserRealName.text = user.userProfileData.realName
             invitingUserLocation.text = user.userProfileData.getLocation()

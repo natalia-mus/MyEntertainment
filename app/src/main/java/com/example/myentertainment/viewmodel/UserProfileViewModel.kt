@@ -122,22 +122,24 @@ open class UserProfileViewModel : ViewModel() {
                     fetchAnotherProfilePicture()
 
                 } else {
-                    val id = userProfileData!!.userId!!
-                    getProfilePictureReference(id).downloadUrl
-                        .addOnSuccessListener {
-                            profilePicture = it
-                            joinUserProfilePicture()
-
-                        }.addOnFailureListener {
-                            val errorCode = (it as StorageException).errorCode
-
-                            if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
-                                profilePicture = null
+                    val id = userProfileData!!.userId
+                    if (id != null) {
+                        getProfilePictureReference(id).downloadUrl
+                            .addOnSuccessListener {
+                                profilePicture = it
                                 joinUserProfilePicture()
-                            } else {
-                                onGettingProfilePictureFailed()
+
+                            }.addOnFailureListener {
+                                val errorCode = (it as StorageException).errorCode
+
+                                if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                                    profilePicture = null
+                                    joinUserProfilePicture()
+                                } else {
+                                    onGettingProfilePictureFailed()
+                                }
                             }
-                        }
+                    }
                 }
             }
         }

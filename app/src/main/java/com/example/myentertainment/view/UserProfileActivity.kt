@@ -318,12 +318,15 @@ class UserProfileActivity : AppCompatActivity() {
 
         if (date != null) {
             val monthName = date.getMonthShortName()
-            val day = date.day!!
-            val year = date.year!!
-            val userAge = date.getUserAge()!!
-            birthDateValue = "$monthName $day, $year"
-            age.text = "($userAge $yrs)"
-            age.visibility = View.VISIBLE
+            val day = date.day
+            val year = date.year
+            val userAge = date.getUserAge()
+
+            if (monthName != null && day != null && year != null) birthDateValue = "$monthName $day, $year"
+            if (userAge != null) {
+                age.text = "($userAge $yrs)"
+                age.visibility = View.VISIBLE
+            }
         } else {
             age.visibility = View.GONE
             removeBirthDate.visibility = View.GONE
@@ -471,7 +474,12 @@ class UserProfileActivity : AppCompatActivity() {
         val datePicker = datePickerDialogView.findViewById<DatePicker>(R.id.datePicker_date)
 
         if (currentBirthDate != null) {
-            datePicker.updateDate(currentBirthDate!!.year!!, currentBirthDate!!.month!!, currentBirthDate!!.day!!)
+            val year = currentBirthDate!!.year
+            val month = currentBirthDate!!.month
+            val day = currentBirthDate!!.day
+            if (year != null && month != null && day != null) {
+                datePicker.updateDate(year, month, day)
+            }
         }
 
         datePickerDialogView.findViewById<Button>(R.id.datePicker_buttonSave).setOnClickListener() {

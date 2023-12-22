@@ -26,7 +26,7 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.main_menu, menu)
-        hideOptions(menu!!)
+        menu?.let { hideOptions(it) }
         return true
     }
 
