@@ -47,24 +47,15 @@ class BooksFragmentViewModel : ViewModel() {
     }
 
     fun fetchBooks() {
+        val result = ArrayList<Book>()
+
         mainPath.get().addOnSuccessListener {
-            val booksList: MutableList<Book> = mutableListOf()
-            var lastChild = it.childrenCount
-
-            var i = 0
-            while (i < lastChild) {
-                if (!it.child(i.toString()).exists()) {
-                    lastChild++
-                }
-                i++
+            it.children.forEach {
+                val child = it.getValue(Book::class.java)
+                child?.let { book -> result.add(book) }
             }
 
-            for (j in 0 until lastChild) {
-                val singleBook = it.child(j.toString()).getValue(Book::class.java)
-                singleBook?.let { book -> booksList.add(book) }
-            }
-
-            books.value = booksList
+            books.value = result
         }
     }
 

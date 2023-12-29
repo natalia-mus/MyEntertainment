@@ -49,23 +49,19 @@ class FriendsViewModel : UserProfileViewModel() {
     fun getFriends(userId: String) {
         loading.value = true
 
-        friendsReference.child(userId).get().addOnCompleteListener() { task ->
-            if (task.isSuccessful) {
-                val value = task.result?.value
-                if (value != null) {
-                    val friendsMap = task.result?.value as HashMap<String, String>
+        val friendsIds = ArrayList<String?>()
 
-                    val friendsIds = ArrayList<String?>()
-                    for (id in friendsMap.values) {
-                        friendsIds.add(id)
-                    }
+        friendsReference.child(userId).get().addOnSuccessListener {
+            it.children.forEach {
+                val child = it.getValue(String::class.java)
+                child?.let { id -> friendsIds.add(id) }
+            }
 
-                    getUserProfiles(friendsIds)
-
-                } else {
-                    loading.value = false
-                    status.value = SearchUsersStatus.NO_FRIENDS
-                }
+            if (friendsIds.isNotEmpty()) {
+                getUserProfiles(friendsIds)
+            } else {
+                loading.value = false
+                status.value = SearchUsersStatus.NO_FRIENDS
             }
         }
     }

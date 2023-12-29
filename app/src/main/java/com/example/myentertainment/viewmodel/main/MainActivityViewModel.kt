@@ -39,23 +39,16 @@ class MainActivityViewModel : UserProfileViewModel() {
     }
 
     fun getInvitations() {
-        invitationsReference.child(currentUser).get().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                if (task.result != null && task.result!!.value != null) {
-                    val result = ArrayList<Invitation>()
-                    val pendingInvitations = task.result!!.value as HashMap<String, Any>
+        val result = ArrayList<Invitation>()
 
-                    for (item in pendingInvitations) {
-                        val invitationObject = item.value as HashMap<String, Invitation>
-                        val invitation = parseInvitation(invitationObject)
-                        result.add(invitation)
-                    }
-
-                    invitations.value = result
-                    getInvitingUsers()
-                }
-
+        invitationsReference.child(currentUser).get().addOnSuccessListener {
+            it.children.forEach {
+                val child = it.getValue(Invitation::class.java)
+                child?.let { invitation -> result.add(invitation) }
             }
+
+            invitations.value = result
+            getInvitingUsers()
         }
     }
 
@@ -75,16 +68,6 @@ class MainActivityViewModel : UserProfileViewModel() {
 
     fun signOut() {
         databaseAuth.signOut()
-    }
-
-    private fun parseInvitation(invitation: HashMap<String, Invitation>): Invitation {
-        var invitingUserId = ""
-
-        if (invitation.containsKey("invitingUserId")) {
-            invitingUserId = invitation["invitingUserId"].toString()
-        }
-
-        return Invitation(invitingUserId)
     }
 
     private fun removeInvitation(invitationId: String) {

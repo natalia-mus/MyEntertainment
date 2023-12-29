@@ -47,24 +47,15 @@ class MusicFragmentViewModel : ViewModel() {
     }
 
     fun fetchMusic() {
+        val result = ArrayList<Music>()
+
         mainPath.get().addOnSuccessListener {
-            val musicList: MutableList<Music> = mutableListOf()
-            var lastChild = it.childrenCount
-
-            var i = 0
-            while (i < lastChild) {
-                if (!it.child(i.toString()).exists()) {
-                    lastChild++
-                }
-                i++
+            it.children.forEach {
+                val child = it.getValue(Music::class.java)
+                child?.let { music -> result.add(music) }
             }
 
-            for (j in 0 until lastChild) {
-                val singleMusic = it.child(j.toString()).getValue(Music::class.java)
-                singleMusic?.let { music -> musicList.add(music) }
-            }
-
-            music.value = musicList
+            music.value = result
         }
     }
 

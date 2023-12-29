@@ -43,12 +43,12 @@ class ChangePasswordFragment : Fragment() {
 
         if (result) {
             message = getString(R.string.password_updated)
-            activity!!.finish()
+            requireActivity().finish()
         } else {
             message = getString(R.string.something_went_wrong)
         }
 
-        Toast.makeText(activity!!.applicationContext, message, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     private fun handleValidationResult(validationResult: ValidationResult) {
@@ -80,7 +80,7 @@ class ChangePasswordFragment : Fragment() {
         }
 
         cancelButton.setOnClickListener() {
-            activity!!.finish()
+            requireActivity().finish()
         }
     }
 

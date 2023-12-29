@@ -22,14 +22,14 @@ class AboutViewModel : ViewModel() {
     val about = MutableLiveData<About>()
 
     fun getData() {
-        databaseReference.get().addOnCompleteListener() { task ->
-            if (task.isSuccessful && task.result != null) {
+        databaseReference.get()
+            .addOnSuccessListener {
+                about.value = it.getValue(About::class.java)
                 fetchingDataStatus.value = true
-                about.value = task.result!!.getValue(About::class.java)
-            } else {
+
+            }.addOnFailureListener {
                 fetchingDataStatus.value = false
             }
-        }
     }
 
 }

@@ -48,24 +48,15 @@ class MoviesFragmentViewModel : ViewModel() {
     }
 
     fun fetchMovies() {
+        val result = ArrayList<Movie>()
+
         mainPath.get().addOnSuccessListener {
-            val moviesList: MutableList<Movie> = mutableListOf()
-            var lastChild = it.childrenCount
-
-            var i = 0
-            while (i < lastChild) {
-                if (!it.child(i.toString()).exists()) {
-                    lastChild++
-                }
-                i++
+            it.children.forEach {
+                val child = it.getValue(Movie::class.java)
+                child?.let { movie -> result.add(movie) }
             }
 
-            for (j in 0 until lastChild) {
-                val singleMovie = it.child(j.toString()).getValue(Movie::class.java)
-                singleMovie?.let { movie -> moviesList.add(movie) }
-            }
-
-            movies.value = moviesList
+            movies.value = result
         }
     }
 

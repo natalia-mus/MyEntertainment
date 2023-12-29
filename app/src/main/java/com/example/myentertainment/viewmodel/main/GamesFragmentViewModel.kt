@@ -46,24 +46,15 @@ class GamesFragmentViewModel : ViewModel() {
     }
 
     fun fetchGames() {
+        val result = ArrayList<Game>()
+
         mainPath.get().addOnSuccessListener {
-            val gamesList: MutableList<Game> = mutableListOf()
-            var lastChild = it.childrenCount
-
-            var i = 0
-            while (i < lastChild) {
-                if (!it.child(i.toString()).exists()) {
-                    lastChild++
-                }
-                i++
+            it.children.forEach {
+                val child = it.getValue(Game::class.java)
+                child?.let { game -> result.add(game) }
             }
 
-            for (j in 0 until lastChild) {
-                val singleGame = it.child(j.toString()).getValue(Game::class.java)
-                singleGame?.let { game -> gamesList.add(game) }
-            }
-
-            games.value = gamesList
+            games.value = result
         }
     }
 
