@@ -13,13 +13,13 @@ import javax.inject.Named
 
 class MusicFragmentViewModel : ViewModel() {
 
-    private val mainPath: DatabaseReference
+    private val path: DatabaseReference
     private val user: String
 
     init {
         BaseApplication.baseApplicationComponent.inject(this)
         user = databaseAuth.uid.toString()
-        mainPath = entertainmentReference.child(user).child(CategoryObject.MUSIC)
+        path = entertainmentReference.child(user).child(CategoryObject.MUSIC)
     }
 
     @Inject
@@ -35,7 +35,7 @@ class MusicFragmentViewModel : ViewModel() {
 
     fun deleteMusic(id: String?) {
         itemDeleted.value = false
-        mainPath.child(id.toString()).removeValue()
+        path.child(id.toString()).removeValue()
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     fetchMusic()
@@ -49,7 +49,7 @@ class MusicFragmentViewModel : ViewModel() {
     fun fetchMusic() {
         val result = ArrayList<Music>()
 
-        mainPath.get().addOnSuccessListener {
+        path.get().addOnSuccessListener {
             it.children.forEach {
                 val child = it.getValue(Music::class.java)
                 child?.let { music -> result.add(music) }

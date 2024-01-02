@@ -18,13 +18,13 @@ import javax.inject.Named
 class AddBookFragmentViewModel : ViewModel() {
 
     private val user: String
-    private val mainPath: DatabaseReference
+    private val path: DatabaseReference
     private var itemId: String = "0"
 
     init {
         BaseApplication.baseApplicationComponent.inject(this)
         user = databaseAuth.uid.toString()
-        mainPath = entertainmentReference.child(user).child(CategoryObject.BOOKS)
+        path = entertainmentReference.child(user).child(CategoryObject.BOOKS)
         setItemId()
     }
 
@@ -53,7 +53,7 @@ class AddBookFragmentViewModel : ViewModel() {
         val book = Book(itemId, title, author, releaseYear, genre, rating)
 
         if (validation(book)) {
-            mainPath.child(itemId).setValue(book).addOnCompleteListener() { task ->
+            path.child(itemId).setValue(book).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     loading.value = false
                     addingToDatabaseResult.value = true
@@ -66,7 +66,7 @@ class AddBookFragmentViewModel : ViewModel() {
     }
 
     fun getBook(id: String) {
-        mainPath.get().addOnSuccessListener {
+        path.get().addOnSuccessListener {
             book.value = it.child(id).getValue(Book::class.java)
         }
     }
@@ -76,7 +76,7 @@ class AddBookFragmentViewModel : ViewModel() {
 
         if (validation(item)) {
             val book = hashMapOf<String, Any>(item.id.toString() to item)
-            mainPath.updateChildren(book).addOnCompleteListener() { task ->
+            path.updateChildren(book).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     loading.value = false
                     addingToDatabaseResult.value = true
@@ -89,7 +89,7 @@ class AddBookFragmentViewModel : ViewModel() {
     }
 
     private fun setItemId() {
-        mainPath.addValueEventListener(object : ValueEventListener {
+        path.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {}
 
             override fun onDataChange(snapshot: DataSnapshot) {

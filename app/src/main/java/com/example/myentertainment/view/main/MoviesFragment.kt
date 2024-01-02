@@ -71,9 +71,9 @@ class MoviesFragment : Fragment(), OnItemClickAction {
     }
 
     private fun updateView(movies: List<Movie>) {
-        loadingSection.visibility = View.INVISIBLE
+        loadingSection.visibility = View.GONE
         if (movies.isEmpty()) {
-            moviesList.visibility = View.INVISIBLE
+            moviesList.visibility = View.GONE
             noMoviesLabel.visibility = View.VISIBLE
         } else {
             if (viewModel.itemDeleted.value == true) {

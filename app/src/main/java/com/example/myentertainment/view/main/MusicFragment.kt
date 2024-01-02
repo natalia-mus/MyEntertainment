@@ -71,9 +71,9 @@ class MusicFragment : Fragment(), OnItemClickAction {
     }
 
     private fun updateView(music: List<Music>) {
-        loadingSection.visibility = View.INVISIBLE
+        loadingSection.visibility = View.GONE
         if (music.isEmpty()) {
-            musicList.visibility = View.INVISIBLE
+            musicList.visibility = View.GONE
             noMusicLabel.visibility = View.VISIBLE
         } else {
             if (viewModel.itemDeleted.value == true) {

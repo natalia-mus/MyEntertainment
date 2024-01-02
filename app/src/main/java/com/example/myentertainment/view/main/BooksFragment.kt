@@ -71,9 +71,9 @@ class BooksFragment : Fragment(), OnItemClickAction {
     }
 
     private fun updateView(books: List<Book>) {
-        loadingSection.visibility = View.INVISIBLE
+        loadingSection.visibility = View.GONE
         if (books.isEmpty()) {
-            booksList.visibility = View.INVISIBLE
+            booksList.visibility = View.GONE
             noBooksLabel.visibility = View.VISIBLE
         } else {
             if (viewModel.itemDeleted.value == true) {

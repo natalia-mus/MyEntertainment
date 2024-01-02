@@ -71,9 +71,9 @@ class GamesFragment : Fragment(), OnItemClickAction {
     }
 
     private fun updateView(games: List<Game>) {
-        loadingSection.visibility = View.INVISIBLE
+        loadingSection.visibility = View.GONE
         if (games.isEmpty()) {
-            gamesList.visibility = View.INVISIBLE
+            gamesList.visibility = View.GONE
             noGamesLabel.visibility = View.VISIBLE
         } else {
             if (viewModel.itemDeleted.value == true) {

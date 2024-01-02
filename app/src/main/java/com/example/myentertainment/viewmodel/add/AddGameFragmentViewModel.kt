@@ -18,13 +18,13 @@ import javax.inject.Named
 class AddGameFragmentViewModel : ViewModel() {
 
     private val user: String
-    private val mainPath: DatabaseReference
+    private val path: DatabaseReference
     private var itemId: String = "0"
 
     init {
         BaseApplication.baseApplicationComponent.inject(this)
         user = databaseAuth.uid.toString()
-        mainPath = entertainmentReference.child(user).child(CategoryObject.GAMES)
+        path = entertainmentReference.child(user).child(CategoryObject.GAMES)
         setItemId()
     }
 
@@ -52,7 +52,7 @@ class AddGameFragmentViewModel : ViewModel() {
         val game = Game(itemId, title, releaseYear, genre, rating)
 
         if (validation(game)) {
-            mainPath.child(itemId).setValue(game)
+            path.child(itemId).setValue(game)
                 .addOnCompleteListener() { task ->
                     if (task.isSuccessful) {
                         loading.value = false
@@ -76,7 +76,7 @@ class AddGameFragmentViewModel : ViewModel() {
 
         if (validation(item)) {
             val game = hashMapOf<String, Any>(item.id.toString() to item)
-            mainPath.updateChildren(game).addOnCompleteListener() { task ->
+            path.updateChildren(game).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     loading.value = false
                     addingToDatabaseResult.value = true
@@ -89,7 +89,7 @@ class AddGameFragmentViewModel : ViewModel() {
     }
 
     private fun setItemId() {
-        mainPath.addValueEventListener(object : ValueEventListener {
+        path.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {}
 
             override fun onDataChange(snapshot: DataSnapshot) {

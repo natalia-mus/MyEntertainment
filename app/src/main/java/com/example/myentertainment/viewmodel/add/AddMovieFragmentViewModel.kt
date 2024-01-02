@@ -18,13 +18,13 @@ import javax.inject.Named
 class AddMovieFragmentViewModel : ViewModel() {
 
     private val user: String
-    private val mainPath: DatabaseReference
+    private val path: DatabaseReference
     private var itemId: String = "0"
 
     init {
         BaseApplication.baseApplicationComponent.inject(this)
         user = databaseAuth.uid.toString()
-        mainPath = entertainmentReference.child(user).child(CategoryObject.MOVIES)
+        path = entertainmentReference.child(user).child(CategoryObject.MOVIES)
         setItemId()
     }
 
@@ -53,7 +53,7 @@ class AddMovieFragmentViewModel : ViewModel() {
         val movie = Movie(itemId, title, releaseYear, genre, director, rating)
 
         if (validation(movie)) {
-            mainPath.child(itemId).setValue(movie)
+            path.child(itemId).setValue(movie)
                 .addOnCompleteListener() { task ->
                     if (task.isComplete) {
                         if (task.isSuccessful) {
@@ -69,7 +69,7 @@ class AddMovieFragmentViewModel : ViewModel() {
     }
 
     fun getMovie(id: String) {
-        mainPath.get().addOnSuccessListener {
+        path.get().addOnSuccessListener {
             movie.value = it.child(id).getValue(Movie::class.java)
         }
     }
@@ -79,7 +79,7 @@ class AddMovieFragmentViewModel : ViewModel() {
 
         if (validation(item)) {
             val movie = hashMapOf<String, Any>(item.id.toString() to item)
-            mainPath.updateChildren(movie).addOnCompleteListener() { task ->
+            path.updateChildren(movie).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     loading.value = false
                     addingToDatabaseResult.value = true
@@ -92,7 +92,7 @@ class AddMovieFragmentViewModel : ViewModel() {
     }
 
     private fun setItemId() {
-        mainPath.addValueEventListener(object : ValueEventListener {
+        path.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {}
 
             override fun onDataChange(snapshot: DataSnapshot) {
