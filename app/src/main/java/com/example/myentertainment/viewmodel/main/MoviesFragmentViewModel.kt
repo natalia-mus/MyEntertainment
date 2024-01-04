@@ -5,13 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.`object`.CategoryObject
+import com.example.myentertainment.data.IEntertainment
 import com.example.myentertainment.data.Movie
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
 import javax.inject.Named
 
-class MoviesFragmentViewModel : ViewModel() {
+class MoviesFragmentViewModel : ViewModel(), IEntertainmentViewModel {
 
     private val path: DatabaseReference
     private val user: String
@@ -48,7 +49,7 @@ class MoviesFragmentViewModel : ViewModel() {
     }
 
     fun fetchMovies() {
-        val result = ArrayList<Movie>()
+        val result = ArrayList<IEntertainment>()
 
         path.get().addOnSuccessListener {
             it.children.forEach {
@@ -56,13 +57,8 @@ class MoviesFragmentViewModel : ViewModel() {
                 child?.let { movie -> result.add(movie) }
             }
 
-            movies.value = orderByCreationDate(result)
+            movies.value = orderByCreationDate(result) as ArrayList<Movie>
         }
-    }
-
-    private fun orderByCreationDate(array: ArrayList<Movie>): ArrayList<Movie> {
-        array.sortBy { it.creationDate }
-        return array
     }
 
 }

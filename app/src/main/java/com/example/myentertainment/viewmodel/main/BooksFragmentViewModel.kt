@@ -6,12 +6,13 @@ import androidx.lifecycle.ViewModel
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.data.Book
+import com.example.myentertainment.data.IEntertainment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
 import javax.inject.Named
 
-class BooksFragmentViewModel : ViewModel() {
+class BooksFragmentViewModel : ViewModel(), IEntertainmentViewModel {
 
     private val path: DatabaseReference
     private val user: String
@@ -47,7 +48,7 @@ class BooksFragmentViewModel : ViewModel() {
     }
 
     fun fetchBooks() {
-        val result = ArrayList<Book>()
+        val result = ArrayList<IEntertainment>()
 
         path.get().addOnSuccessListener {
             it.children.forEach {
@@ -55,13 +56,8 @@ class BooksFragmentViewModel : ViewModel() {
                 child?.let { book -> result.add(book) }
             }
 
-            books.value = orderByCreationDate(result)
+            books.value = orderByCreationDate(result) as ArrayList<Book>
         }
-    }
-
-    private fun orderByCreationDate(array: ArrayList<Book>): ArrayList<Book> {
-        array.sortBy { it.creationDate }
-        return array
     }
 
 }
