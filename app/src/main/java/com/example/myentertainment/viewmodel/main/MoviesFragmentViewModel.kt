@@ -56,8 +56,13 @@ class MoviesFragmentViewModel : ViewModel() {
                 child?.let { movie -> result.add(movie) }
             }
 
-            movies.value = result
+            movies.value = orderByCreationDate(result)
         }
+    }
+
+    private fun orderByCreationDate(array: ArrayList<Movie>): ArrayList<Movie> {
+        array.sortBy { it.creationDate }
+        return array
     }
 
 }

@@ -55,8 +55,13 @@ class MusicFragmentViewModel : ViewModel() {
                 child?.let { music -> result.add(music) }
             }
 
-            music.value = result
+            music.value = orderByCreationDate(result)
         }
+    }
+
+    private fun orderByCreationDate(array: ArrayList<Music>): ArrayList<Music> {
+        array.sortBy { it.creationDate }
+        return array
     }
 
 }

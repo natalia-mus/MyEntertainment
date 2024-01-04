@@ -54,8 +54,13 @@ class GamesFragmentViewModel : ViewModel() {
                 child?.let { game -> result.add(game) }
             }
 
-            games.value = result
+            games.value = orderByCreationDate(result)
         }
+    }
+
+    private fun orderByCreationDate(array: ArrayList<Game>): ArrayList<Game> {
+        array.sortBy { it.creationDate }
+        return array
     }
 
 }

@@ -55,8 +55,13 @@ class BooksFragmentViewModel : ViewModel() {
                 child?.let { book -> result.add(book) }
             }
 
-            books.value = result
+            books.value = orderByCreationDate(result)
         }
+    }
+
+    private fun orderByCreationDate(array: ArrayList<Book>): ArrayList<Book> {
+        array.sortBy { it.creationDate }
+        return array
     }
 
 }
