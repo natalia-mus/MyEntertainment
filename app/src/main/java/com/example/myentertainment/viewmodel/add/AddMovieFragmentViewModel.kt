@@ -20,7 +20,7 @@ class AddMovieFragmentViewModel : ViewModel() {
     init {
         BaseApplication.baseApplicationComponent.inject(this)
         user = databaseAuth.uid.toString()
-        path = entertainmentReference.child(user).child(CategoryObject.MOVIES)
+        path = entertainmentReference.child(user).child(CategoryObject.MOVIES.categoryName)
     }
 
     @Inject

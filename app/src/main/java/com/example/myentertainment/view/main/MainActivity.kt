@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), InvitationDialogListener {
     private val musicFragment by lazy { MusicFragment() }
 
     private lateinit var viewModel: MainActivityViewModel
-    private lateinit var currentFragment: String
+    private lateinit var currentFragment: CategoryObject
     private lateinit var bottomNavigation: BottomNavigationView
     private lateinit var addButton: FloatingActionButton
 
@@ -127,7 +127,9 @@ class MainActivity : AppCompatActivity(), InvitationDialogListener {
 
     private fun checkCategory() {
         if (intent.hasExtra(Constants.CATEGORY)) {
-            currentFragment = intent.getStringExtra(Constants.CATEGORY).toString()
+            val categoryName = intent.getStringExtra(Constants.CATEGORY)
+            val category = CategoryObject.getCategoryByName(categoryName)
+            currentFragment = category ?: CategoryObject.MOVIES
             when (currentFragment) {
                 CategoryObject.MOVIES -> changeCurrentFragment(moviesFragment)
                 CategoryObject.BOOKS -> changeCurrentFragment(booksFragment)

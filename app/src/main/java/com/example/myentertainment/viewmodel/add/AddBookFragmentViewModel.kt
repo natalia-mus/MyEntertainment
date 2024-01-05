@@ -20,7 +20,7 @@ class AddBookFragmentViewModel : ViewModel() {
     init {
         BaseApplication.baseApplicationComponent.inject(this)
         user = databaseAuth.uid.toString()
-        path = entertainmentReference.child(user).child(CategoryObject.BOOKS)
+        path = entertainmentReference.child(user).child(CategoryObject.BOOKS.categoryName)
     }
 
     @Inject

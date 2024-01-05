@@ -26,7 +26,7 @@ interface BaseApplicationComponent {
     fun inject(viewModel: UserProfileActivityViewModel)
     fun inject(viewModel: MainActivityViewModel)
     fun inject(viewModel: AddMovieFragmentViewModel)
-    fun inject(viewModel: MoviesFragmentViewModel)
+    fun inject(viewModel: EntertainmentViewModel)
     fun inject(viewModel: AddBookFragmentViewModel)
     fun inject(viewModel: BooksFragmentViewModel)
     fun inject(viewModel: AddGameFragmentViewModel)

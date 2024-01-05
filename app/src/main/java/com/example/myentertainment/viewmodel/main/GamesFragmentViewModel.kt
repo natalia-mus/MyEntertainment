@@ -12,7 +12,7 @@ import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
 import javax.inject.Named
 
-class GamesFragmentViewModel : ViewModel(), IEntertainmentViewModel {
+class GamesFragmentViewModel : EntertainmentViewModel(CategoryObject.GAMES) {
 
     private val path: DatabaseReference
     private val user: String
@@ -20,15 +20,15 @@ class GamesFragmentViewModel : ViewModel(), IEntertainmentViewModel {
     init {
         BaseApplication.baseApplicationComponent.inject(this)
         user = databaseAuth.uid.toString()
-        path = entertainmentReference.child(user).child(CategoryObject.GAMES)
+        path = entertainmentReference.child(user).child(CategoryObject.GAMES.categoryName)
     }
 
-    @Inject
-    lateinit var databaseAuth: FirebaseAuth
-
-    @Inject
-    @Named("entertainmentReference")
-    lateinit var entertainmentReference: DatabaseReference
+//    @Inject
+//    lateinit var databaseAuth: FirebaseAuth
+//
+//    @Inject
+//    @Named("entertainmentReference")
+//    lateinit var entertainmentReference: DatabaseReference
 
     val games = MutableLiveData<List<Game>>()
     val itemDeleted = MutableLiveData<Boolean>(false)
@@ -55,7 +55,7 @@ class GamesFragmentViewModel : ViewModel(), IEntertainmentViewModel {
                 child?.let { game -> result.add(game) }
             }
 
-            games.value = orderByCreationDate(result) as ArrayList<Game>
+            //games.value = orderByCreationDate(result) as ArrayList<Game>
         }
     }
 

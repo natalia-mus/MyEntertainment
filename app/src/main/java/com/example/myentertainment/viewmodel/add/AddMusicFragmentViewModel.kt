@@ -20,7 +20,7 @@ class AddMusicFragmentViewModel : ViewModel() {
     init {
         BaseApplication.baseApplicationComponent.inject(this)
         user = databaseAuth.uid.toString()
-        path = entertainmentReference.child(user).child(CategoryObject.MUSIC)
+        path = entertainmentReference.child(user).child(CategoryObject.MUSIC.categoryName)
     }
 
     @Inject

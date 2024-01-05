@@ -54,7 +54,7 @@ class BooksFragment : Fragment(), OnItemClickAction {
     private fun editBook(id: String?) {
         if (id != null) {
             val intent = Intent(activity, AddActivity::class.java)
-            intent.putExtra(Constants.CATEGORY, CategoryObject.BOOKS)
+            intent.putExtra(Constants.CATEGORY, CategoryObject.BOOKS.categoryName)
             intent.putExtra(Constants.ID, id)
             startActivity(intent)
         }

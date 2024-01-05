@@ -12,23 +12,23 @@ import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
 import javax.inject.Named
 
-class MoviesFragmentViewModel : ViewModel(), IEntertainmentViewModel {
+class MoviesFragmentViewModel : EntertainmentViewModel(CategoryObject.MOVIES) {
 
-    private val path: DatabaseReference
-    private val user: String
-
-    init {
-        BaseApplication.baseApplicationComponent.inject(this)
-        user = databaseAuth.uid.toString()
-        path = entertainmentReference.child(user).child(CategoryObject.MOVIES)
-    }
-
-    @Inject
-    lateinit var databaseAuth: FirebaseAuth
-
-    @Inject
-    @Named("entertainmentReference")
-    lateinit var entertainmentReference: DatabaseReference
+//    private val path: DatabaseReference
+//    private val user: String
+//
+//    init {
+//        BaseApplication.baseApplicationComponent.inject(this)
+//        user = databaseAuth.uid.toString()
+//        path = entertainmentReference.child(user).child(CategoryObject.MOVIES)
+//    }
+//
+//    @Inject
+//    lateinit var databaseAuth: FirebaseAuth
+//
+//    @Inject
+//    @Named("entertainmentReference")
+//    lateinit var entertainmentReference: DatabaseReference
 
     val movies = MutableLiveData<List<Movie>>()
     val itemDeleted = MutableLiveData<Boolean>(false)
@@ -36,29 +36,35 @@ class MoviesFragmentViewModel : ViewModel(), IEntertainmentViewModel {
 
     fun deleteMovie(id: String?) {
         itemDeleted.value = false
-        path.child(id.toString())
-            .removeValue()
-            .addOnCompleteListener() { task ->
-                if (task.isSuccessful) {
-                    fetchMovies()
-                    itemDeleted.value = true
-                } else {
-                    Log.e("MoviesFragmentViewModel", "error")
-                }
-            }
+//        path.child(id.toString())
+//            .removeValue()
+//            .addOnCompleteListener() { task ->
+//                if (task.isSuccessful) {
+//                    fetchMovies()
+//                    itemDeleted.value = true
+//                } else {
+//                    Log.e("MoviesFragmentViewModel", "error")
+//                }
+//            }
     }
 
     fun fetchMovies() {
-        val result = ArrayList<IEntertainment>()
+//        val result = ArrayList<IEntertainment>()
+//
+//        path.get().addOnSuccessListener {
+//            it.children.forEach {
+//                val child = it.getValue(Movie::class.java)
+//                child?.let { movie -> result.add(movie) }
+//            }
+//
+//            movies.value = orderByCreationDate(result) as ArrayList<Movie>
+//        }
 
-        path.get().addOnSuccessListener {
-            it.children.forEach {
-                val child = it.getValue(Movie::class.java)
-                child?.let { movie -> result.add(movie) }
-            }
+        fetchItems()
+    }
 
-            movies.value = orderByCreationDate(result) as ArrayList<Movie>
-        }
+    override fun onItemsValueChanged() {
+        movies.value = items.value as ArrayList<Movie>
     }
 
 }

@@ -12,7 +12,7 @@ import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
 import javax.inject.Named
 
-class BooksFragmentViewModel : ViewModel(), IEntertainmentViewModel {
+class BooksFragmentViewModel : ViewModel() {
 
     private val path: DatabaseReference
     private val user: String
@@ -20,7 +20,7 @@ class BooksFragmentViewModel : ViewModel(), IEntertainmentViewModel {
     init {
         BaseApplication.baseApplicationComponent.inject(this)
         user = databaseAuth.uid.toString()
-        path = entertainmentReference.child(user).child(CategoryObject.BOOKS)
+        path = entertainmentReference.child(user).child(CategoryObject.BOOKS.categoryName)
     }
 
     @Inject
@@ -56,7 +56,7 @@ class BooksFragmentViewModel : ViewModel(), IEntertainmentViewModel {
                 child?.let { book -> result.add(book) }
             }
 
-            books.value = orderByCreationDate(result) as ArrayList<Book>
+            //books.value = orderByCreationDate(result) as ArrayList<Book>
         }
     }
 

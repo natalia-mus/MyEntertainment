@@ -54,7 +54,7 @@ class GamesFragment : Fragment(), OnItemClickAction {
     private fun editGame(id: String?) {
         if (id != null) {
             val intent = Intent(activity, AddActivity::class.java)
-            intent.putExtra(Constants.CATEGORY, CategoryObject.GAMES)
+            intent.putExtra(Constants.CATEGORY, CategoryObject.GAMES.categoryName)
             intent.putExtra(Constants.ID, id)
             startActivity(intent)
         }

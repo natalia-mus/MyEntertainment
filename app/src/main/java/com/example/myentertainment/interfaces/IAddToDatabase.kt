@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
+import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.view.main.MainActivity
 
@@ -19,12 +20,12 @@ interface IAddToDatabase {
         addingToDatabaseResult: Boolean,
         context: Context,
         message: String,
-        category: String
+        category: CategoryObject
     ) {
         if (addingToDatabaseResult) {
             Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             val intent = Intent(context, MainActivity::class.java)
-            intent.putExtra(Constants.CATEGORY, category)
+            intent.putExtra(Constants.CATEGORY, category.categoryName)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)

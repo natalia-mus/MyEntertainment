@@ -20,7 +20,7 @@ class AddGameFragmentViewModel : ViewModel() {
     init {
         BaseApplication.baseApplicationComponent.inject(this)
         user = databaseAuth.uid.toString()
-        path = entertainmentReference.child(user).child(CategoryObject.GAMES)
+        path = entertainmentReference.child(user).child(CategoryObject.GAMES.categoryName)
     }
 
     @Inject

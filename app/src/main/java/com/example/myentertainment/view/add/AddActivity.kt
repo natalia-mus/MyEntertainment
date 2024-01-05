@@ -9,13 +9,14 @@ import com.example.myentertainment.`object`.CategoryObject
 
 class AddActivity : AppCompatActivity() {
 
-    private var category: String? = ""
+    private var category: CategoryObject? = null
     private lateinit var fragment: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.host)
-        category = intent.getStringExtra(Constants.CATEGORY)
+        val categoryName = intent.getStringExtra(Constants.CATEGORY)
+        category = CategoryObject.getCategoryByName(categoryName)
         category?.let { setFragment(it) }
         establishOpeningContext()
         showFragment(fragment)
@@ -30,12 +31,12 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-    private fun setFragment(category: String) {
-        when (category) {
-            CategoryObject.MOVIES -> fragment = AddMovieFragment()
-            CategoryObject.BOOKS -> fragment = AddBookFragment()
-            CategoryObject.GAMES -> fragment = AddGameFragment()
-            CategoryObject.MUSIC -> fragment = AddMusicFragment()
+    private fun setFragment(category: CategoryObject) {
+        fragment = when (category) {
+            CategoryObject.MOVIES -> AddMovieFragment()
+            CategoryObject.BOOKS -> AddBookFragment()
+            CategoryObject.GAMES -> AddGameFragment()
+            CategoryObject.MUSIC -> AddMusicFragment()
         }
     }
 
