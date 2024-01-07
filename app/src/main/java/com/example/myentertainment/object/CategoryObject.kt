@@ -11,7 +11,12 @@ enum class CategoryObject(val categoryName: String) {
             var result: CategoryObject? = null
 
             if (!categoryName.isNullOrEmpty()) {
-                result = valueOf(categoryName)
+                for (categoryObject in values()) {
+                    if (categoryObject.categoryName == categoryName) {
+                        result = categoryObject
+                        break
+                    }
+                }
             }
 
             return result

@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity(), InvitationDialogListener {
 
         addButton.setOnClickListener() {
             val intent = Intent(this, AddActivity::class.java)
-            intent.putExtra(Constants.CATEGORY, currentFragment)
+            intent.putExtra(Constants.CATEGORY, currentFragment.categoryName)
             startActivity(intent)
         }
     }

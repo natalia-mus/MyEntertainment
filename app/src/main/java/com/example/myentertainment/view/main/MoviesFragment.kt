@@ -54,7 +54,7 @@ class MoviesFragment : Fragment(), OnItemClickAction {
     private fun editMovie(id: String?) {
         if (id != null) {
             val intent = Intent(activity, AddActivity::class.java)
-            intent.putExtra(Constants.CATEGORY, CategoryObject.MOVIES)
+            intent.putExtra(Constants.CATEGORY, CategoryObject.MOVIES.categoryName)
             intent.putExtra(Constants.ID, id)
             startActivity(intent)
         }

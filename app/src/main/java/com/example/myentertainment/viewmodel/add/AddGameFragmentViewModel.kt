@@ -62,7 +62,7 @@ class AddGameFragmentViewModel : ViewModel() {
     }
 
     fun getGame(id: String) {
-        entertainmentReference.get().addOnSuccessListener {
+        path.get().addOnSuccessListener {
             game.value = it.child(id).getValue(Game::class.java)
         }
     }
