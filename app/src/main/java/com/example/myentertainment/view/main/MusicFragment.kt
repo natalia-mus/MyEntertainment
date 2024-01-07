@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.Constants
@@ -18,12 +17,12 @@ import com.example.myentertainment.data.Music
 import com.example.myentertainment.interfaces.OnItemClickAction
 import com.example.myentertainment.view.add.AddActivity
 import com.example.myentertainment.view.main.adapters.MusicAdapter
-import com.example.myentertainment.viewmodel.main.MusicFragmentViewModel
+import com.example.myentertainment.viewmodel.main.EntertainmentViewModel
 
 class MusicFragment : Fragment(), OnItemClickAction {
 
     private lateinit var fragmentView: View
-    private lateinit var viewModel: MusicFragmentViewModel
+    private lateinit var viewModel: EntertainmentViewModel
 
     private lateinit var musicList: RecyclerView
     private lateinit var musicAdapter: MusicAdapter
@@ -37,9 +36,9 @@ class MusicFragment : Fragment(), OnItemClickAction {
     ): View {
         fragmentView = inflater.inflate(R.layout.fragment_music, container, false)
         initView()
-        viewModel = ViewModelProvider(this).get(MusicFragmentViewModel::class.java)
+        viewModel = EntertainmentViewModel.create(CategoryObject.MUSIC, this)
         setObservers()
-        viewModel.fetchMusic()
+        viewModel.fetchItems()
         return fragmentView
     }
 
@@ -48,7 +47,7 @@ class MusicFragment : Fragment(), OnItemClickAction {
     }
 
     override fun onItemLongClicked(id: String?) {
-        viewModel.deleteMusic(id)
+        //viewModel.deleteMusic(id)
     }
 
     private fun editSong(id: String?) {
@@ -67,7 +66,7 @@ class MusicFragment : Fragment(), OnItemClickAction {
     }
 
     private fun setObservers() {
-        viewModel.music.observe(this) { updateView(it) }
+        viewModel.entertainmentList.observe(this) { updateView(it as List<Music>) }
     }
 
     private fun updateView(music: List<Music>) {

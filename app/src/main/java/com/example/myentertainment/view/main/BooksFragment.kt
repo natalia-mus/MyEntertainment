@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.Constants
@@ -18,12 +17,12 @@ import com.example.myentertainment.data.Book
 import com.example.myentertainment.interfaces.OnItemClickAction
 import com.example.myentertainment.view.add.AddActivity
 import com.example.myentertainment.view.main.adapters.BooksAdapter
-import com.example.myentertainment.viewmodel.main.BooksFragmentViewModel
+import com.example.myentertainment.viewmodel.main.EntertainmentViewModel
 
 class BooksFragment : Fragment(), OnItemClickAction {
 
     private lateinit var fragmentView: View
-    private lateinit var viewModel: BooksFragmentViewModel
+    private lateinit var viewModel: EntertainmentViewModel
 
     private lateinit var booksList: RecyclerView
     private lateinit var booksAdapter: BooksAdapter
@@ -36,10 +35,10 @@ class BooksFragment : Fragment(), OnItemClickAction {
         savedInstanceState: Bundle?
     ): View {
         fragmentView = inflater.inflate(R.layout.fragment_books, container, false)
-        viewModel = ViewModelProvider(this).get(BooksFragmentViewModel::class.java)
+        viewModel = EntertainmentViewModel.create(CategoryObject.BOOKS, this)
         initView()
         setObservers()
-        viewModel.fetchBooks()
+        viewModel.fetchItems()
         return fragmentView
     }
 
@@ -48,7 +47,7 @@ class BooksFragment : Fragment(), OnItemClickAction {
     }
 
     override fun onItemLongClicked(id: String?) {
-        viewModel.deleteBook(id)
+        //viewModel.deleteBook(id)
     }
 
     private fun editBook(id: String?) {
@@ -67,7 +66,7 @@ class BooksFragment : Fragment(), OnItemClickAction {
     }
 
     private fun setObservers() {
-        viewModel.books.observe(this) { updateView(it) }
+        viewModel.entertainmentList.observe(this) { updateView(it as List<Book>) }
     }
 
     private fun updateView(books: List<Book>) {

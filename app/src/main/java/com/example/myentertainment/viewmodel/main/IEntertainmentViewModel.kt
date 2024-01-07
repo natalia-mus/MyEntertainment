@@ -2,6 +2,8 @@ package com.example.myentertainment.viewmodel.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import com.example.myentertainment.BaseApplication
 import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.data.*
@@ -10,17 +12,15 @@ import com.google.firebase.database.DatabaseReference
 import javax.inject.Inject
 import javax.inject.Named
 
-open class EntertainmentViewModel(category: CategoryObject) : ViewModel() {
+open class EntertainmentViewModel : ViewModel() {
 
-    private val itemType: Class<out IEntertainment>
-    private val path: DatabaseReference
+    private lateinit var itemType: Class<out IEntertainment>
+    private lateinit var path: DatabaseReference
     private val user: String
 
     init {
         BaseApplication.baseApplicationComponent.inject(this)
         user = databaseAuth.uid.toString()
-        path = entertainmentReference.child(user).child(category.categoryName)
-        itemType = getItemType(category)
     }
 
     @Inject
@@ -30,7 +30,16 @@ open class EntertainmentViewModel(category: CategoryObject) : ViewModel() {
     @Named("entertainmentReference")
     lateinit var entertainmentReference: DatabaseReference
 
-    protected val items = MutableLiveData<List<IEntertainment>>()
+    val entertainmentList = MutableLiveData<List<IEntertainment>>()
+    val itemDeleted = MutableLiveData<Boolean>(false)
+
+    companion object {
+        fun create(category: CategoryObject, owner: ViewModelStoreOwner): EntertainmentViewModel {
+            val instance = ViewModelProvider(owner).get(EntertainmentViewModel::class.java)
+            instance.setCategory(category)
+            return instance
+        }
+    }
 
     open fun onItemsValueChanged() {}
 
@@ -43,14 +52,9 @@ open class EntertainmentViewModel(category: CategoryObject) : ViewModel() {
                 child?.let { item -> result.add(item) }
             }
 
-            items.value = orderByCreationDate(result)
+            entertainmentList.value = orderByCreationDate(result)
             onItemsValueChanged()
         }
-    }
-
-    fun orderByCreationDate(array: ArrayList<IEntertainment>): ArrayList<IEntertainment> {
-        array.sortBy { it.creationDate }
-        return array
     }
 
     private fun getItemType(category: CategoryObject): Class<out IEntertainment> {
@@ -60,5 +64,15 @@ open class EntertainmentViewModel(category: CategoryObject) : ViewModel() {
             CategoryObject.GAMES -> Game::class.java
             CategoryObject.MUSIC -> Music::class.java
         }
+    }
+
+    private fun orderByCreationDate(array: ArrayList<IEntertainment>): ArrayList<IEntertainment> {
+        array.sortBy { it.creationDate }
+        return array
+    }
+
+    private fun setCategory(category: CategoryObject) {
+        path = entertainmentReference.child(user).child(category.categoryName)
+        itemType = getItemType(category)
     }
 }

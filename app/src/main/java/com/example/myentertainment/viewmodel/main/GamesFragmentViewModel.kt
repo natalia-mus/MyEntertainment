@@ -1,13 +1,12 @@
 package com.example.myentertainment.viewmodel.main
 
 import androidx.lifecycle.MutableLiveData
-import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.data.Game
 
-class GamesFragmentViewModel : EntertainmentViewModel(CategoryObject.GAMES) {
+class GamesFragmentViewModel : EntertainmentViewModel() {
 
     val games = MutableLiveData<List<Game>>()
-    val itemDeleted = MutableLiveData<Boolean>(false)
+    //val itemDeleted = MutableLiveData<Boolean>(false)
 
 
     fun deleteGame(id: String?) {
@@ -38,7 +37,7 @@ class GamesFragmentViewModel : EntertainmentViewModel(CategoryObject.GAMES) {
     }
 
     override fun onItemsValueChanged() {
-        games.value = items.value as ArrayList<Game>
+        games.value = entertainmentList.value as ArrayList<Game>
     }
 
 }

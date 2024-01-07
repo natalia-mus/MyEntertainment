@@ -1,37 +1,12 @@
 package com.example.myentertainment.viewmodel.main
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.myentertainment.BaseApplication
-import com.example.myentertainment.`object`.CategoryObject
-import com.example.myentertainment.data.IEntertainment
 import com.example.myentertainment.data.Movie
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import javax.inject.Inject
-import javax.inject.Named
 
-class MoviesFragmentViewModel : EntertainmentViewModel(CategoryObject.MOVIES) {
-
-//    private val path: DatabaseReference
-//    private val user: String
-//
-//    init {
-//        BaseApplication.baseApplicationComponent.inject(this)
-//        user = databaseAuth.uid.toString()
-//        path = entertainmentReference.child(user).child(CategoryObject.MOVIES)
-//    }
-//
-//    @Inject
-//    lateinit var databaseAuth: FirebaseAuth
-//
-//    @Inject
-//    @Named("entertainmentReference")
-//    lateinit var entertainmentReference: DatabaseReference
+class MoviesFragmentViewModel : EntertainmentViewModel() {
 
     val movies = MutableLiveData<List<Movie>>()
-    val itemDeleted = MutableLiveData<Boolean>(false)
+    //val itemDeleted = MutableLiveData<Boolean>(false)
 
 
     fun deleteMovie(id: String?) {
@@ -64,7 +39,7 @@ class MoviesFragmentViewModel : EntertainmentViewModel(CategoryObject.MOVIES) {
     }
 
     override fun onItemsValueChanged() {
-        movies.value = items.value as ArrayList<Movie>
+        movies.value = entertainmentList.value as ArrayList<Movie>
     }
 
 }
