@@ -1,5 +1,6 @@
 package com.example.myentertainment.viewmodel.main
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +31,7 @@ open class EntertainmentViewModel : ViewModel() {
     @Named("entertainmentReference")
     lateinit var entertainmentReference: DatabaseReference
 
+
     val entertainmentList = MutableLiveData<List<IEntertainment>>()
     val itemDeleted = MutableLiveData<Boolean>(false)
 
@@ -42,6 +44,20 @@ open class EntertainmentViewModel : ViewModel() {
     }
 
     open fun onItemsValueChanged() {}
+
+    fun deleteItem(id: String?) {
+        itemDeleted.value = false
+        path.child(id.toString())
+            .removeValue()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    fetchItems()
+                    itemDeleted.value = true
+                } else {
+                    Log.e("EntertainmentViewModel", "error")
+                }
+            }
+    }
 
     fun fetchItems() {
         val result = ArrayList<IEntertainment>()

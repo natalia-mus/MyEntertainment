@@ -47,7 +47,7 @@ class BooksFragment : Fragment(), OnItemClickAction {
     }
 
     override fun onItemLongClicked(id: String?) {
-        //viewModel.deleteBook(id)
+        viewModel.deleteItem(id)
     }
 
     private fun editBook(id: String?) {

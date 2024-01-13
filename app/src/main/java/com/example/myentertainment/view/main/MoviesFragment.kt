@@ -47,7 +47,7 @@ class MoviesFragment : Fragment(), OnItemClickAction {
     }
 
     override fun onItemLongClicked(id: String?) {
-        //viewModel.deleteMovie(id)
+        viewModel.deleteItem(id)
     }
 
     private fun editMovie(id: String?) {

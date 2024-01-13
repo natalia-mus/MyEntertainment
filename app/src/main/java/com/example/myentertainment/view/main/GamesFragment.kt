@@ -47,7 +47,7 @@ class GamesFragment : Fragment(), OnItemClickAction {
     }
 
     override fun onItemLongClicked(id: String?) {
-        //viewModel.deleteGame(id)
+        viewModel.deleteItem(id)
     }
 
     private fun editGame(id: String?) {

@@ -47,7 +47,7 @@ class MusicFragment : Fragment(), OnItemClickAction {
     }
 
     override fun onItemLongClicked(id: String?) {
-        //viewModel.deleteMusic(id)
+        viewModel.deleteItem(id)
     }
 
     private fun editSong(id: String?) {
