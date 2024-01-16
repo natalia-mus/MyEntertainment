@@ -10,13 +10,14 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
 import com.example.myentertainment.data.Game
+import com.example.myentertainment.data.IEntertainment
 import com.example.myentertainment.interfaces.OnItemClickAction
 
 class GamesAdapter(
     private val context: Context,
     private var games: List<Game>,
     private val onItemClickAction: OnItemClickAction
-) : RecyclerView.Adapter<GamesViewHolder>() {
+) : RecyclerView.Adapter<GamesViewHolder>(), IEntertainmentAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GamesViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.single_game, parent, false)
@@ -54,8 +55,8 @@ class GamesAdapter(
 
     override fun getItemCount() = games.size
 
-    fun dataSetChanged(newDataSet: List<Game>) {
-        games = newDataSet
+    override fun dataSetChanged(newDataSet: List<IEntertainment>) {
+        games = newDataSet as List<Game>
         notifyDataSetChanged()
     }
 
