@@ -16,7 +16,7 @@ import com.example.myentertainment.interfaces.OnItemClickAction
 import com.example.myentertainment.view.main.adapters.*
 import com.example.myentertainment.viewmodel.main.EntertainmentViewModel
 
-class EntertainmentFragment(private val category: CategoryObject) : Fragment(), OnItemClickAction {
+class EntertainmentFragment(val category: CategoryObject) : Fragment(), OnItemClickAction {
 
     private lateinit var fragmentView: View
     private lateinit var viewModel: EntertainmentViewModel
