@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,7 +32,7 @@ class EntertainmentFragment(val category: CategoryObject) : Fragment(), OnItemCl
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        fragmentView = inflater.inflate(getLayoutId(), container, false)
+        fragmentView = inflater.inflate(R.layout.fragment_entertainment, container, false)
         viewModel = EntertainmentViewModel.create(category, this)
         initView()
         setObservers()
@@ -47,36 +48,28 @@ class EntertainmentFragment(val category: CategoryObject) : Fragment(), OnItemCl
         viewModel.deleteItem(id)
     }
 
-    private fun getLayoutId(): Int {
-        return when (category) {
-            CategoryObject.MOVIES -> R.layout.fragment_movies
-            CategoryObject.BOOKS -> R.layout.fragment_books
-            CategoryObject.GAMES -> R.layout.fragment_games
-            CategoryObject.MUSIC -> R.layout.fragment_music
-        }
-    }
-
     private fun initView() {
+        itemsList = fragmentView.findViewById(R.id.entertainment_itemsList)
+        loadingSection = fragmentView.findViewById(R.id.entertainment_loadingSection)
+        noItemsLabel = fragmentView.findViewById(R.id.entertainment_noItemsLabel)
+
+        val entertainmentFragment = fragmentView.findViewById<ConstraintLayout>(R.id.entertainment_fragment)
         when (category) {
             CategoryObject.MOVIES -> {
-                itemsList = fragmentView.findViewById(R.id.movies_list)
-                loadingSection = fragmentView.findViewById(R.id.movies_loadingSection)
-                noItemsLabel = fragmentView.findViewById(R.id.movies_noMoviesLabel)
+                entertainmentFragment.background = ResourcesCompat.getDrawable(resources, R.color.red, null)
+                noItemsLabel.text = resources.getString(R.string.no_movies)
             }
             CategoryObject.BOOKS -> {
-                itemsList = fragmentView.findViewById(R.id.books_list)
-                loadingSection = fragmentView.findViewById(R.id.books_loadingSection)
-                noItemsLabel = fragmentView.findViewById(R.id.books_noBooksLabel)
+                entertainmentFragment.background = ResourcesCompat.getDrawable(resources, R.color.blue, null)
+                noItemsLabel.text = resources.getString(R.string.no_books)
             }
             CategoryObject.GAMES -> {
-                itemsList = fragmentView.findViewById(R.id.games_list)
-                loadingSection = fragmentView.findViewById(R.id.games_loadingSection)
-                noItemsLabel = fragmentView.findViewById(R.id.games_noGamesLabel)
+                entertainmentFragment.background = ResourcesCompat.getDrawable(resources, R.color.green, null)
+                noItemsLabel.text = resources.getString(R.string.no_games)
             }
             CategoryObject.MUSIC -> {
-                itemsList = fragmentView.findViewById(R.id.music_list)
-                loadingSection = fragmentView.findViewById(R.id.music_loadingSection)
-                noItemsLabel = fragmentView.findViewById(R.id.music_noMusicLabel)
+                entertainmentFragment.background = ResourcesCompat.getDrawable(resources, R.color.yellow, null)
+                noItemsLabel.text = resources.getString(R.string.no_music)
             }
         }
     }
