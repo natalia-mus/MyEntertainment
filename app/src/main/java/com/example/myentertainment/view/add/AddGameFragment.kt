@@ -83,7 +83,7 @@ class AddGameFragment : Fragment(), IAddToDatabase {
     private fun prepareViewForAddContext() {
         gameAddedMessage = getString(R.string.game_added)
 
-        addButton.setOnClickListener() {
+        addButton.setOnClickListener {
             val title = titleEditText.text.toString()
             val releaseYear = releaseYearEditText.text.toString()
             val genre = genreEditText.text.toString()
@@ -98,14 +98,14 @@ class AddGameFragment : Fragment(), IAddToDatabase {
         gameAddedMessage = getString(R.string.game_edited)
         addButton.text = getString(R.string.game_edit)
 
-        addButton.setOnClickListener() {
+        addButton.setOnClickListener {
             val id = itemId
             val title = titleEditText.text.toString()
             val releaseYear = releaseYearEditText.text.toString()
             val genre = genreEditText.text.toString()
             val rating = ratingBar.rating
 
-            val game = Game(id, title, releaseYear, genre, rating)
+            val game = Game(id, title, releaseYear, genre, rating, item.creationDate)
             viewModel.updateItem(game)
         }
 

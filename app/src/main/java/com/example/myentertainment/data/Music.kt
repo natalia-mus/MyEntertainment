@@ -11,6 +11,6 @@ data class Music(
 ) : IEntertainment {
 
     init {
-        creationDate = getCurrentDate()
+        creationDate = getCurrentDate(creationDate)
     }
 }

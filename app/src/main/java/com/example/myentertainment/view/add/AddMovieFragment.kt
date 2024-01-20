@@ -85,7 +85,7 @@ class AddMovieFragment : Fragment(), IAddToDatabase {
     private fun prepareViewForAddContext() {
         movieAddedMessage = getString(R.string.movie_added)
 
-        addButton.setOnClickListener() {
+        addButton.setOnClickListener {
             val title = titleEditText.text.toString()
             val releaseYear = releaseYearEditText.text.toString()
             val genre = genreEditText.text.toString()
@@ -101,7 +101,7 @@ class AddMovieFragment : Fragment(), IAddToDatabase {
         movieAddedMessage = getString(R.string.movie_edited)
         addButton.text = getString(R.string.movie_edit)
 
-        addButton.setOnClickListener() {
+        addButton.setOnClickListener {
             val id = itemId
             val title = titleEditText.text.toString()
             val releaseYear = releaseYearEditText.text.toString()
@@ -109,7 +109,7 @@ class AddMovieFragment : Fragment(), IAddToDatabase {
             val director = directorEditText.text.toString()
             val rating = ratingBar.rating
 
-            val movie = Movie(id, title, releaseYear, genre, director, rating)
+            val movie = Movie(id, title, releaseYear, genre, director, rating, item.creationDate)
             viewModel.updateItem(movie)
         }
 

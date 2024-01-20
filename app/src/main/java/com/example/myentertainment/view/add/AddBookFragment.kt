@@ -85,7 +85,7 @@ class AddBookFragment : Fragment(), IAddToDatabase {
     private fun prepareViewForAddContext() {
         bookAddedMessage = getString(R.string.book_added)
 
-        addButton.setOnClickListener() {
+        addButton.setOnClickListener {
             val title = titleEditText.text.toString()
             val author = authorEditText.text.toString()
             val releaseYear = releaseYearEditText.text.toString()
@@ -101,7 +101,7 @@ class AddBookFragment : Fragment(), IAddToDatabase {
         bookAddedMessage = getString(R.string.book_edited)
         addButton.text = getString(R.string.book_edit)
 
-        addButton.setOnClickListener() {
+        addButton.setOnClickListener {
             val id = itemId
             val title = titleEditText.text.toString()
             val author = authorEditText.text.toString()
@@ -109,7 +109,7 @@ class AddBookFragment : Fragment(), IAddToDatabase {
             val genre = genreEditText.text.toString()
             val rating = ratingBar.rating
 
-            val book = Book(id, title, author, releaseYear, genre, rating)
+            val book = Book(id, title, author, releaseYear, genre, rating, item.creationDate)
             viewModel.updateItem(book)
         }
 

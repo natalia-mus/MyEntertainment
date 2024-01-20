@@ -10,6 +10,6 @@ data class Game(
 ) : IEntertainment {
 
     init {
-        creationDate = getCurrentDate()
+        creationDate = getCurrentDate(creationDate)
     }
 }

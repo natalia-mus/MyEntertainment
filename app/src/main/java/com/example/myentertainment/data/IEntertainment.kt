@@ -6,7 +6,7 @@ interface IEntertainment {
 
     var creationDate: String?
 
-    fun getCurrentDate(): String {
-        return Timestamp(System.currentTimeMillis()).toString()
+    fun getCurrentDate(currentDate: String?): String {
+        return if (creationDate != null) creationDate!! else Timestamp(System.currentTimeMillis()).toString()
     }
 }

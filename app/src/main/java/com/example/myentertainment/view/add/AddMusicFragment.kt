@@ -85,7 +85,7 @@ class AddMusicFragment : Fragment(), IAddToDatabase {
     private fun prepareViewForAddContext() {
         songAddedMessage = getString(R.string.music_added)
 
-        addButton.setOnClickListener() {
+        addButton.setOnClickListener {
             val title = titleEditText.text.toString()
             val artist = artistEditText.text.toString()
             val releaseYear = releaseYearEditText.text.toString()
@@ -101,7 +101,7 @@ class AddMusicFragment : Fragment(), IAddToDatabase {
         songAddedMessage = getString(R.string.music_edited)
         addButton.text = getString(R.string.music_edit)
 
-        addButton.setOnClickListener() {
+        addButton.setOnClickListener {
             val id = itemId
             val title = titleEditText.text.toString()
             val artist = artistEditText.text.toString()
@@ -109,7 +109,7 @@ class AddMusicFragment : Fragment(), IAddToDatabase {
             val genre = genreEditText.text.toString()
             val rating = ratingBar.rating
 
-            val music = Music(id, title, artist, releaseYear, genre, rating)
+            val music = Music(id, title, artist, releaseYear, genre, rating, item.creationDate)
             viewModel.updateItem(music)
         }
 

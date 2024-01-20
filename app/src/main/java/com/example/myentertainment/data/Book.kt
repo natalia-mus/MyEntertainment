@@ -11,6 +11,6 @@ data class Book(
 ) : IEntertainment {
 
     init {
-        creationDate = getCurrentDate()
+        creationDate = getCurrentDate(creationDate)
     }
 }

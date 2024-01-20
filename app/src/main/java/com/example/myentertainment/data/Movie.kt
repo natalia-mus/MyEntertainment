@@ -11,6 +11,6 @@ data class Movie(
 ) : IEntertainment {
 
     init {
-        creationDate = getCurrentDate()
+        creationDate = getCurrentDate(creationDate)
     }
 }
