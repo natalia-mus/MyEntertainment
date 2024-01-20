@@ -1,5 +1,6 @@
 package com.example.myentertainment.view.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +11,12 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
 import com.example.myentertainment.data.*
 import com.example.myentertainment.interfaces.OnItemClickAction
+import com.example.myentertainment.view.add.AddActivity
 import com.example.myentertainment.view.main.adapters.*
 import com.example.myentertainment.viewmodel.main.EntertainmentViewModel
 
@@ -41,11 +44,20 @@ class EntertainmentFragment(val category: CategoryObject) : Fragment(), OnItemCl
     }
 
     override fun onItemClicked(id: String?) {
-        //editBook(id)
+        editItem(id)
     }
 
     override fun onItemLongClicked(id: String?) {
         viewModel.deleteItem(id)
+    }
+
+    private fun editItem(id: String?) {
+        if (id != null) {
+            val intent = Intent(activity, AddActivity::class.java)
+            intent.putExtra(Constants.CATEGORY, category.categoryName)
+            intent.putExtra(Constants.ID, id)
+            startActivity(intent)
+        }
     }
 
     private fun initView() {
@@ -74,6 +86,16 @@ class EntertainmentFragment(val category: CategoryObject) : Fragment(), OnItemCl
         }
     }
 
+    private fun setAdapter(items: List<IEntertainment>) {
+        itemsList.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        itemsAdapter = when (category) {
+            CategoryObject.MOVIES -> MoviesAdapter(requireContext(), items as List<Movie>, this)
+            CategoryObject.BOOKS -> BooksAdapter(requireContext(), items as List<Book>, this)
+            CategoryObject.GAMES -> GamesAdapter(requireContext(), items as List<Game>, this)
+            CategoryObject.MUSIC -> MusicAdapter(requireContext(), items as List<Music>, this)
+        }
+    }
+
     private fun setObservers() {
         viewModel.entertainmentList.observe(this) { updateView(it as List<IEntertainment>) }
     }
@@ -90,16 +112,6 @@ class EntertainmentFragment(val category: CategoryObject) : Fragment(), OnItemCl
                 setAdapter(items)
                 itemsList.adapter = itemsAdapter as RecyclerView.Adapter<*>
             }
-        }
-    }
-
-    private fun setAdapter(items: List<IEntertainment>) {
-        itemsList.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        itemsAdapter = when (category) {
-            CategoryObject.MOVIES -> MoviesAdapter(requireContext(), items as List<Movie>, this)
-            CategoryObject.BOOKS -> BooksAdapter(requireContext(), items as List<Book>, this)
-            CategoryObject.GAMES -> GamesAdapter(requireContext(), items as List<Game>, this)
-            CategoryObject.MUSIC -> MusicAdapter(requireContext(), items as List<Music>, this)
         }
     }
 
