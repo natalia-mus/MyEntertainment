@@ -6,6 +6,10 @@ import androidx.fragment.app.Fragment
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
+import com.example.myentertainment.data.Book
+import com.example.myentertainment.data.Game
+import com.example.myentertainment.data.Movie
+import com.example.myentertainment.data.Music
 
 class AddActivity : AppCompatActivity() {
 
@@ -23,10 +27,28 @@ class AddActivity : AppCompatActivity() {
     }
 
     private fun establishOpeningContext() {
-        if (intent.hasExtra(Constants.ID)) {
-            val id = intent.getStringExtra(Constants.ID)
+        if (intent.hasExtra(CategoryObject.MOVIES.categoryName)) {
+            val item = intent.getParcelableExtra<Movie>(CategoryObject.MOVIES.categoryName)
             val bundle = Bundle()
-            bundle.putString(Constants.ID, id)
+            bundle.putParcelable(CategoryObject.MOVIES.categoryName, item)
+            fragment.arguments = bundle
+
+        } else if (intent.hasExtra(CategoryObject.BOOKS.categoryName)) {
+            val item = intent.getParcelableExtra<Book>(CategoryObject.BOOKS.categoryName)
+            val bundle = Bundle()
+            bundle.putParcelable(CategoryObject.BOOKS.categoryName, item)
+            fragment.arguments = bundle
+
+        } else if (intent.hasExtra(CategoryObject.GAMES.categoryName)) {
+            val item = intent.getParcelableExtra<Game>(CategoryObject.GAMES.categoryName)
+            val bundle = Bundle()
+            bundle.putParcelable(CategoryObject.GAMES.categoryName, item)
+            fragment.arguments = bundle
+
+        } else if (intent.hasExtra(CategoryObject.MUSIC.categoryName)) {
+            val item = intent.getParcelableExtra<Music>(CategoryObject.MUSIC.categoryName)
+            val bundle = Bundle()
+            bundle.putParcelable(CategoryObject.MUSIC.categoryName, item)
             fragment.arguments = bundle
         }
     }

@@ -31,7 +31,6 @@ class AddGameFragmentViewModel : ViewModel() {
     lateinit var entertainmentReference: DatabaseReference
 
     val loading = MutableLiveData<Boolean>()
-    val game = MutableLiveData<Game>()
     val validationResult = MutableLiveData<ValidationResult>()
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
@@ -53,12 +52,6 @@ class AddGameFragmentViewModel : ViewModel() {
                     loading.value = false
                     addingToDatabaseResult.value = task.isSuccessful
                 }
-        }
-    }
-
-    fun getGame(id: String) {
-        path.get().addOnSuccessListener {
-            game.value = it.child(id).getValue(Game::class.java)
         }
     }
 

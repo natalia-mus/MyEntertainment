@@ -31,7 +31,6 @@ class AddMusicFragmentViewModel : ViewModel() {
     lateinit var entertainmentReference: DatabaseReference
 
     val loading = MutableLiveData<Boolean>()
-    val song = MutableLiveData<Music>()
     val validationResult = MutableLiveData<ValidationResult>()
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
@@ -54,12 +53,6 @@ class AddMusicFragmentViewModel : ViewModel() {
                     loading.value = false
                     addingToDatabaseResult.value = task.isSuccessful
                 }
-        }
-    }
-
-    fun getSong(id: String) {
-        path.get().addOnSuccessListener {
-            song.value = it.child(id).getValue(Music::class.java)
         }
     }
 

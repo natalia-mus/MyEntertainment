@@ -31,7 +31,6 @@ class AddMovieFragmentViewModel : ViewModel() {
     lateinit var entertainmentReference: DatabaseReference
 
     val loading = MutableLiveData<Boolean>()
-    val movie = MutableLiveData<Movie>()
     val validationResult = MutableLiveData<ValidationResult>()
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
@@ -54,12 +53,6 @@ class AddMovieFragmentViewModel : ViewModel() {
                     loading.value = false
                     addingToDatabaseResult.value = task.isSuccessful
                 }
-        }
-    }
-
-    fun getMovie(id: String) {
-        path.get().addOnSuccessListener {
-            movie.value = it.child(id).getValue(Movie::class.java)
         }
     }
 

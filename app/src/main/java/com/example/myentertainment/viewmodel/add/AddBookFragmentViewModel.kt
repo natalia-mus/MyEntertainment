@@ -31,7 +31,6 @@ class AddBookFragmentViewModel : ViewModel() {
     lateinit var entertainmentReference: DatabaseReference
 
     val loading = MutableLiveData<Boolean>()
-    val book = MutableLiveData<Book>()
     val validationResult = MutableLiveData<ValidationResult>()
     val addingToDatabaseResult = MutableLiveData<Boolean>()
 
@@ -53,12 +52,6 @@ class AddBookFragmentViewModel : ViewModel() {
                 loading.value = false
                 addingToDatabaseResult.value = task.isSuccessful
             }
-        }
-    }
-
-    fun getBook(id: String) {
-        path.get().addOnSuccessListener {
-            book.value = it.child(id).getValue(Book::class.java)
         }
     }
 

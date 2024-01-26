@@ -44,21 +44,25 @@ class EntertainmentFragment(val category: CategoryObject) : Fragment(), OnItemCl
         return fragmentView
     }
 
-    override fun onItemClicked(id: String?) {
-        editItem(id)
+    override fun onItemClicked(item: IEntertainment) {
+        editItem(item)
     }
 
     override fun onItemLongClicked(id: String?) {
         viewModel.deleteItem(id)
     }
 
-    private fun editItem(id: String?) {
-        if (id != null) {
-            val intent = Intent(activity, AddActivity::class.java)
-            intent.putExtra(Constants.CATEGORY, category.categoryName)
-            intent.putExtra(Constants.ID, id)
-            startActivity(intent)
+    private fun editItem(item: IEntertainment) {
+        val intent = Intent(activity, AddActivity::class.java)
+        intent.putExtra(Constants.CATEGORY, category.categoryName)
+
+        when (category) {
+            CategoryObject.MOVIES -> intent.putExtra(category.categoryName, item as Movie)
+            CategoryObject.BOOKS -> intent.putExtra(category.categoryName, item as Book)
+            CategoryObject.GAMES -> intent.putExtra(category.categoryName, item as Game)
+            CategoryObject.MUSIC -> intent.putExtra(category.categoryName, item as Music)
         }
+        startActivity(intent)
     }
 
     private fun initView() {
