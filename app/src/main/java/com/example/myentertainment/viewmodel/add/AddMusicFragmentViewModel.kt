@@ -50,16 +50,9 @@ class AddMusicFragmentViewModel : ViewModel() {
 
         if (validation(music)) {
             path.child(itemId).setValue(music)
-                .addOnCompleteListener() { task ->
-                    if (task.isComplete) {
-                        if (task.isSuccessful) {
-                            loading.value = false
-                            addingToDatabaseResult.value = true
-                        } else {
-                            loading.value = false
-                            addingToDatabaseResult.value = false
-                        }
-                    }
+                .addOnCompleteListener { task ->
+                    loading.value = false
+                    addingToDatabaseResult.value = task.isSuccessful
                 }
         }
     }
@@ -76,13 +69,8 @@ class AddMusicFragmentViewModel : ViewModel() {
         if (validation(item)) {
             val song = hashMapOf<String, Any>(item.id.toString() to item)
             path.updateChildren(song).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    loading.value = false
-                    addingToDatabaseResult.value = true
-                } else {
-                    loading.value = false
-                    addingToDatabaseResult.value = false
-                }
+                loading.value = false
+                addingToDatabaseResult.value = task.isSuccessful
             }
         }
     }

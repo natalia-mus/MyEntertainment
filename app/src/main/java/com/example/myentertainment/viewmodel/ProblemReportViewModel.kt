@@ -49,14 +49,9 @@ class ProblemReportViewModel : ViewModel() {
             val screenshotsIds = addScreenshotsToDatabase(screenshots)
             val report = ProblemReport(itemId, user, getDeviceModel(), getDeviceManufacturer(), getAndroidVersion(), summary, description, screenshotsIds, getDate())
 
-            databaseReference.child(itemId).setValue(report).addOnCompleteListener() { task ->
-                if (task.isSuccessful) {
-                    loading.value = false
-                    addingToDatabaseResult.value = true
-                } else {
-                    loading.value = false
-                    addingToDatabaseResult.value = false
-                }
+            databaseReference.child(itemId).setValue(report).addOnCompleteListener { task ->
+                loading.value = false
+                addingToDatabaseResult.value = task.isSuccessful
             }
         }
     }

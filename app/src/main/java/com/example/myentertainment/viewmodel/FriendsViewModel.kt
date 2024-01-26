@@ -63,11 +63,21 @@ class FriendsViewModel : UserProfileViewModel() {
                 loading.value = false
                 status.value = SearchUsersStatus.NO_FRIENDS
             }
+
+        }.addOnFailureListener {
+            loading.value = false
+            status.value = SearchUsersStatus.ERROR
+
         }
     }
 
     override fun onAllUsersChanged() {
         filter(true)
+    }
+
+    override fun onFetchingDataError() {
+        loading.value = false
+        status.value = SearchUsersStatus.ERROR
     }
 
     fun onFriendsListRefreshed() {

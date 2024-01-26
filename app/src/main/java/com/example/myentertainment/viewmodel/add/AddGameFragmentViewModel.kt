@@ -49,14 +49,9 @@ class AddGameFragmentViewModel : ViewModel() {
 
         if (validation(game)) {
             path.child(itemId).setValue(game)
-                .addOnCompleteListener() { task ->
-                    if (task.isSuccessful) {
-                        loading.value = false
-                        addingToDatabaseResult.value = true
-                    } else {
-                        loading.value = false
-                        addingToDatabaseResult.value = false
-                    }
+                .addOnCompleteListener { task ->
+                    loading.value = false
+                    addingToDatabaseResult.value = task.isSuccessful
                 }
         }
     }
@@ -73,13 +68,8 @@ class AddGameFragmentViewModel : ViewModel() {
         if (validation(item)) {
             val game = hashMapOf<String, Any>(item.id.toString() to item)
             path.updateChildren(game).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    loading.value = false
-                    addingToDatabaseResult.value = true
-                } else {
-                    loading.value = false
-                    addingToDatabaseResult.value = false
-                }
+                loading.value = false
+                addingToDatabaseResult.value = task.isSuccessful
             }
         }
     }

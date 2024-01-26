@@ -33,6 +33,7 @@ open class EntertainmentViewModel : ViewModel() {
 
 
     val entertainmentList = MutableLiveData<List<IEntertainment>>()
+    val fetchingItemsStatus = MutableLiveData<Boolean>()
     val itemDeleted = MutableLiveData<Boolean>(false)
 
     companion object {
@@ -60,6 +61,7 @@ open class EntertainmentViewModel : ViewModel() {
     }
 
     fun fetchItems() {
+        fetchingItemsStatus.value = true
         val result = ArrayList<IEntertainment>()
 
         path.get().addOnSuccessListener {
@@ -70,6 +72,9 @@ open class EntertainmentViewModel : ViewModel() {
 
             entertainmentList.value = orderByCreationDate(result)
             onItemsValueChanged()
+
+        }.addOnFailureListener {
+            fetchingItemsStatus.value = false
         }
     }
 

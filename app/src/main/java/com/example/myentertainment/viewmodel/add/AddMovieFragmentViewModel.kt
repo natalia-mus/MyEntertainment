@@ -50,16 +50,9 @@ class AddMovieFragmentViewModel : ViewModel() {
 
         if (validation(movie)) {
             path.child(itemId).setValue(movie)
-                .addOnCompleteListener() { task ->
-                    if (task.isComplete) {
-                        if (task.isSuccessful) {
-                            loading.value = false
-                            addingToDatabaseResult.value = true
-                        } else {
-                            loading.value = false
-                            addingToDatabaseResult.value = false
-                        }
-                    }
+                .addOnCompleteListener { task ->
+                    loading.value = false
+                    addingToDatabaseResult.value = task.isSuccessful
                 }
         }
     }
@@ -76,13 +69,8 @@ class AddMovieFragmentViewModel : ViewModel() {
         if (validation(item)) {
             val movie = hashMapOf<String, Any>(item.id.toString() to item)
             path.updateChildren(movie).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    loading.value = false
-                    addingToDatabaseResult.value = true
-                } else {
-                    loading.value = false
-                    addingToDatabaseResult.value = false
-                }
+                loading.value = false
+                addingToDatabaseResult.value = task.isSuccessful
             }
         }
     }

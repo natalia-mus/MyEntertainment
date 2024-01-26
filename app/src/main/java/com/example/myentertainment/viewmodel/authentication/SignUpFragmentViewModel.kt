@@ -33,7 +33,7 @@ class SignUpFragmentViewModel : ViewModel() {
 
         if (validation(username, email, password, confirmPassword)) {
             databaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener() { task ->
+                .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         createUserProfile(username, email)
                     } else {
@@ -50,14 +50,9 @@ class SignUpFragmentViewModel : ViewModel() {
         val userProfileData = UserProfileData(userId, username, null, null, null, null, email)
 
         databaseReference.child(userId).setValue(userProfileData)
-            .addOnCompleteListener() { task ->
-                if (task.isSuccessful) {
-                    loading.value = false
-                    signUpResult.value = true
-                } else {
-                    loading.value = false
-                    signUpResult.value = false
-                }
+            .addOnCompleteListener { task ->
+                loading.value = false
+                signUpResult.value = task.isSuccessful
             }
     }
 

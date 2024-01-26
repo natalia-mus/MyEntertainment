@@ -50,13 +50,8 @@ class AddBookFragmentViewModel : ViewModel() {
 
         if (validation(book)) {
             path.child(itemId).setValue(book).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    loading.value = false
-                    addingToDatabaseResult.value = true
-                } else {
-                    loading.value = false
-                    addingToDatabaseResult.value = false
-                }
+                loading.value = false
+                addingToDatabaseResult.value = task.isSuccessful
             }
         }
     }
@@ -73,13 +68,8 @@ class AddBookFragmentViewModel : ViewModel() {
         if (validation(item)) {
             val book = hashMapOf<String, Any>(item.id.toString() to item)
             path.updateChildren(book).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    loading.value = false
-                    addingToDatabaseResult.value = true
-                } else {
-                    loading.value = false
-                    addingToDatabaseResult.value = false
-                }
+                loading.value = false
+                addingToDatabaseResult.value = task.isSuccessful
             }
         }
     }

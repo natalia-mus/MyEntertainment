@@ -59,6 +59,9 @@ open class UserProfileViewModel : ViewModel() {
                 userProfilesData.value = users
                 userProfilesDataCache = ArrayList(users)
                 onAllUsersChanged()
+
+            }.addOnFailureListener {
+                onFetchingDataError()
             }
 
         } else {
@@ -179,6 +182,8 @@ open class UserProfileViewModel : ViewModel() {
     }
 
     protected open fun onAllUsersChanged() {}
+
+    protected open fun onFetchingDataError() {}
 
     protected open fun onGettingProfilePictureFailed() {}
 

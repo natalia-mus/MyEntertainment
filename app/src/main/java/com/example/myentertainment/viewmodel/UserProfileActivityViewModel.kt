@@ -86,8 +86,8 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
                     invitationsReference.child(currentUser).child(userId).get().addOnCompleteListener { task ->
                         if (task.isSuccessful && task.result?.value != null) {
                             friendshipStatus.value = FriendshipStatus.READY_TO_ACCEPT
-                        } else {
 
+                        } else {
                             // check if user exists in table "friends"
                             friendsReference.child(userId).child(currentUser).get().addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
@@ -139,7 +139,7 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     }
 
     fun removeProfilePicture() {
-        getProfilePictureReference(currentUser).delete().addOnCompleteListener() { task ->
+        getProfilePictureReference(currentUser).delete().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 updatingProfilePictureSuccessful.value = true
                 getProfilePictureUrl(currentUser, false)
@@ -163,7 +163,7 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
     fun updateUserProfileData(userProfileData: UserProfileData) {
         if (validation(userProfileData)) {
             val data = hashMapOf<String, Any>(currentUser to userProfileData)
-            usersReference.updateChildren(data).addOnCompleteListener() { task ->
+            usersReference.updateChildren(data).addOnCompleteListener { task ->
                 updatingUserProfileDataSuccessful.value = task.isSuccessful
                 if (task.isSuccessful) {
                     getUpdatedUserProfile()
@@ -174,7 +174,7 @@ class UserProfileActivityViewModel : UserProfileViewModel() {
 
     private fun changeProfilePicture(uploadTask: UploadTask) {
         userProfilesArray.clear()
-        uploadTask.addOnCompleteListener() { task ->
+        uploadTask.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 updatingProfilePictureSuccessful.value = true
                 getProfilePictureUrl(currentUser, false)

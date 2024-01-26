@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -86,6 +87,12 @@ class EntertainmentFragment(val category: CategoryObject) : Fragment(), OnItemCl
         }
     }
 
+    private fun onFetchingItemsStatusChanged(status: Boolean) {
+        if (!status) {
+            Toast.makeText(activity, resources.getString(R.string.error_try_again), Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun setAdapter(items: List<IEntertainment>) {
         itemsList.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         itemsAdapter = when (category) {
@@ -98,6 +105,7 @@ class EntertainmentFragment(val category: CategoryObject) : Fragment(), OnItemCl
 
     private fun setObservers() {
         viewModel.entertainmentList.observe(this) { updateView(it as List<IEntertainment>) }
+        viewModel.fetchingItemsStatus.observe(this) { onFetchingItemsStatusChanged(it) }
     }
 
     private fun updateView(items: List<IEntertainment>) {
