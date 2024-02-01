@@ -110,7 +110,7 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
         if (userId != Constants.NULL) {
             goToMainActivity()
         } else {
-            loadingSection.visibility = View.INVISIBLE
+            loadingSection.visibility = View.GONE
             signInSection.visibility = View.VISIBLE
         }
     }
@@ -119,7 +119,7 @@ class SignInFragment(private val onSignUpClickAction: OnSignUpClickAction) : Fra
         if (loading) {
             loadingSection.visibility = View.VISIBLE
         } else {
-            loadingSection.visibility = View.INVISIBLE
+            loadingSection.visibility = View.GONE
         }
     }
 

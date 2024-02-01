@@ -12,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.StorageReference
-import java.util.HashMap
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -51,20 +50,18 @@ open class UserProfileViewModel : ViewModel() {
         if (userProfilesDataCache.isEmpty()) {
             val users = ArrayList<UserProfileData>()
 
-            usersReference.get().addOnCompleteListener() { task ->
-                if (task.isSuccessful) {
-                    val allUsersMap = task.result?.value as HashMap<String, UserProfileData>
-
-                    for (item in allUsersMap) {
-                        val user = item.value as HashMap<String, UserProfileData>
-                        val userProfile = parseUserProfileObject(user)
-                        users.add(userProfile)
-                    }
-
-                    userProfilesData.value = users
-                    userProfilesDataCache = ArrayList(users)
-                    onAllUsersChanged()
+            usersReference.get().addOnSuccessListener {
+                it.children.forEach {
+                    val child = it.getValue(UserProfileData::class.java)
+                    child?.let { user -> users.add(user) }
                 }
+
+                userProfilesData.value = users
+                userProfilesDataCache = ArrayList(users)
+                onAllUsersChanged()
+
+            }.addOnFailureListener {
+                onFetchingDataError()
             }
 
         } else {
@@ -122,22 +119,24 @@ open class UserProfileViewModel : ViewModel() {
                     fetchAnotherProfilePicture()
 
                 } else {
-                    val id = userProfileData!!.userId!!
-                    getProfilePictureReference(id).downloadUrl
-                        .addOnSuccessListener {
-                            profilePicture = it
-                            joinUserProfilePicture()
-
-                        }.addOnFailureListener {
-                            val errorCode = (it as StorageException).errorCode
-
-                            if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
-                                profilePicture = null
+                    val id = userProfileData!!.userId
+                    if (id != null) {
+                        getProfilePictureReference(id).downloadUrl
+                            .addOnSuccessListener {
+                                profilePicture = it
                                 joinUserProfilePicture()
-                            } else {
-                                onGettingProfilePictureFailed()
+
+                            }.addOnFailureListener {
+                                val errorCode = (it as StorageException).errorCode
+
+                                if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                                    profilePicture = null
+                                    joinUserProfilePicture()
+                                } else {
+                                    onGettingProfilePictureFailed()
+                                }
                             }
-                        }
+                    }
                 }
             }
         }
@@ -163,18 +162,14 @@ open class UserProfileViewModel : ViewModel() {
                 getProfilePictureUrl(id)
 
             } else {
-                usersReference.child(id).get().addOnCompleteListener() { task ->
-                    if (task.isSuccessful) {
-                        userProfileData = task.result?.getValue(UserProfileData::class.java)
-                        if (userProfileData != null) {
-                            userProfilesDataCache.add(userProfileData!!)
-                        }
-                        getProfilePictureUrl(id)
+                usersReference.child(id).get().addOnSuccessListener {
+                    userProfileData = it.getValue(UserProfileData::class.java)
+                    userProfileData?.let { element -> userProfilesDataCache.add(element) }
+                    getProfilePictureUrl(id)
 
-                    } else {
-                        requests--
-                        userProfileData = null
-                    }
+                }.addOnFailureListener {
+                    requests--
+                    userProfileData = null
                 }
             }
         }
@@ -187,6 +182,8 @@ open class UserProfileViewModel : ViewModel() {
     }
 
     protected open fun onAllUsersChanged() {}
+
+    protected open fun onFetchingDataError() {}
 
     protected open fun onGettingProfilePictureFailed() {}
 

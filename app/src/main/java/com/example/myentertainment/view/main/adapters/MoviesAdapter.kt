@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
+import com.example.myentertainment.data.IEntertainment
 import com.example.myentertainment.data.Movie
 import com.example.myentertainment.interfaces.OnItemClickAction
 
@@ -16,7 +17,7 @@ class MoviesAdapter(
     private val context: Context,
     private var movies: List<Movie>,
     private val onItemClickAction: OnItemClickAction
-) : RecyclerView.Adapter<MoviesViewHolder>() {
+) : RecyclerView.Adapter<MoviesViewHolder>(), IEntertainmentAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.single_movie, parent, false)
@@ -47,8 +48,7 @@ class MoviesAdapter(
 
 
         holder.item.setOnClickListener() {
-            val id = movies[position].id
-            onItemClickAction.onItemClicked(id)
+            onItemClickAction.onItemClicked(movies[position])
         }
 
         holder.item.setOnLongClickListener() {
@@ -60,8 +60,8 @@ class MoviesAdapter(
 
     override fun getItemCount() = movies.size
 
-    fun dataSetChanged(newDataSet: List<Movie>) {
-        movies = newDataSet
+    override fun dataSetChanged(newDataSet: List<IEntertainment>) {
+        movies = newDataSet as List<Movie>
         notifyDataSetChanged()
     }
 

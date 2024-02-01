@@ -49,29 +49,35 @@ class FriendsViewModel : UserProfileViewModel() {
     fun getFriends(userId: String) {
         loading.value = true
 
-        friendsReference.child(userId).get().addOnCompleteListener() { task ->
-            if (task.isSuccessful) {
-                val value = task.result?.value
-                if (value != null) {
-                    val friendsMap = task.result?.value as HashMap<String, String>
+        val friendsIds = ArrayList<String?>()
 
-                    val friendsIds = ArrayList<String?>()
-                    for (id in friendsMap.values) {
-                        friendsIds.add(id)
-                    }
-
-                    getUserProfiles(friendsIds)
-
-                } else {
-                    loading.value = false
-                    status.value = SearchUsersStatus.NO_FRIENDS
-                }
+        friendsReference.child(userId).get().addOnSuccessListener {
+            it.children.forEach {
+                val child = it.getValue(String::class.java)
+                child?.let { id -> friendsIds.add(id) }
             }
+
+            if (friendsIds.isNotEmpty()) {
+                getUserProfiles(friendsIds)
+            } else {
+                loading.value = false
+                status.value = SearchUsersStatus.NO_FRIENDS
+            }
+
+        }.addOnFailureListener {
+            loading.value = false
+            status.value = SearchUsersStatus.ERROR
+
         }
     }
 
     override fun onAllUsersChanged() {
         filter(true)
+    }
+
+    override fun onFetchingDataError() {
+        loading.value = false
+        status.value = SearchUsersStatus.ERROR
     }
 
     fun onFriendsListRefreshed() {
@@ -152,9 +158,11 @@ class FriendsViewModel : UserProfileViewModel() {
             }
 
             val filtered = ArrayList<UserProfile>()
-            for (item in friends.value!!) {
-                if (item.userProfileData != null && containsPhrase(item.userProfileData, phrase)) {
-                    filtered.add(item)
+            if (friends.value != null) {
+                for (item in friends.value!!) {
+                    if (item.userProfileData != null && containsPhrase(item.userProfileData, phrase)) {
+                        filtered.add(item)
+                    }
                 }
             }
 

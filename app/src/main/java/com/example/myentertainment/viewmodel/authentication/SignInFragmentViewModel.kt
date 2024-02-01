@@ -31,14 +31,9 @@ class SignInFragmentViewModel : ViewModel() {
 
         if (validation(email, password)) {
             databaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener() { task ->
-                    if (task.isComplete) {
-                        loading.value = false
-                        signInResult.value = task.isSuccessful
-                    } else {
-                        loading.value = false
-                        signInResult.value = false
-                    }
+                .addOnCompleteListener { task ->
+                    loading.value = false
+                    signInResult.value = task.isSuccessful
                 }
         }
 

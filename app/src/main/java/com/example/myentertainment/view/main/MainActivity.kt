@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
@@ -24,13 +23,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity(), InvitationDialogListener {
 
-    private val moviesFragment by lazy { MoviesFragment() }
-    private val booksFragment by lazy { BooksFragment() }
-    private val gamesFragment by lazy { GamesFragment() }
-    private val musicFragment by lazy { MusicFragment() }
+    private val moviesFragment by lazy { EntertainmentFragment(CategoryObject.MOVIES) }
+    private val booksFragment by lazy { EntertainmentFragment(CategoryObject.BOOKS) }
+    private val gamesFragment by lazy { EntertainmentFragment(CategoryObject.GAMES) }
+    private val musicFragment by lazy { EntertainmentFragment(CategoryObject.MUSIC) }
 
     private lateinit var viewModel: MainActivityViewModel
-    private lateinit var currentFragment: String
+    private lateinit var currentCategory: CategoryObject
     private lateinit var bottomNavigation: BottomNavigationView
     private lateinit var addButton: FloatingActionButton
 
@@ -99,27 +98,24 @@ class MainActivity : AppCompatActivity(), InvitationDialogListener {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun changeCurrentFragment(fragment: Fragment) {
+    private fun changeCurrentFragment(fragment: EntertainmentFragment) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.mainActivity_fragment, fragment)
             commit()
         }
 
-        when (fragment) {
-            is MoviesFragment -> {
-                currentFragment = CategoryObject.MOVIES
+        currentCategory = fragment.category
+        when (currentCategory) {
+            CategoryObject.MOVIES -> {
                 bottomNavigation.menu.getItem(0).isChecked = true
             }
-            is BooksFragment -> {
-                currentFragment = CategoryObject.BOOKS
+            CategoryObject.BOOKS -> {
                 bottomNavigation.menu.getItem(1).isChecked = true
             }
-            is GamesFragment -> {
-                currentFragment = CategoryObject.GAMES
+            CategoryObject.GAMES -> {
                 bottomNavigation.menu.getItem(2).isChecked = true
             }
-            is MusicFragment -> {
-                currentFragment = CategoryObject.MUSIC
+            CategoryObject.MUSIC -> {
                 bottomNavigation.menu.getItem(3).isChecked = true
             }
         }
@@ -127,8 +123,9 @@ class MainActivity : AppCompatActivity(), InvitationDialogListener {
 
     private fun checkCategory() {
         if (intent.hasExtra(Constants.CATEGORY)) {
-            currentFragment = intent.getStringExtra(Constants.CATEGORY).toString()
-            when (currentFragment) {
+            val categoryName = intent.getStringExtra(Constants.CATEGORY)
+            val category = CategoryObject.getCategoryByName(categoryName) ?: CategoryObject.MOVIES
+            when (category) {
                 CategoryObject.MOVIES -> changeCurrentFragment(moviesFragment)
                 CategoryObject.BOOKS -> changeCurrentFragment(booksFragment)
                 CategoryObject.GAMES -> changeCurrentFragment(gamesFragment)
@@ -159,7 +156,7 @@ class MainActivity : AppCompatActivity(), InvitationDialogListener {
 
         addButton.setOnClickListener() {
             val intent = Intent(this, AddActivity::class.java)
-            intent.putExtra(Constants.CATEGORY, currentFragment)
+            intent.putExtra(Constants.CATEGORY, currentCategory.categoryName)
             startActivity(intent)
         }
     }

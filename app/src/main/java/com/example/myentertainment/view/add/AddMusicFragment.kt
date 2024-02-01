@@ -10,7 +10,6 @@ import android.widget.RatingBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.myentertainment.Constants
 import com.example.myentertainment.OpeningContext
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
@@ -35,7 +34,7 @@ class AddMusicFragment : Fragment(), IAddToDatabase {
     private lateinit var noTitleMessage: String
     private lateinit var songAddedMessage: String
 
-    private var itemId: String? = null
+    private var song: Music? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,8 +44,8 @@ class AddMusicFragment : Fragment(), IAddToDatabase {
         fragmentView = inflater.inflate(R.layout.fragment_add_music, container, false)
         viewModel = ViewModelProvider(this).get(AddMusicFragmentViewModel::class.java)
         setObservers()
-        establishOpeningContext()
         initView()
+        establishOpeningContext()
         return fragmentView
     }
 
@@ -59,33 +58,29 @@ class AddMusicFragment : Fragment(), IAddToDatabase {
         addButton = fragmentView.findViewById(R.id.addMusic_addButton)
         loadingSection = fragmentView.findViewById(R.id.addMusic_loadingSection)
         noTitleMessage = getString(R.string.music_no_title)
-
-        if (openingContext == OpeningContext.ADD) {
-            prepareViewForAddContext()
-        }
     }
 
     override fun setObservers() {
         viewModel.loading.observe(this) { updateView(it, loadingSection) }
-        viewModel.song.observe(this) { prepareViewForEditContext(it) }
         viewModel.validationResult.observe(this) { handleValidationResult(it, requireContext(), noTitleMessage) }
         viewModel.addingToDatabaseResult.observe(this) { handleAddingToDatabaseResult(it, requireContext(), songAddedMessage, CategoryObject.MUSIC) }
     }
 
     private fun establishOpeningContext() {
-        itemId = arguments?.getString(Constants.ID)
+        if (arguments?.containsKey(CategoryObject.MUSIC.categoryName) == true) {
+            song = arguments!!.getParcelable(CategoryObject.MUSIC.categoryName)
+            prepareViewForEditContext()
 
-        if (itemId != null) {
-            openingContext = OpeningContext.EDIT
-            viewModel.getSong(itemId!!)
-
-        } else openingContext = OpeningContext.ADD
+        } else {
+            prepareViewForAddContext()
+        }
     }
 
     private fun prepareViewForAddContext() {
+        openingContext = OpeningContext.ADD
         songAddedMessage = getString(R.string.music_added)
 
-        addButton.setOnClickListener() {
+        addButton.setOnClickListener {
             val title = titleEditText.text.toString()
             val artist = artistEditText.text.toString()
             val releaseYear = releaseYearEditText.text.toString()
@@ -97,27 +92,31 @@ class AddMusicFragment : Fragment(), IAddToDatabase {
         }
     }
 
-    private fun prepareViewForEditContext(item: Music) {
-        songAddedMessage = getString(R.string.music_edited)
-        addButton.text = getString(R.string.music_edit)
+    private fun prepareViewForEditContext() {
+        if (song != null) {
+            openingContext = OpeningContext.EDIT
+            songAddedMessage = getString(R.string.music_edited)
+            addButton.text = getString(R.string.music_edit)
 
-        addButton.setOnClickListener() {
-            val id = itemId
-            val title = titleEditText.text.toString()
-            val artist = artistEditText.text.toString()
-            val releaseYear = releaseYearEditText.text.toString()
-            val genre = genreEditText.text.toString()
-            val rating = ratingBar.rating
+            addButton.setOnClickListener {
+                song!!.title = titleEditText.text.toString()
+                song!!.artist = artistEditText.text.toString()
+                song!!.releaseYear = releaseYearEditText.text.toString()
+                song!!.genre = genreEditText.text.toString()
+                song!!.rating = ratingBar.rating
 
-            val music = Music(id, title, artist, releaseYear, genre, rating)
-            viewModel.updateItem(music)
+                viewModel.updateItem(song!!)
+            }
+
+            titleEditText.setText(song!!.title)
+            artistEditText.setText(song!!.artist)
+            releaseYearEditText.setText(song!!.releaseYear)
+            genreEditText.setText(song!!.genre)
+            val rating = song!!.rating
+            if (rating != null) {
+                ratingBar.rating = rating
+            }
         }
-
-        titleEditText.setText(item.title)
-        artistEditText.setText(item.artist)
-        releaseYearEditText.setText(item.releaseYear)
-        genreEditText.setText(item.genre)
-        if (item.rating != null) ratingBar.rating = item.rating
     }
 
 }

@@ -1,9 +1,25 @@
 package com.example.myentertainment.`object`
 
-object CategoryObject {
+enum class CategoryObject(val categoryName: String) {
+    MOVIES("movies"),
+    BOOKS("books"),
+    GAMES("games"),
+    MUSIC("music");
 
-    const val MOVIES = "movies"
-    const val BOOKS = "books"
-    const val GAMES = "games"
-    const val MUSIC = "music"
+    companion object {
+        fun getCategoryByName(categoryName: String?): CategoryObject? {
+            var result: CategoryObject? = null
+
+            if (!categoryName.isNullOrEmpty()) {
+                for (categoryObject in values()) {
+                    if (categoryObject.categoryName == categoryName) {
+                        result = categoryObject
+                        break
+                    }
+                }
+            }
+
+            return result
+        }
+    }
 }

@@ -10,7 +10,6 @@ import android.widget.RatingBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.myentertainment.Constants
 import com.example.myentertainment.OpeningContext
 import com.example.myentertainment.R
 import com.example.myentertainment.`object`.CategoryObject
@@ -35,7 +34,7 @@ class AddBookFragment : Fragment(), IAddToDatabase {
     private lateinit var noTitleMessage: String
     private lateinit var bookAddedMessage: String
 
-    private var itemId: String? = null
+    private var book: Book? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,8 +44,8 @@ class AddBookFragment : Fragment(), IAddToDatabase {
         fragmentView = inflater.inflate(R.layout.fragment_add_book, container, false)
         viewModel = ViewModelProvider(this).get(AddBookFragmentViewModel::class.java)
         setObservers()
-        establishOpeningContext()
         initView()
+        establishOpeningContext()
         return fragmentView
     }
 
@@ -59,33 +58,29 @@ class AddBookFragment : Fragment(), IAddToDatabase {
         addButton = fragmentView.findViewById(R.id.addBook_addButton)
         loadingSection = fragmentView.findViewById(R.id.addBook_loadingSection)
         noTitleMessage = getString(R.string.book_no_title)
-
-        if (openingContext == OpeningContext.ADD) {
-            prepareViewForAddContext()
-        }
     }
 
     override fun setObservers() {
         viewModel.loading.observe(this) { updateView(it, loadingSection) }
-        viewModel.book.observe(this) { prepareViewForEditContext(it) }
         viewModel.validationResult.observe(this) { handleValidationResult(it, requireContext(), noTitleMessage) }
         viewModel.addingToDatabaseResult.observe(this) { handleAddingToDatabaseResult(it, requireContext(), bookAddedMessage, CategoryObject.BOOKS) }
     }
 
     private fun establishOpeningContext() {
-        itemId = arguments?.getString(Constants.ID)
+        if (arguments?.containsKey(CategoryObject.BOOKS.categoryName) == true) {
+            book = arguments!!.getParcelable(CategoryObject.BOOKS.categoryName)
+            prepareViewForEditContext()
 
-        if (itemId != null) {
-            openingContext = OpeningContext.EDIT
-            viewModel.getBook(itemId!!)
-
-        } else openingContext = OpeningContext.ADD
+        } else {
+            prepareViewForAddContext()
+        }
     }
 
     private fun prepareViewForAddContext() {
+        openingContext = OpeningContext.ADD
         bookAddedMessage = getString(R.string.book_added)
 
-        addButton.setOnClickListener() {
+        addButton.setOnClickListener {
             val title = titleEditText.text.toString()
             val author = authorEditText.text.toString()
             val releaseYear = releaseYearEditText.text.toString()
@@ -97,27 +92,31 @@ class AddBookFragment : Fragment(), IAddToDatabase {
         }
     }
 
-    private fun prepareViewForEditContext(item: Book) {
-        bookAddedMessage = getString(R.string.book_edited)
-        addButton.text = getString(R.string.book_edit)
+    private fun prepareViewForEditContext() {
+        if (book != null) {
+            openingContext = OpeningContext.EDIT
+            bookAddedMessage = getString(R.string.book_edited)
+            addButton.text = getString(R.string.book_edit)
 
-        addButton.setOnClickListener() {
-            val id = itemId
-            val title = titleEditText.text.toString()
-            val author = authorEditText.text.toString()
-            val releaseYear = releaseYearEditText.text.toString()
-            val genre = genreEditText.text.toString()
-            val rating = ratingBar.rating
+            addButton.setOnClickListener {
+                book!!.title = titleEditText.text.toString()
+                book!!.author = authorEditText.text.toString()
+                book!!.releaseYear = releaseYearEditText.text.toString()
+                book!!.genre = genreEditText.text.toString()
+                book!!.rating = ratingBar.rating
 
-            val book = Book(id, title, author, releaseYear, genre, rating)
-            viewModel.updateItem(book)
+                viewModel.updateItem(book!!)
+            }
+
+            titleEditText.setText(book!!.title)
+            authorEditText.setText(book!!.author)
+            releaseYearEditText.setText(book!!.releaseYear)
+            genreEditText.setText(book!!.genre)
+            val rating = book!!.rating
+            if (rating != null) {
+                ratingBar.rating = rating
+            }
         }
-
-        titleEditText.setText(item.title)
-        authorEditText.setText(item.author)
-        releaseYearEditText.setText(item.releaseYear)
-        genreEditText.setText(item.genre)
-        if (item.rating != null) ratingBar.rating = item.rating
     }
 
 }

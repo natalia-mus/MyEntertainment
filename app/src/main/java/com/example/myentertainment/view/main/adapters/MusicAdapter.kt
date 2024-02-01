@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myentertainment.R
+import com.example.myentertainment.data.IEntertainment
 import com.example.myentertainment.data.Music
 import com.example.myentertainment.interfaces.OnItemClickAction
 
@@ -16,7 +17,7 @@ class MusicAdapter(
     private val context: Context,
     private var music: List<Music>,
     private val onItemClickAction: OnItemClickAction
-) : RecyclerView.Adapter<MusicViewHolder>() {
+) : RecyclerView.Adapter<MusicViewHolder>(), IEntertainmentAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.single_music, parent, false)
@@ -47,8 +48,7 @@ class MusicAdapter(
 
 
         holder.item.setOnClickListener() {
-            val id = music[position].id
-            onItemClickAction.onItemClicked(id)
+            onItemClickAction.onItemClicked(music[position])
         }
 
         holder.item.setOnLongClickListener() {
@@ -61,8 +61,8 @@ class MusicAdapter(
 
     override fun getItemCount() = music.size
 
-    fun dataSetChanged(newDataSet: List<Music>) {
-        music = newDataSet
+    override fun dataSetChanged(newDataSet: List<IEntertainment>) {
+        music = newDataSet as List<Music>
         notifyDataSetChanged()
     }
 

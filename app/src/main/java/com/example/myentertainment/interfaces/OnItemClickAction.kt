@@ -1,7 +1,9 @@
 package com.example.myentertainment.interfaces
 
+import com.example.myentertainment.data.IEntertainment
+
 interface OnItemClickAction {
 
-    fun onItemClicked(id: String?)
+    fun onItemClicked(item: IEntertainment)
     fun onItemLongClicked(id: String?)
 }
