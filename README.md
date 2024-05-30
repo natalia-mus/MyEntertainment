@@ -2,7 +2,10 @@
 
 MyEntertainment is an application to save information about various movies/tv series, books, games or songs. Every item has details characteristic to its category - like title, author/director/arthist, genre, release year and user's rating.<br/><br/>
  
-![my_entertainment_gif](https://user-images.githubusercontent.com/56269299/118413260-a2f53900-b69e-11eb-9a26-cc0a8d5ee881.gif)
+<p align="center">
+<img src="https://user-images.githubusercontent.com/56269299/118413260-a2f53900-b69e-11eb-9a26-cc0a8d5ee881.gif" />
+</p>
+
 <br/><br/>
 
 To use app it is necessary to create an account with an e-mail and at least 6 characters long password. Then user can overview and add items to four categories - movies, books, games and music. 
