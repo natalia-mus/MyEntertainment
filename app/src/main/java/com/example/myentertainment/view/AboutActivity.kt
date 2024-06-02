@@ -20,7 +20,7 @@ class AboutActivity : AppCompatActivity() {
 
     private lateinit var descriptionTextView: TextView
     private lateinit var historyTextView: TextView
-    private lateinit var url: Button
+    private lateinit var githubButton: Button
     private lateinit var loadingSection: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,10 +45,10 @@ class AboutActivity : AppCompatActivity() {
     private fun initView() {
         descriptionTextView = findViewById(R.id.about_description)
         historyTextView = findViewById(R.id.about_history)
-        url = findViewById(R.id.about_url)
+        githubButton = findViewById(R.id.about_github)
         loadingSection = findViewById(R.id.about_loadingSection)
 
-        url.setOnClickListener() {
+        githubButton.setOnClickListener {
             openUrl()
         }
     }
@@ -68,6 +68,10 @@ class AboutActivity : AppCompatActivity() {
     private fun updateView(about: About) {
         descriptionTextView.text = about.description
         historyTextView.text = about.history
+
+        descriptionTextView.visibility = View.VISIBLE
+        historyTextView.visibility = View.VISIBLE
+        githubButton.visibility = View.VISIBLE
     }
 
 }

@@ -31,6 +31,7 @@
                 android:lineSpacingExtra="5dp"
                 android:textColor="@color/white"
                 android:textSize="18sp"
+                android:visibility="gone"
                 tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vel mi aliquam, egestas mi ut, hendrerit nibh. Mauris nulla augue, sollicitudin ut laoreet vel, pellentesque in neque. Donec efficitur scelerisque orci. Fusce nulla orci, efficitur ultricies lobortis ac, vulputate in lacus. Proin malesuada felis mollis feugiat posuere. Etiam tristique odio id gravida lacinia." />
 
             <TextView
@@ -44,16 +45,18 @@
                 android:lineSpacingExtra="5dp"
                 android:textColor="@color/white"
                 android:textSize="18sp"
+                android:visibility="gone"
                 tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vel mi aliquam, egestas mi ut, hendrerit nibh. Mauris nulla augue, sollicitudin ut laoreet vel, pellentesque in neque. Donec efficitur scelerisque orci. Fusce nulla orci, efficitur ultricies lobortis ac, vulputate in lacus. Proin malesuada felis mollis feugiat posuere. Etiam tristique odio id gravida lacinia." />
 
             <Button
-                android:id="@+id/about_url"
+                android:id="@+id/about_github"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="70dp"
                 android:layout_marginBottom="30dp"
-                android:text="@string/github" />
+                android:text="@string/github"
+                android:visibility="gone" />
 
         </LinearLayout>
 

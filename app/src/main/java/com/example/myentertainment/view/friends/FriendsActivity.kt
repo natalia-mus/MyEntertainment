@@ -86,6 +86,12 @@ class FriendsActivity : AppCompatActivity(), UserTileClickListener {
             findFriends()
             Utils.hideKeyboard(this)
         }
+
+        searchField.setOnEditorActionListener { _, _, _ ->
+            findFriends()
+            Utils.hideKeyboard(this)
+            true
+        }
     }
 
     private fun refreshFriendsList() {
