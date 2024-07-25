@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.myentertainment.Constants
 import com.example.myentertainment.R
+import com.example.myentertainment.view.AboutActivity
 import com.example.myentertainment.view.ProblemReportActivity
 
 class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
@@ -32,6 +33,10 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.menuItem_about -> {
+                val intent = Intent(this, AboutActivity::class.java)
+                startActivity(intent)
+            }
             R.id.menuItem_reportAProblem -> {
                 val intent = Intent(this, ProblemReportActivity::class.java)
                 startActivity(intent)

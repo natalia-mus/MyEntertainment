@@ -1,4 +1,4 @@
-package com.example.myentertainment.viewmodel
+package com.example.myentertainment
 
 object Dimensions {
     const val USER_TILE_PROFILE_PICTURE_SIZE = 130
