@@ -15,6 +15,7 @@ class StartAppActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide()
         setContentView(R.layout.activity_start_app)
         initView()
     }
@@ -49,6 +50,7 @@ class StartAppActivity : AppCompatActivity() {
 
     private fun startSignUpActivity() {
         val intent = Intent(this, AuthenticationActivity::class.java)
+        intent.putExtra(AuthenticationActivity.SIGN_UP, true)
         startActivity(intent)
     }
 }

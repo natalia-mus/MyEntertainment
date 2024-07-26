@@ -14,14 +14,19 @@ class AuthenticationActivity : AppCompatActivity(), OnSignUpClickAction {
 
     companion object {
         const val CHANGE_PASSWORD = "change_password"
+        const val SIGN_UP = "sign_up"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.host)
 
-        if (intent.getBooleanExtra(CHANGE_PASSWORD, false)) {
+        if (intent.getBooleanExtra(SIGN_UP, false)) {
+            changeCurrentFragment(SignUpFragment(), false)
+
+        } else if (intent.getBooleanExtra(CHANGE_PASSWORD, false)) {
             changeCurrentFragment(ChangePasswordFragment(), false)
+
         } else {
             changeCurrentFragment(SignInFragment(this), false)
         }
