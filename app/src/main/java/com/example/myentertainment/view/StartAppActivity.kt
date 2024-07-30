@@ -36,7 +36,7 @@ class StartAppActivity : AppCompatActivity() {
         }
 
         signInButton.setOnClickListener {
-            startSignInActivity()
+            startSignInActivity(false)
         }
 
         signUpButton.setOnClickListener {
@@ -53,7 +53,7 @@ class StartAppActivity : AppCompatActivity() {
             setContentView(R.layout.activity_start_app)
             initView()
         } else {
-            startSignInActivity()
+            startSignInActivity(true)
         }
     }
 
@@ -62,8 +62,12 @@ class StartAppActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun startSignInActivity() {
+    private fun startSignInActivity(clearTask: Boolean) {
         val intent = Intent(this, AuthenticationActivity::class.java)
+        if (clearTask) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
         startActivity(intent)
     }
 

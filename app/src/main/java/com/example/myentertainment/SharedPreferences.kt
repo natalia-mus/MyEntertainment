@@ -12,6 +12,10 @@ object SharedPreferences {
         return getSharedPreferences(context).getBoolean(SHOW_START_APP_ACTIVITY, true)
     }
 
+    fun setShowStartAppActivity(context: Context, showStartAppActivity: Boolean) {
+        getSharedPreferences(context).edit().putBoolean(SHOW_START_APP_ACTIVITY, showStartAppActivity).apply()
+    }
+
     private fun getSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
     }

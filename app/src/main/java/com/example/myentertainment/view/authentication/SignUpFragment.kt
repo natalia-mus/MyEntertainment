@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myentertainment.R
+import com.example.myentertainment.SharedPreferences
 import com.example.myentertainment.`object`.ValidationResult
 import com.example.myentertainment.view.main.MainActivity
 import com.example.myentertainment.viewmodel.authentication.SignUpFragmentViewModel
@@ -51,6 +52,7 @@ class SignUpFragment : Fragment() {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
+            SharedPreferences.setShowStartAppActivity(requireContext(), false)
         } else {
             val message = getString(R.string.user_can_not_be_created)
             Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
