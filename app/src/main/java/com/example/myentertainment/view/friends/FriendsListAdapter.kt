@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide
 import com.example.myentertainment.LayoutDimensionsUtil
 import com.example.myentertainment.R
 import com.example.myentertainment.data.UserProfile
-import com.example.myentertainment.viewmodel.Dimensions
+import com.example.myentertainment.Dimensions
 
 class FriendsListAdapter(
     private val context: Context,

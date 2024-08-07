@@ -4,8 +4,6 @@ object Constants {
 
     const val NULL = "null"
     const val CATEGORY = "category"
-    const val ID = "id"
-    const val CHANGE_PASSWORD = "change_password"
     const val USER_ID = "user_id"
 
     const val REQUEST_CODE_PERMISSION_CAMERA = 101
